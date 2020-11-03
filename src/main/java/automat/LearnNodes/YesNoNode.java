@@ -11,8 +11,8 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class YesNoNode extends HandlerNode {
-    public YesNoNode(String value) {
-        super(value);
+    public YesNoNode() {
+
     }
 
     @Override
@@ -25,8 +25,12 @@ public class YesNoNode extends HandlerNode {
 
         String word = condition
                 ? dict.get(user.stateLearn.getValue()).en
-                : dict.get(user.stateLearn.getValue()).ru;
+                : prepeareTranslate(dict.get(user.stateLearn.getValue()).ru);
 
         return move(condition).action(word);
+    }
+
+    private String prepeareTranslate(String word){
+        return word.replaceAll("\\|", " | ");
     }
 }

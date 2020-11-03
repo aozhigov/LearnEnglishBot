@@ -10,11 +10,9 @@ import java.util.Hashtable;
 import java.util.List;
 
 public abstract class HandlerNode {
-    public String value;
     public List<PrintNode> links;
 
-    public HandlerNode(String value) {
-        this.value = value;
+    public HandlerNode() {
     }
 
     public abstract Tuple<SendMessage, HandlerNode> action(String query,

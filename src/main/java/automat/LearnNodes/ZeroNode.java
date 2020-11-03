@@ -11,8 +11,8 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class ZeroNode extends HandlerNode {
-    public ZeroNode(String value) {
-        super(value);
+    public ZeroNode() {
+
     }
 
     @Override

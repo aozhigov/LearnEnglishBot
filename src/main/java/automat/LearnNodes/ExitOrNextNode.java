@@ -12,8 +12,8 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class ExitOrNextNode extends HandlerNode {
-    public ExitOrNextNode(String value) {
-        super(value);
+    public ExitOrNextNode() {
+
     }
 
     @Override

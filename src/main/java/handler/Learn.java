@@ -41,11 +41,11 @@ public class Learn extends AbstractHandler {
         printNodes.add(new PrintNode("Можешь выбрать одну из команд", 2));
 
         ArrayList<HandlerNode> handlerNodes = new ArrayList<>();
-        handlerNodes.add(new ZeroNode(""));
-        handlerNodes.add(new StartNode(""));
-        handlerNodes.add(new CheckWordNode(""));
-        handlerNodes.add(new YesNoNode(""));
-        handlerNodes.add(new ExitOrNextNode(""));
+        handlerNodes.add(new ZeroNode());
+        handlerNodes.add(new StartNode());
+        handlerNodes.add(new CheckWordNode());
+        handlerNodes.add(new YesNoNode());
+        handlerNodes.add(new ExitOrNextNode());
 
         printNodes.get(0).initLinks(Collections.singletonList(handlerNodes.get(1)));
         printNodes.get(1).initLinks(Collections.singletonList(handlerNodes.get(2)));

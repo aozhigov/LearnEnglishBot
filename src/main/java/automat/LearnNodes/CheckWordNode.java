@@ -12,8 +12,8 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class CheckWordNode extends HandlerNode {
-    public CheckWordNode(String value) {
-        super(value);
+    public CheckWordNode() {
+
     }
 
     @Override
