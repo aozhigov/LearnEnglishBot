@@ -1,2 +1,2 @@
-# Telegram-bot.TelegramBot-Indivisual-Headman
-Telegram bot for students
+# Telegram-bot.TelegramBot-LearnEnglishBot
+Telegram bot for learn english
