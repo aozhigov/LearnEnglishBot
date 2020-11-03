@@ -25,12 +25,12 @@ public class YesNoNode extends HandlerNode {
 
         String word = condition
                 ? dict.get(user.stateLearn.getValue()).en
-                : prepeareTranslate(dict.get(user.stateLearn.getValue()).ru);
+                : prepareTranslate(dict.get(user.stateLearn.getValue()).ru);
 
         return move(condition).action(word);
     }
 
-    private String prepeareTranslate(String word){
+    private String prepareTranslate(String word){
         return word.replaceAll("\\|", " | ");
     }
 }
