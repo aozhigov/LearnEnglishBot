@@ -1,0 +1,838 @@
+{
+  "collection-api": [
+    {
+      "frequency": 19,
+      "en": "item",
+      "ru": "элемент",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 12,
+      "en": "match",
+      "ru": "соответствие|совместить",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 9,
+      "en": "find",
+      "ru": "найти",
+      "example": "FindIndex",
+      "hard": false
+    },
+    {
+      "frequency": 7,
+      "en": "key",
+      "ru": "ключ",
+      "example": "ContainsKey",
+      "hard": false
+    },
+    {
+      "frequency": 4,
+      "en": "range",
+      "ru": "диапазон|промежуток|регион",
+      "example": "InsertRange",
+      "hard": false
+    },
+    {
+      "frequency": 4,
+      "en": "sort",
+      "ru": "сортировать|отсортировать|упорядочить|упорядочивать|сортировка|упорядочивание",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 3,
+      "en": "capacity",
+      "ru": "емкость|ёмкость|вместимость",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 3,
+      "en": "add",
+      "ru": "добавить",
+      "example": "AddRange",
+      "hard": false
+    },
+    {
+      "frequency": 3,
+      "en": "binary",
+      "ru": "бинарный",
+      "example": "BinarySearch",
+      "hard": false
+    },
+    {
+      "frequency": 3,
+      "en": "search",
+      "ru": "поиск",
+      "example": "BinarySearch",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "clear",
+      "ru": "очистить|очистка|опустошить|опустошение",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "insert",
+      "ru": "вставить",
+      "example": "InsertRange",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "reverse",
+      "ru": "обратить|обратный",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "string",
+      "ru": "строка",
+      "example": "ToString",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "read",
+      "ru": "читать",
+      "example": "AsReadOnly",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "convert",
+      "ru": "преобразовать|конвертировать|преобразовывать",
+      "example": "ConvertAll",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "exist",
+      "ru": "существует",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "action",
+      "ru": "действие",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "each",
+      "ru": "каждый",
+      "example": "ForEach",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "excess",
+      "ru": "избыток|превышение|излишек|лишний|избыточный",
+      "example": "TrimExcess",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "sender",
+      "ru": "отправитель|передатчик",
+      "example": "",
+      "hard": false
+    }
+  ],
+  "io-api": [
+    {
+      "frequency": 117,
+      "en": "path",
+      "ru": "путь",
+      "example": "GetTempPath",
+      "hard": false
+    },
+    {
+      "frequency": 40,
+      "en": "access",
+      "ru": "доступ",
+      "example": "GetAccessControl",
+      "hard": false
+    },
+    {
+      "frequency": 36,
+      "en": "search",
+      "ru": "поиск|искать",
+      "example": "searchPattern",
+      "hard": false
+    },
+    {
+      "frequency": 33,
+      "en": "write",
+      "ru": "писать",
+      "example": "LastWriteTime",
+      "hard": false
+    },
+    {
+      "frequency": 24,
+      "en": "creation",
+      "ru": "создание",
+      "example": "CreationTimeUtc",
+      "hard": false
+    },
+    {
+      "frequency": 24,
+      "en": "pattern",
+      "ru": "шаблон",
+      "example": "searchPattern",
+      "hard": false
+    },
+    {
+      "frequency": 18,
+      "en": "enumerate",
+      "ru": "перечислять",
+      "example": "EnumerateDirectories",
+      "hard": false
+    },
+    {
+      "frequency": 15,
+      "en": "create",
+      "ru": "создать",
+      "example": "CreateDirectory",
+      "hard": false
+    },
+    {
+      "frequency": 12,
+      "en": "open",
+      "ru": "открыть",
+      "example": "OpenRead",
+      "hard": false
+    },
+    {
+      "frequency": 12,
+      "en": "read",
+      "ru": "читать",
+      "example": "IsReadOnly",
+      "hard": false
+    },
+    {
+      "frequency": 10,
+      "en": "contents",
+      "ru": "содержание|содержимое",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 9,
+      "en": "extension",
+      "ru": "расширение",
+      "example": "ChangeExtension",
+      "hard": false
+    },
+    {
+      "frequency": 8,
+      "en": "encoding",
+      "ru": "кодировка|кодирование",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 6,
+      "en": "mode",
+      "ru": "режим",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 6,
+      "en": "entries",
+      "ru": "записи|элементы",
+      "example": "EnumerateFileSystemEntries",
+      "hard": false
+    },
+    {
+      "frequency": 4,
+      "en": "include",
+      "ru": "включать",
+      "example": "includeSections",
+      "hard": false
+    },
+    {
+      "frequency": 4,
+      "en": "section",
+      "ru": "раздел",
+      "example": "includeSections",
+      "hard": false
+    },
+    {
+      "frequency": 4,
+      "en": "move",
+      "ru": "перемещать|переместить",
+      "example": "MoveTo",
+      "hard": false
+    },
+    {
+      "frequency": 4,
+      "en": "backup",
+      "ru": "резервное копирование|резервная копия|бэкап",
+      "example": "destinationBackupFileName",
+      "hard": false
+    },
+    {
+      "frequency": 4,
+      "en": "root",
+      "ru": "корень",
+      "example": "GetDirectoryRoot",
+      "hard": false
+    },
+    {
+      "frequency": 4,
+      "en": "combine",
+      "ru": "совмещать|сомбинировать|комбинировать",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "overwrite",
+      "ru": "перезаписать|перезаписывать",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "decrypt",
+      "ru": "расшифровать|дешифровать|расшифровывать|дешифровывать",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "encrypt",
+      "ru": "шифровать|зашифровать",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "share",
+      "ru": "поделиться|делиться|шарить",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "error",
+      "ru": "ошибка",
+      "example": "ignoreMetadataErrors",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "refresh",
+      "ru": "обновить",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "current",
+      "ru": "текущий",
+      "example": "SetCurrentDirectory",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "recursive",
+      "ru": "рекурсивный",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "subdirectory",
+      "ru": "поддиректория|подпапка",
+      "example": "CreateSubdirectory",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "invalid",
+      "ru": "недействительный|некорректный|невалидный",
+      "example": "GetInvalidFileNameChars",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "drive",
+      "ru": "диск",
+      "example": "GetLogicalDrives",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "change",
+      "ru": "менять|изменять|изменение|смена",
+      "example": "ChangeExtension",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "without",
+      "ru": "без",
+      "example": "GetFileNameWithoutExtension",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "random",
+      "ru": "случайный|случайно",
+      "example": "GetRandomFileName",
+      "hard": false
+    }
+  ],
+  "linq": [
+    {
+      "frequency": 20,
+      "en": "average",
+      "ru": "средний|среднее",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 16,
+      "en": "predicate",
+      "ru": "предикат",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 14,
+      "en": "first",
+      "ru": "первый",
+      "example": "FirstOrDefault",
+      "hard": false
+    },
+    {
+      "frequency": 10,
+      "en": "second",
+      "ru": "второй",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 10,
+      "en": "default",
+      "ru": "по умолчанию|умолчание",
+      "example": "FirstOrDefault",
+      "hard": false
+    },
+    {
+      "frequency": 6,
+      "en": "select",
+      "ru": "выбор",
+      "example": "SelectMany",
+      "hard": false
+    },
+    {
+      "frequency": 4,
+      "en": "order",
+      "ru": "упорядочить|порядок|упорядочивание",
+      "example": "OrderByDescending",
+      "hard": false
+    },
+    {
+      "frequency": 4,
+      "en": "descending",
+      "ru": "по убыванию",
+      "example": "OrderByDescending",
+      "hard": false
+    },
+    {
+      "frequency": 4,
+      "en": "single",
+      "ru": "единственный|один|одинокий",
+      "example": "SingleOrDefault",
+      "hard": false
+    },
+    {
+      "frequency": 3,
+      "en": "take",
+      "ru": "взять",
+      "example": "TakeWhile",
+      "hard": false
+    },
+    {
+      "frequency": 3,
+      "en": "skip",
+      "ru": "пропустить",
+      "example": "SkipWhile",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "distinct",
+      "ru": "различные|различных|различный|уникальный|уникальные|уникальных",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "union",
+      "ru": "объединить|объединение",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "intersect",
+      "ru": "пересечь|пересекать",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "except",
+      "ru": "за исключением|кроме|исключая",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 2,
+      "en": "sequence",
+      "ru": "последовательность",
+      "example": "SequenceEqual",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "range",
+      "ru": "диапазон|промежуток",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "append",
+      "ru": "добавить в конец|приписать в конец|добавить|приписать",
+      "example": "",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "prepend",
+      "ru": "добавить в начало|приписать в начало|добавить|приписать",
+      "example": "",
+      "hard": false
+    }
+  ],
+  "string": [
+    {
+      "frequency": 30,
+      "en": "append",
+      "ru": "добавить|приписать|приписывать|добавлять",
+      "example": "AppendFormat",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "ensure",
+      "ru": "обеспечить|убедиться",
+      "example": "EnsureCapacity",
+      "hard": false
+    },
+    {
+      "frequency": 1,
+      "en": "repeat",
+      "ru": "повторить|повтор",
+      "example": "repeatCount",
+      "hard": false
+    },
+    {
+      "frequency": 22,
+      "en": "arg",
+      "ru": "сокращение от аргумент|аргумент",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 14,
+      "en": "count",
+      "ru": "количество|считать",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 14,
+      "en": "compare",
+      "ru": "сравнить|сравнивать",
+      "example": "CompareOrdinal",
+      "hard": true
+    },
+    {
+      "frequency": 12,
+      "en": "comparison",
+      "ru": "сравнение",
+      "example": "comparisonType",
+      "hard": true
+    },
+    {
+      "frequency": 12,
+      "en": "any",
+      "ru": "любой",
+      "example": "IndexOfAny",
+      "hard": true
+    },
+    {
+      "frequency": 12,
+      "en": "last",
+      "ru": "последний",
+      "example": "LastIndexOf",
+      "hard": true
+    },
+    {
+      "frequency": 11,
+      "en": "separator",
+      "ru": "разделитель",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 11,
+      "en": "concat",
+      "ru": "функция конкатенации|конкатенация|приписывание|приписать|конкатенировать|приписывать",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 7,
+      "en": "trim",
+      "ru": "подрезать|подрезка",
+      "example": "trimChars",
+      "explain": "Так называется удаление пробельных символов с концов строки",
+      "hard": true
+    },
+    {
+      "frequency": 6,
+      "en": "char",
+      "ru": "сокращение от character (символ)|символ|символ строки",
+      "example": "ToCharArray",
+      "hard": true
+    },
+    {
+      "frequency": 6,
+      "en": "split",
+      "ru": "разделение|разделить|разбить|разбивать|разделять",
+      "example": "",
+      "explain": "Так называют функции, разделяющие строку на части по какому-то правилу",
+      "hard": true
+    },
+    {
+      "frequency": 6,
+      "en": "case",
+      "ru": "регистр символа|регистр|случай|вариант",
+      "example": "ignoreCase",
+      "hard": true
+    },
+    {
+      "frequency": 5,
+      "en": "join",
+      "ru": "присоединение|соединение|объединение|присоединить|соединить|объединить|присоединять|объединять|соединять",
+      "example": "",
+      "explain": "Так называют функции, приписывающие строки друг к другу через разделитель",
+      "hard": true
+    },
+    {
+      "frequency": 5,
+      "en": "equal",
+      "ru": "равно|равен|равны|совпадают|совпадать|равняется|равняться",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 5,
+      "en": "provider",
+      "ru": "поставщик",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 4,
+      "en": "total",
+      "ru": "общий",
+      "example": "totalWidth",
+      "hard": true
+    },
+    {
+      "frequency": 4,
+      "en": "pad",
+      "ru": "дополнять|заполнять|дополнить|заполнить|отбить|отбивать",
+      "example": "PadRight",
+      "explain": "Так называют функции, приписывающие в начало или конец строки пробельные символы, чтобы дополнить строку до заданной ширины",
+      "hard": true
+    },
+    {
+      "frequency": 3,
+      "en": "lower",
+      "ru": "нижний|ниже",
+      "example": "ToLower",
+      "explain": "При работе со строками это как правило означает нижний регистр символов",
+      "hard": true
+    },
+    {
+      "frequency": 3,
+      "en": "upper",
+      "ru": "верхний|выше",
+      "example": "ToUpper",
+      "explain": "При работе со строками это как правило означает верхний регистр символов",
+      "hard": true
+    },
+    {
+      "frequency": 3,
+      "en": "args",
+      "ru": "сокращение от аргументы|аргументы",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 2,
+      "en": "destination",
+      "ru": "назначение|адресат|получатель",
+      "example": "destinationIndex",
+      "explain": "При копировании или перемещении так называют то, куда копируют",
+      "hard": true
+    },
+    {
+      "frequency": 2,
+      "en": "array",
+      "ru": "массив",
+      "example": "ToCharArray",
+      "hard": true
+    },
+    {
+      "frequency": 2,
+      "en": "substring",
+      "ru": "подстрока",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 2,
+      "en": "normalized",
+      "ru": "нормализованный",
+      "example": "IsNormalized",
+      "hard": true
+    },
+    {
+      "frequency": 2,
+      "en": "normalization",
+      "ru": "нормализация",
+      "example": "normalizationForm",
+      "hard": true
+    },
+    {
+      "frequency": 2,
+      "en": "ordinal",
+      "ru": "порядковый|по порядку",
+      "example": "CompareOrdinal",
+      "hard": true
+    },
+    {
+      "frequency": 2,
+      "en": "padding",
+      "ru": "отбивка|дополнение|заполнение|отбивочный|дополняющий|заполняющий",
+      "example": "paddingChar",
+      "explain": "Так называют дополнение строки некоторым символом до заданной длины",
+      "hard": true
+    },
+    {
+      "frequency": 2,
+      "en": "replace",
+      "ru": "заменить",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 2,
+      "en": "remove",
+      "ru": "удалить",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 1,
+      "en": "obj",
+      "ru": "сокращение от объект|объект",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 1,
+      "en": "equality",
+      "ru": "равенство",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 1,
+      "en": "inequality",
+      "ru": "неравенство",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 1,
+      "en": "source",
+      "ru": "источник|исходник|исходный",
+      "example": "sourceIndex",
+      "explain": "при копировании или перемещении так называют то, откуда копируют",
+      "hard": true
+    },
+    {
+      "frequency": 1,
+      "en": "empty",
+      "ru": "пустой",
+      "example": "IsNullOrEmpty",
+      "hard": true
+    },
+    {
+      "frequency": 1,
+      "en": "whitespace",
+      "ru": "пробельный символ|пробел",
+      "example": "IsNullOrWhiteSpace",
+      "hard": true
+    },
+    {
+      "frequency": 1,
+      "en": "space",
+      "ru": "пробел|пространство",
+      "example": "IsNullOrWhiteSpace",
+      "hard": true
+    },
+    {
+      "frequency": 1,
+      "en": "contains",
+      "ru": "содержит",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 1,
+      "en": "clone",
+      "ru": "клонировать|клон|склонировать",
+      "example": "",
+      "hard": true
+    },
+    {
+      "frequency": 1,
+      "en": "insert",
+      "ru": "вставить",
+      "example": "",
+      "hard": true
+    }
+  ]
+}
