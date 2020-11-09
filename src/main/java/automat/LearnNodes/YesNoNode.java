@@ -1,6 +1,7 @@
 package automat.LearnNodes;
 
 import automat.HandlerNode;
+import common.Event;
 import common.Tuple;
 import common.User;
 import common.Word;
@@ -11,26 +12,35 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class YesNoNode extends HandlerNode {
-    public YesNoNode() {
+    private Hashtable<String, ArrayList<Word>> vocabularies;
 
+    public YesNoNode(Hashtable<String, ArrayList<Word>> vocabularies) {
+        this.vocabularies = vocabularies;
     }
 
     @Override
-    public Tuple<SendMessage, HandlerNode> action(String query,
-                                                  User user,
-                                                  List<String> namesVocabularies,
-                                                  Hashtable<String, ArrayList<Word>> dictionaries) {
-        boolean condition = query.equals("да");
-        List<Word> dict = dictionaries.get(user.stateLearn.getKey());
+    public Tuple<SendMessage, HandlerNode> action(String query,  User user) {
+        Event event = Event.END; // or help
+        String word = user.getName();
 
-        String word = condition
-                ? dict.get(user.stateLearn.getValue()).en
-                : prepareTranslate(dict.get(user.stateLearn.getValue()).ru);
+        if (query.contains("выход"))
+            return move(event).action(word);
 
-        return move(condition).action(word);
+        List<Word> vocabulary = vocabularies.get(user.stateLearn.getKey());
+
+        if (query.equals("да")){
+            word = vocabulary.get(user.stateLearn.getValue()).en;
+            event = Event.SECOND_EN_WORD;
+        }
+        else{
+            word = prepareTranslate(vocabulary.get(user.stateLearn.getValue()).ru);
+            event = Event.RU_WORD;
+        }
+
+        return move(event).action(word);
     }
 
     private String prepareTranslate(String word){
-        return word.replaceAll("\\|", " | ");
+        return word.replaceAll("\\|", " или ");
     }
 }

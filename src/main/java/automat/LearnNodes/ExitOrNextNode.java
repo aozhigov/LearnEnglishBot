@@ -1,10 +1,7 @@
 package automat.LearnNodes;
 
 import automat.HandlerNode;
-import common.Command;
-import common.Tuple;
-import common.User;
-import common.Word;
+import common.*;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 import java.util.ArrayList;
@@ -12,25 +9,24 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class ExitOrNextNode extends HandlerNode {
-    public ExitOrNextNode() {
+    private Hashtable<String, ArrayList<Word>> vocabularies;
 
+    public ExitOrNextNode(Hashtable<String, ArrayList<Word>> vocabularies) {
+        this.vocabularies = vocabularies;
     }
 
     @Override
-    public Tuple<SendMessage, HandlerNode> action(String query,
-                                                  User user,
-                                                  List<String> namesVocabularies,
-                                                  Hashtable<String, ArrayList<Word>> dictionaries) {
-        boolean condition = query.equals("да");
-        List<Word> dict = dictionaries.get(user.stateLearn.getKey());
+    public Tuple<SendMessage, HandlerNode> action(String query, User user) {
+        List<Word> vocabulary = vocabularies.get(user.stateLearn.getKey());
+        String word = vocabulary.get(user.getNextIdWord(vocabulary.size())).en;
+        Event event = Event.FIRST_EN_WORD;
 
-        String word = condition
-                ? dict.get(user.getNextIdWord(dict.size())).en
-                : user.getName();
-
-        if (!condition)
+        if (!query.equals("да")){
+            word = user.getName();
+            event = Event.END;
             user.stateDialog = new Tuple<>(Command.HELP, null);
+        }
 
-        return move(condition).action(word);
+        return move(event).action(word);
     }
 }

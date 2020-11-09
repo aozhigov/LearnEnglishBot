@@ -1,6 +1,6 @@
 package bot;
 
-import handler.MainLogic;
+import handler.Default;
 import org.json.simple.parser.ParseException;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -15,12 +15,12 @@ import java.io.IOException;
 public class TelegramBot extends TelegramLongPollingBot {
     String token;
     String botName;
-    MainLogic defaultHandler;
+    Default defaultHandler;
 
     public TelegramBot(String botName, String token) throws IOException, ParseException {
         this.botName = botName;
         this.token = token;
-        this.defaultHandler = new MainLogic(botName);
+        this.defaultHandler = new Default(botName);
     }
 
     @Override

@@ -13,11 +13,11 @@ import java.util.Hashtable;
 import static bot.WorkWithMessage.createMessage;
 import static bot.WorkWithMessage.setChatId;
 
-public class MainLogic {
+public class Default {
     private final Hashtable<Long, User> users;
     private final Hashtable<Command, AbstractHandler> handlers;
 
-    public MainLogic(String botName) throws IOException, ParseException {
+    public Default(String botName) throws IOException, ParseException {
         users = new Hashtable<>();
         handlers = new Hashtable<>();
         handlers.put(Command.LEARN, new Learn(botName));

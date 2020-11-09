@@ -1,6 +1,7 @@
 package automat.LearnNodes;
 
 import automat.HandlerNode;
+import common.Event;
 import common.Tuple;
 import common.User;
 import common.Word;
@@ -12,22 +13,37 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class CheckWordNode extends HandlerNode {
-    public CheckWordNode() {
+    private Hashtable<String, ArrayList<Word>> vocabularies;
 
+    public CheckWordNode(Hashtable<String, ArrayList<Word>> vocabularies) {
+        this.vocabularies = vocabularies;
     }
 
     @Override
-    public Tuple<SendMessage, HandlerNode> action(String query,
-                                                  User user,
-                                                  List<String> namesVocabularies,
-                                                  Hashtable<String, ArrayList<Word>> dictionaries) {
-        List<Word> dict = dictionaries.get(user.stateLearn.getKey());
-        boolean condition = checkTranslate(dict.get(user.stateLearn.getValue()), query);
-        String word = condition
-                ? dict.get(user.getNextIdWord(dict.size())).en
-                : user.getName();
+    public Tuple<SendMessage, HandlerNode> action(String query, User user) {
+        Event event = Event.END; // or help
+        if (query.contains("выход"))
+            return move(event).action(user.getName());
 
-        return move(condition).action(word);
+        List<Word> vocabulary = vocabularies.get(user.stateLearn.getKey());
+        String word = "";
+
+        if (query.contains("подсказ") || query.contains("помог") || query.contains("помощ")){
+            event = Event.HINT;
+            word = "-hint-";
+            return move(event).action(word);
+        }
+
+
+        if (checkTranslate(vocabulary.get(user.stateLearn.getValue()), query)){
+            word = vocabulary.get(user.getNextIdWord(vocabulary.size())).en;
+            event = Event.FIRST_EN_WORD;
+            return move(event).action(word);
+        }
+
+        word = user.getName();
+        event = Event.TRY;
+        return move(event).action(word);
     }
 
     private boolean checkTranslate(Word word, String query) {

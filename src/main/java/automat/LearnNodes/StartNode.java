@@ -1,6 +1,7 @@
 package automat.LearnNodes;
 
 import automat.HandlerNode;
+import common.Event;
 import common.Tuple;
 import common.User;
 import common.Word;
@@ -11,25 +12,30 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class StartNode extends HandlerNode {
-    public StartNode() {
+    private Hashtable<String, ArrayList<Word>> vocabularies;
 
+    public StartNode(Hashtable<String, ArrayList<Word>> vocabularies) {
+        this.vocabularies = vocabularies;
     }
 
     @Override
-    public Tuple<SendMessage, HandlerNode> action(String query,
-                                                  User user,
-                                                  List<String> namesVocabularies,
-                                                  Hashtable<String, ArrayList<Word>> dictionaries) {
-        boolean condition = namesVocabularies.contains(query);
+    public Tuple<SendMessage, HandlerNode> action(String query, User user) {
+        Event event = Event.END; // or help
+        String word = user.getName();
 
-        if (condition)
+        if (query.contains("выход"))
+            return move(event).action(word);
+
+        if (vocabularies.containsKey(query)){
             user.stateLearn.setKey(query);
+            List<Word> vocabulary = vocabularies.get(user.stateLearn.getKey());
 
-        List<Word> dict = dictionaries.get(user.stateLearn.getKey());
-        String word = condition
-                ? dict.get(user.getNextIdWord(dict.size())).en
-                : user.getName();
+            word = vocabulary.get(user.getNextIdWord(vocabulary.size())).en;
+            event = Event.FIRST_EN_WORD;
+        }
+        else
+            event = Event.WRONG_TOPIC;
 
-        return move(condition).action(word);
+        return move(event).action(word);
     }
 }

@@ -24,17 +24,11 @@ public class WorkWithMessage {
         return msg;
     }
 
-    public static SendMessage createMsgWithKeyboard(String text, int idxKeyboard) {
-        ArrayList<Tuple<Integer, List<String>>> keyboards = new ArrayList<>();
-        keyboards.add(new Tuple<>(2, Arrays.asList("linq", "string", "io-api", "collection-api")));
-        keyboards.add(new Tuple<>(1, Arrays.asList("Да", "Нет")));
-        keyboards.add(new Tuple<>(3, Arrays.asList("/learn", "/stop", "/help")));
-
+    public static SendMessage createMsgWithKeyboard(String text, Tuple<Integer, List<String>> keyboard) {
         SendMessage msg = createMessage(text);
-        if (idxKeyboard >= 0) {
-            Tuple<Integer, List<String>> keyboard = keyboards.get(idxKeyboard);
+
+        if (keyboard != null)
             return addKeyboard(keyboard.getKey(), msg, keyboard.getValue());
-        }
 
         return addKeyboard(0, msg, new ArrayList<>());
     }

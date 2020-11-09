@@ -1,14 +1,10 @@
 package automat.LearnNodes;
 
 import automat.HandlerNode;
+import common.Event;
 import common.Tuple;
 import common.User;
-import common.Word;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
-
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
 
 public class ZeroNode extends HandlerNode {
     public ZeroNode() {
@@ -16,10 +12,7 @@ public class ZeroNode extends HandlerNode {
     }
 
     @Override
-    public Tuple<SendMessage, HandlerNode> action(String query,
-                                                  User user,
-                                                  List<String> namesVocabularies,
-                                                  Hashtable<String, ArrayList<Word>> dictionaries) {
-        return move(true).action(user.getName());
+    public Tuple<SendMessage, HandlerNode> action(String query, User user) {
+        return move(Event.START).action(user.getName());
     }
 }

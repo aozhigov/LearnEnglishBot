@@ -12,4 +12,5 @@ public class Word {
         this.ru = ru;
         this.example = example;
     }
+
 }

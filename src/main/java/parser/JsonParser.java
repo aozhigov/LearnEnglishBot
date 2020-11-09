@@ -14,7 +14,7 @@ import java.util.Hashtable;
 
 public class JsonParser {
     public static Hashtable<String, ArrayList<Word>> getDictsFromJson() throws IOException, ParseException {
-        Hashtable<String, ArrayList<Word>> dictionaries = new Hashtable<>();
+        Hashtable<String, ArrayList<Word>> vocabularies = new Hashtable<>();
         JSONParser parser = new JSONParser();
 
         String path = System.getProperty("user.dir") + "\\resources\\dictionaries.json";
@@ -30,9 +30,10 @@ public class JsonParser {
                         temp.get("ru").toString(), temp.get("example").toString()));
             }
 
-            dictionaries.put(name, t);
+            vocabularies.put(name, t);
         }
 
-        return dictionaries;
+        return vocabularies;
     }
 }
+

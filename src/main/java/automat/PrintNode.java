@@ -10,16 +10,16 @@ import static bot.WorkWithMessage.createMsgWithKeyboard;
 public class PrintNode {
     public String value;
     public List<HandlerNode> links;
-    private final int idxKeyboard;
+    private final Tuple<Integer, List<String>> keyboard;
 
-    public PrintNode(String value, int idxKeyboard) {
+    public PrintNode(String value, Tuple<Integer, List<String>> keyboard) {
         this.value = value;
-        this.idxKeyboard = idxKeyboard;
+        this.keyboard = keyboard;
     }
 
     public Tuple<SendMessage, HandlerNode> action(String word) {
         String text = value.replaceAll("\\{\\{WORD\\}\\}", word);
-        return new Tuple<>(createMsgWithKeyboard(text, idxKeyboard), move());
+        return new Tuple<>(createMsgWithKeyboard(text, keyboard), move());
     }
 
     public HandlerNode move() {

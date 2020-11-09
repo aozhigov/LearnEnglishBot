@@ -1,5 +1,6 @@
 package automat;
 
+import common.Event;
 import common.Tuple;
 import common.User;
 import common.Word;
@@ -10,25 +11,26 @@ import java.util.Hashtable;
 import java.util.List;
 
 public abstract class HandlerNode {
-    public List<PrintNode> links;
+    public Hashtable<Event, PrintNode> links;
 
     public HandlerNode() {
     }
 
-    public abstract Tuple<SendMessage, HandlerNode> action(String query,
-                                                           User user,
-                                                           List<String> namesVocabularies,
-                                                           Hashtable<String, ArrayList<Word>> dictionaries);
+    public abstract Tuple<SendMessage, HandlerNode> action(String query, User user);
 
-    public PrintNode move(boolean condition) {
-        return links.size() > 1
-                ? condition
-                    ? links.get(0)
-                    : links.get(1)
-                : null;
+//    public PrintNode move(boolean condition) {
+//        return links.size() > 1
+//                ? condition
+//                    ? links.get(0)
+//                    : links.get(1)
+//                : null;
+//    }
+
+    public PrintNode move(Event event) {
+        return links.get(event);
     }
 
-    public void initLinks(List<PrintNode> links) {
+    public void initLinks(Hashtable<Event, PrintNode> links) {
         this.links = links;
     }
 }
