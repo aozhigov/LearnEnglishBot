@@ -1,7 +1,9 @@
 package common;
 
 public enum Event {
-    START, END, FIRST_EN_WORD,
+    FIRST_START, SECOND_START,
+    END, FIRST_EN_WORD,
     SECOND_EN_WORD, RU_WORD,
-    WRONG_TOPIC, HINT, TRY
+    WRONG_TOPIC, HINT, TRY,
+    HELP, STATISTIC, EXIT, STOP, NONE
 }

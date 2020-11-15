@@ -9,7 +9,7 @@ import static bot.WorkWithMessage.createMsgWithKeyboard;
 
 public class PrintNode {
     public String value;
-    public List<HandlerNode> links;
+    private HandlerNode handler;
     private final Tuple<Integer, List<String>> keyboard;
 
     public PrintNode(String value, Tuple<Integer, List<String>> keyboard) {
@@ -23,12 +23,10 @@ public class PrintNode {
     }
 
     public HandlerNode move() {
-        return links.size() > 0
-                ? links.get(0)
-                : null;
+        return handler;
     }
 
-    public void initLinks(List<HandlerNode> links) {
-        this.links = links;
+    public void initLinks(HandlerNode links) {
+        this.handler = links;
     }
 }

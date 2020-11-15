@@ -1,10 +1,7 @@
 package automat.LearnNodes;
 
 import automat.HandlerNode;
-import common.Event;
-import common.Tuple;
-import common.User;
-import common.Word;
+import common.*;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 import java.util.ArrayList;
@@ -20,13 +17,13 @@ public class YesNoNode extends HandlerNode {
 
     @Override
     public Tuple<SendMessage, HandlerNode> action(String query,  User user) {
-        Event event = Event.END; // or help
+        Event event = checkCommand(query);
         String word = user.getName();
 
-        if (query.contains("выход"))
+        if (event != Event.NONE)
             return move(event).action(word);
 
-        List<Word> vocabulary = vocabularies.get(user.stateLearn.getKey());
+        ArrayList<Word> vocabulary = vocabularies.get(user.stateLearn.getKey());
 
         if (query.equals("да")){
             word = vocabulary.get(user.stateLearn.getValue()).en;

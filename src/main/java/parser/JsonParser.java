@@ -1,5 +1,6 @@
 package parser;
 
+import common.Selection;
 import common.Word;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,7 +14,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 
 public class JsonParser {
-    public static Hashtable<String, ArrayList<Word>> getDictsFromJson() throws IOException, ParseException {
+    public static Hashtable<String, ArrayList<Word>> getVocabulariesFromJson() throws IOException, ParseException {
         Hashtable<String, ArrayList<Word>> vocabularies = new Hashtable<>();
         JSONParser parser = new JSONParser();
 
