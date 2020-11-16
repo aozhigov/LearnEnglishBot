@@ -44,6 +44,8 @@ public class Word {
     }
 
     public int getIncorrectAnswerStatistic(Long userId){
+        if (!this.dictionary.containsKey(userId))
+            this.dictionary.put(userId, new Tuple<>(0, 1));
         return this.dictionary.get(userId).getValue();
     }
 
