@@ -1,33 +1,27 @@
 package common;
 
 import automat.HandlerNode;
-
-import java.util.Random;
+import vocabulary.Word;
 
 public class User {
-    private String userName;
     public Tuple<Event, HandlerNode> stateDialog;
     public Tuple<String, Word> stateLearn;
-    private Long id;
+    private final String userName;
+    private final Long id;
 
 
-    public User(String name, Long id){
+    public User(String name, Long id) {
         userName = name;
         stateDialog = new Tuple<>(Event.FIRST_START, null);
         stateLearn = new Tuple<>("", null);
         this.id = id;
     }
 
-    public String getName(){
+    public String getName() {
         return userName;
     }
 
-//    public int getNextIdWord(int size){
-//        stateLearn.setValue(rnd.nextInt(size));
-//        return stateLearn.getValue();
-//    }
-
-    public Long getId(){
+    public Long getId() {
         return this.id;
     }
 }

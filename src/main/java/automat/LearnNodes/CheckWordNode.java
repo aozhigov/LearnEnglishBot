@@ -1,13 +1,12 @@
 package automat.LearnNodes;
 
 import automat.HandlerNode;
-import common.*;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
+import common.Event;
+import common.Message;
+import common.User;
+import vocabulary.Selection;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
-import java.util.List;
 
 public class CheckWordNode extends HandlerNode {
     private final Hashtable<String, Selection> vocabularies;
@@ -17,30 +16,27 @@ public class CheckWordNode extends HandlerNode {
     }
 
     @Override
-    public Tuple<SendMessage, HandlerNode> action(String query, User user) {
+    public Message action(String query, User user) {
         Event event = checkCommand(query);
+        String word = user.getName();
+
         if (event != Event.NONE)
-            return move(event).action(user.getName());
+            return move(event).action(word);
 
         Selection vocabulary = vocabularies.get(user.stateLearn.getKey());
-        String word = "";
 
-        if (query.contains("/hint")){
-            event = Event.HINT;
-            word = "-hint-";
-            return move(event).action(word);
+        if (query.contains("/hint")) {
+            word = user.stateLearn.getValue().createHint();
+            return move(Event.HINT).action(word);
         }
 
 
-        if (vocabulary.checkTranslate(query, user)){
-            user.stateLearn.setValue(vocabulary.getEnWord(user));//.get(user.getNextIdWord(vocabulary.size())).en;
+        if (vocabulary.checkTranslate(query, user)) {
+            user.stateLearn.setValue(vocabulary.getEnWord(user));
             word = user.stateLearn.getValue().getEn();
-            event = Event.FIRST_EN_WORD;
-            return move(event).action(word);
+            return move(Event.FIRST_EN_WORD).action(word);
         }
 
-        word = user.getName();
-        event = Event.TRY;
-        return move(event).action(word);
+        return move(Event.TRY).action(word);
     }
 }

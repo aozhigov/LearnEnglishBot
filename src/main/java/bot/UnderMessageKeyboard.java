@@ -11,9 +11,7 @@ import java.util.List;
 public class UnderMessageKeyboard {
     public static SendMessage addKeyboard(int countOfRows,
                                           SendMessage sendMessage,
-                                          ArrayList<Tuple<String, String>> args) {
-        // В args в качестве ключа передаётся строка, которую будет видеть user
-        // В качестве значения будет строка, которая при нажатии на кнопку пойдёт на сервер
+                                          List</*Tuple<String, */String/*>*/> args) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
@@ -23,10 +21,11 @@ public class UnderMessageKeyboard {
 
             int countOfWords = args.size() / countOfRows;
             for (int j = counter; j < countOfWords + counter; j++)
-                if (j < args.size()){
+                if (j < args.size()) {
                     InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
-                    inlineKeyboardButton.setText(args.get(j).getKey());// То, что видит user
-                    inlineKeyboardButton.setCallbackData(args.get(j).getValue());// То, что придёт на сервер
+                    inlineKeyboardButton.setText(args.get(j)/*.getKey()*/);
+                    //inlineKeyboardButton.setCallbackData(args.get(j).getValue());
+                    inlineKeyboardButton.setCallbackData(args.get(j));
                     inlineKeyboardButtons.add(inlineKeyboardButton);
                 }
 

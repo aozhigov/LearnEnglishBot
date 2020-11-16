@@ -2,9 +2,8 @@ package automat.LearnNodes;
 
 import automat.HandlerNode;
 import common.Event;
-import common.Tuple;
+import common.Message;
 import common.User;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 public class ZeroNode extends HandlerNode {
     public ZeroNode() {
@@ -12,8 +11,8 @@ public class ZeroNode extends HandlerNode {
     }
 
     @Override
-    public Tuple<SendMessage, HandlerNode> action(String query, User user) {
-        if (links.containsKey(user.stateDialog.getKey())){
+    public Message action(String query, User user) {
+        if (links.containsKey(user.stateDialog.getKey())) {
             Event temp = user.stateDialog.getKey();
             user.stateDialog.setKey(Event.SECOND_START);
             return move(temp).action(user.getName());

@@ -1,23 +1,26 @@
-package common;
+package vocabulary;
+
+import common.Tuple;
+import common.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Selection {
     private final ArrayList<Word> words;
-    private HashMap<Long, Tuple<Integer, Integer>> usersStat;
+    private final HashMap<Long, Tuple<Integer, Integer>> usersStat;
 
-    public Selection(ArrayList<Word> words){
+    public Selection(ArrayList<Word> words) {
         this.words = words;
         this.usersStat = new HashMap<>();
     }
 
-    public void sort(int number){
+    public void sort(int number) {
         // Если 1, то сортируется по возрастанию значения incorrect в классе Word
         // Если 0, то сортируется по убыванию значения incorrect в классе Word
     }
 
-    public Integer getWordStatistic(User user, String word){
+    public Integer getWordStatistic(User user, String word) {
         // При создании incorrect в Word по умолчанию ставится 1
         for (Word lookingWord : this.words) {
             if (lookingWord.en.equals(word))
@@ -26,7 +29,7 @@ public class Selection {
         return 0;
     }
 
-    public Word getEnWord(User user){
+    public Word getEnWord(User user) {
         Word returningWord = this.words.get(0);
         int minimalIncStat = returningWord.getIncorrectAnswerStatistic(user.getId());
         for (Word lookingWord : this.words) {
@@ -38,7 +41,7 @@ public class Selection {
         return returningWord;
     }
 
-    public Boolean checkTranslate(String query, User user){
+    public Boolean checkTranslate(String query, User user) {
         boolean answer = user.stateLearn.getValue().checkFromRuToEn(user.getId(), query);
         if (!this.usersStat.containsKey(user.getId()))
             this.usersStat.put(user.getId(), new Tuple<>(0, 1));
@@ -61,17 +64,17 @@ public class Selection {
         return word;
     }*/
 
-    public double getSelectionStatistic(User user){
+    public double getSelectionStatistic(User user) {
         return this.usersStat.get(user.getId()).getKey() * 100.0
                 / this.usersStat.get(user.getId()).getValue();
     }
 
-    public void addWord(int freq, String en, String ru, String example){
+    public void addWord(int freq, String en, String ru, String example) {
         Word word = new Word(freq, en, ru, example);
         this.words.add(word);
     }
 
-    public void addWord(Word word){
+    public void addWord(Word word) {
         this.words.add(word);
     }
 }

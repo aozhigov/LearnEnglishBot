@@ -1,18 +1,14 @@
 package bot;
 
-import common.Tuple;
+import common.Message;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import static bot.Keyboard.addKeyboard;
+import static bot.UnderMessageKeyboard.addKeyboard;
 
 public class WorkWithMessage {
     public static SendMessage setChatId(SendMessage message, Long chatId) {
-//        if (message == null)
-//            throw
         message.setChatId(chatId);
 
         return message;
@@ -24,11 +20,12 @@ public class WorkWithMessage {
         return msg;
     }
 
-    public static SendMessage createMsgWithKeyboard(String text, Tuple<Integer, List<String>> keyboard) {
-        SendMessage msg = createMessage(text);
+    public static SendMessage createMsgWithKeyboard(Message answer) {
+        SendMessage msg = createMessage(answer.getText());
 
-        if (keyboard != null)
-            return addKeyboard(keyboard.getKey(), msg, keyboard.getValue());
+        if (answer.getKeyboard() != null)
+            return addKeyboard(answer.getKeyboard().getKey(), msg,
+                    answer.getKeyboard().getValue());
 
         return addKeyboard(0, msg, new ArrayList<>());
     }

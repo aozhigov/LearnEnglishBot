@@ -1,11 +1,11 @@
 package parser;
 
-import common.Selection;
-import common.Word;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import vocabulary.Selection;
+import vocabulary.Word;
 
 import java.io.FileReader;
 import java.io.IOException;

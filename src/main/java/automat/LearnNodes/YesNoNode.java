@@ -1,34 +1,31 @@
 package automat.LearnNodes;
 
 import automat.HandlerNode;
-import common.*;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
+import common.Event;
+import common.Message;
+import common.User;
+import vocabulary.Selection;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 
 public class YesNoNode extends HandlerNode {
-    private final Hashtable<String, Selection> vocabularies;
 
-    public YesNoNode(Hashtable<String, Selection> vocabularies) {
-        this.vocabularies = vocabularies;
+    public YesNoNode() {
     }
 
     @Override
-    public Tuple<SendMessage, HandlerNode> action(String query,  User user) {
+    public Message action(String query, User user) {
         Event event = checkCommand(query);
         String word = user.getName();
 
         if (event != Event.NONE)
             return move(event).action(word);
 
-        if (query.equals("да")){
-            word = user.stateLearn.getValue().getEn();//vocablurary.get(user.stateLearn.getValue()).en;
+        if (query.equals("да")) {
+            word = user.stateLearn.getValue().getEn();
             event = Event.SECOND_EN_WORD;
-        }
-        else{
-            word = user.stateLearn.getValue().getRu();//prepareTranslate(vocabulary..get(user.stateLearn.getValue()).ru);
+        } else {
+            word = user.stateLearn.getValue().getRu();
             event = Event.RU_WORD;
         }
 

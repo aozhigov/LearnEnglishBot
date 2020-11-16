@@ -1,36 +1,34 @@
 package automat.LearnNodes;
 
 import automat.HandlerNode;
-import common.*;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
+import common.Event;
+import common.Message;
+import common.User;
+import vocabulary.Selection;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 
 public class ExitOrNextNode extends HandlerNode {
-    private Hashtable<String, Selection> vocabularies;
+    private final Hashtable<String, Selection> vocabularies;
 
     public ExitOrNextNode(Hashtable<String, Selection> vocabularies) {
         this.vocabularies = vocabularies;
     }
 
     @Override
-    public Tuple<SendMessage, HandlerNode> action(String query, User user) {
+    public Message action(String query, User user) {
         Event event = checkCommand(query);
+        String word = user.getName();
         if (event != Event.NONE)
-            return move(event).action(user.getName());
+            return move(event).action(word);
+
+        if (!query.equals("да"))
+            return move(Event.EXIT).action(word);
+
         Selection vocabulary = vocabularies.get(user.stateLearn.getKey());
-        user.stateLearn.setValue(vocabulary.getEnWord(user));//.get(user.getNextIdWord(vocabulary.size())).en;
-        String word = user.stateLearn.getValue().getEn();
-        event = Event.FIRST_EN_WORD;
+        user.stateLearn.setValue(vocabulary.getEnWord(user));
+        word = user.stateLearn.getValue().getEn();
 
-        if (!query.equals("да")){
-            word = user.getName();
-            event = Event.EXIT;
-            //user.stateDialog.setKey();
-        }
-
-        return move(event).action(word);
+        return move(Event.FIRST_EN_WORD).action(word);
     }
 }

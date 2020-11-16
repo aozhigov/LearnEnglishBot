@@ -1,25 +1,23 @@
 package automat;
 
+import common.Message;
 import common.Tuple;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 import java.util.List;
 
-import static bot.WorkWithMessage.createMsgWithKeyboard;
-
 public class PrintNode {
+    private final Tuple<Integer, List<String>> keyboard;
     public String value;
     private HandlerNode handler;
-    private final Tuple<Integer, List<String>> keyboard;
 
     public PrintNode(String value, Tuple<Integer, List<String>> keyboard) {
         this.value = value;
         this.keyboard = keyboard;
     }
 
-    public Tuple<SendMessage, HandlerNode> action(String word) {
+    public Message action(String word) {
         String text = value.replaceAll("\\{\\{WORD\\}\\}", word);
-        return new Tuple<>(createMsgWithKeyboard(text, keyboard), move());
+        return new Message(text, keyboard, move());
     }
 
     public HandlerNode move() {
