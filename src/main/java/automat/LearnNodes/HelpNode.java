@@ -1,19 +1,16 @@
 package automat.LearnNodes;
 
 import automat.HandlerNode;
-import common.Event;
-import common.Tuple;
-import common.User;
-import common.Word;
+import common.*;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class HelpNode extends HandlerNode {
-    private Hashtable<String, ArrayList<Word>> vocabularies;
+    private Hashtable<String, Selection> vocabularies;
 
-    public HelpNode(Hashtable<String, ArrayList<Word>> vocabularies) {
+    public HelpNode(Hashtable<String, Selection> vocabularies) {
         this.vocabularies = vocabularies;
     }
     @Override
@@ -21,9 +18,9 @@ public class HelpNode extends HandlerNode {
         Event temp = checkCommand(query);
         if (temp != Event.NONE)
             return move(temp).action(user.getName());
-        if (user.stateLearn.getValue() != -1){
-            ArrayList<Word> vocabulary = vocabularies.get(user.stateLearn.getKey());
-            String word = vocabulary.get(user.getNextIdWord(vocabulary.size())).en;
+        if (user.stateLearn.getValue() != null){
+            Selection vocabulary = vocabularies.get(user.stateLearn.getKey());
+            String word = user.stateLearn.getValue().getEn();//vocabulary.get(user.getNextIdWord(vocabulary.size())).en;
             return move(Event.SECOND_EN_WORD).action(word);
         }
 

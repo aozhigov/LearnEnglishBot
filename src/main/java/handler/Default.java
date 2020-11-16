@@ -15,7 +15,7 @@ import static parser.JsonParser.getVocabulariesFromJson;
 
 public class Default {
     private final Hashtable<Long, User> users;
-    private final Hashtable<String, ArrayList<Word>> vocabularies;
+    private final Hashtable<String, Selection> vocabularies;
     private final HandlerNode root;
     private final ArrayList<Tuple<Integer, List<String>>> keyboards;
 
@@ -33,7 +33,7 @@ public class Default {
 
     public SendMessage operate(Long chatId, String query, String userName) {
         if (!users.containsKey(chatId))
-            users.put(chatId, new User(userName));
+            users.put(chatId, new User(userName, (long) (users.size() + 1)));
 
         User user = users.get(chatId);
 

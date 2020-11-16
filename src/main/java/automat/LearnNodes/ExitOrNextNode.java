@@ -9,9 +9,9 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class ExitOrNextNode extends HandlerNode {
-    private Hashtable<String, ArrayList<Word>> vocabularies;
+    private Hashtable<String, Selection> vocabularies;
 
-    public ExitOrNextNode(Hashtable<String, ArrayList<Word>> vocabularies) {
+    public ExitOrNextNode(Hashtable<String, Selection> vocabularies) {
         this.vocabularies = vocabularies;
     }
 
@@ -20,8 +20,9 @@ public class ExitOrNextNode extends HandlerNode {
         Event event = checkCommand(query);
         if (event != Event.NONE)
             return move(event).action(user.getName());
-        ArrayList<Word> vocabulary = vocabularies.get(user.stateLearn.getKey());
-        String word = vocabulary.get(user.getNextIdWord(vocabulary.size())).en;
+        Selection vocabulary = vocabularies.get(user.stateLearn.getKey());
+        user.stateLearn.setValue(vocabulary.getEnWord(user));//.get(user.getNextIdWord(vocabulary.size())).en;
+        String word = user.stateLearn.getValue().getEn();
         event = Event.FIRST_EN_WORD;
 
         if (!query.equals("да")){

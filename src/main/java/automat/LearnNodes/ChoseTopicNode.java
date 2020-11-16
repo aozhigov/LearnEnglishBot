@@ -9,9 +9,9 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class ChoseTopicNode extends HandlerNode {
-    private Hashtable<String, ArrayList<Word>> vocabularies;
+    private Hashtable<String, Selection> vocabularies;
 
-    public ChoseTopicNode(Hashtable<String, ArrayList<Word>> vocabularies) {
+    public ChoseTopicNode(Hashtable<String, Selection> vocabularies) {
         this.vocabularies = vocabularies;
     }
 
@@ -25,9 +25,10 @@ public class ChoseTopicNode extends HandlerNode {
 
         if (vocabularies.containsKey(query)){
             user.stateLearn.setKey(query);
-            ArrayList<Word> vocabulary = vocabularies.get(user.stateLearn.getKey());
+            Selection vocabulary = vocabularies.get(user.stateLearn.getKey());
 
-            word = vocabulary.get(user.getNextIdWord(vocabulary.size())).en;
+            user.stateLearn.setValue(vocabulary.getEnWord(user));//.get(user.getNextIdWord(vocabulary.size())).en;
+            word = user.stateLearn.getValue().getEn();
             event = Event.FIRST_EN_WORD;
         }
         else

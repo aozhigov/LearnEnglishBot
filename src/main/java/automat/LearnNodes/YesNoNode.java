@@ -9,9 +9,9 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class YesNoNode extends HandlerNode {
-    private Hashtable<String, ArrayList<Word>> vocabularies;
+    private final Hashtable<String, Selection> vocabularies;
 
-    public YesNoNode(Hashtable<String, ArrayList<Word>> vocabularies) {
+    public YesNoNode(Hashtable<String, Selection> vocabularies) {
         this.vocabularies = vocabularies;
     }
 
@@ -23,21 +23,15 @@ public class YesNoNode extends HandlerNode {
         if (event != Event.NONE)
             return move(event).action(word);
 
-        ArrayList<Word> vocabulary = vocabularies.get(user.stateLearn.getKey());
-
         if (query.equals("да")){
-            word = vocabulary.get(user.stateLearn.getValue()).en;
+            word = user.stateLearn.getValue().getEn();//vocablurary.get(user.stateLearn.getValue()).en;
             event = Event.SECOND_EN_WORD;
         }
         else{
-            word = prepareTranslate(vocabulary.get(user.stateLearn.getValue()).ru);
+            word = user.stateLearn.getValue().getRu();//prepareTranslate(vocabulary..get(user.stateLearn.getValue()).ru);
             event = Event.RU_WORD;
         }
 
         return move(event).action(word);
-    }
-
-    private String prepareTranslate(String word){
-        return word.replaceAll("\\|", " или ");
     }
 }
