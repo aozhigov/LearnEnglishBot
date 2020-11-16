@@ -9,10 +9,7 @@ public class Selection {
 
     public Selection(ArrayList<Word> words){
         this.words = words;
-    }
-
-    public Selection(){
-        this.words = new ArrayList<>();
+        this.usersStat = new HashMap<>();
     }
 
     public void sort(int number){
@@ -32,8 +29,7 @@ public class Selection {
     public Word getEnWord(User user){
         Word returningWord = this.words.get(0);
         int minimalIncStat = returningWord.getIncorrectAnswerStatistic(user.getId());
-        for (Word lookingWord : this.words)
-        {
+        for (Word lookingWord : this.words) {
             if (lookingWord.getIncorrectAnswerStatistic(user.getId()) < minimalIncStat) {
                 minimalIncStat = lookingWord.getIncorrectAnswerStatistic(user.getId());
                 returningWord = lookingWord;
