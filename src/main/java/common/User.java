@@ -6,23 +6,28 @@ import java.util.Random;
 
 public class User {
     private String userName;
-    public Tuple<Command, HandlerNode> stateDialog;
-    public Tuple<String, Integer> stateLearn;
-    private final Random rnd;
+    public Tuple<Event, HandlerNode> stateDialog;
+    public Tuple<String, Word> stateLearn;
+    private Long id;
 
-    public User(String name){
+
+    public User(String name, Long id){
         userName = name;
-        stateDialog = new Tuple<>(Command.START, null);
-        stateLearn = new Tuple<>("", -1);
-        rnd = new Random();
+        stateDialog = new Tuple<>(Event.FIRST_START, null);
+        stateLearn = new Tuple<>("", null);
+        this.id = id;
     }
 
     public String getName(){
         return userName;
     }
 
-    public int getNextIdWord(int size){
-        stateLearn.setValue(rnd.nextInt(size));
-        return stateLearn.getValue();
+//    public int getNextIdWord(int size){
+//        stateLearn.setValue(rnd.nextInt(size));
+//        return stateLearn.getValue();
+//    }
+
+    public Long getId(){
+        return this.id;
     }
 }

@@ -1,5 +1,6 @@
 package parser;
 
+import common.Selection;
 import common.Word;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,8 +14,8 @@ import java.util.Arrays;
 import java.util.Hashtable;
 
 public class JsonParser {
-    public static Hashtable<String, ArrayList<Word>> getDictsFromJson() throws IOException, ParseException {
-        Hashtable<String, ArrayList<Word>> vocabularies = new Hashtable<>();
+    public static Hashtable<String, Selection> getVocabulariesFromJson() throws IOException, ParseException {
+        Hashtable<String, Selection> vocabularies = new Hashtable<>();
         JSONParser parser = new JSONParser();
 
         String path = System.getProperty("user.dir") + "\\resources\\dictionaries.json";
@@ -30,7 +31,7 @@ public class JsonParser {
                         temp.get("ru").toString(), temp.get("example").toString()));
             }
 
-            vocabularies.put(name, t);
+            vocabularies.put(name, new Selection(t));
         }
 
         return vocabularies;

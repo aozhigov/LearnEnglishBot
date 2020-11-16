@@ -20,7 +20,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public TelegramBot(String botName, String token) throws IOException, ParseException {
         this.botName = botName;
         this.token = token;
-        this.defaultHandler = new Default(botName);
+        this.defaultHandler = new Default();
     }
 
     @Override
