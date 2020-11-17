@@ -3,3 +3,6 @@ target
 token.txt
 src/main/java/SetEnvVar.java
 cls
+resources/Selections.json
+resources/Users.json
+repository

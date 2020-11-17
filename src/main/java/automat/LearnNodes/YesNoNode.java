@@ -2,19 +2,13 @@ package automat.LearnNodes;
 
 import automat.HandlerNode;
 import common.Event;
-import common.Message;
+import common.MessageBot;
 import common.User;
-import vocabulary.Selection;
-
-import java.util.Hashtable;
 
 public class YesNoNode extends HandlerNode {
 
-    public YesNoNode() {
-    }
-
     @Override
-    public Message action(String query, User user) {
+    public MessageBot action(String query, User user) {
         Event event = checkCommand(query);
         String word = user.getName();
 
@@ -22,10 +16,10 @@ public class YesNoNode extends HandlerNode {
             return move(event).action(word);
 
         if (query.equals("да")) {
-            word = user.stateLearn.getValue().getEn();
+            word = user.getStateLearn().getValue().getEn();
             event = Event.SECOND_EN_WORD;
         } else {
-            word = user.stateLearn.getValue().getRu();
+            word = user.getStateLearn().getValue().getRu();
             event = Event.RU_WORD;
         }
 

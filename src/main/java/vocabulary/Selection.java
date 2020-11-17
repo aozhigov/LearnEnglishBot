@@ -10,18 +10,17 @@ public class Selection {
     private final ArrayList<Word> words;
     private final HashMap<Long, Tuple<Integer, Integer>> usersStat;
 
+    public Selection() {
+        words = new ArrayList<>();
+        usersStat = new HashMap<>();
+    }
+
     public Selection(ArrayList<Word> words) {
         this.words = words;
         this.usersStat = new HashMap<>();
     }
 
-    public void sort(int number) {
-        // Если 1, то сортируется по возрастанию значения incorrect в классе Word
-        // Если 0, то сортируется по убыванию значения incorrect в классе Word
-    }
-
     public Integer getWordStatistic(User user, String word) {
-        // При создании incorrect в Word по умолчанию ставится 1
         for (Word lookingWord : this.words) {
             if (lookingWord.en.equals(word))
                 return lookingWord.getIncorrectAnswerStatistic(user.getId());
@@ -42,7 +41,7 @@ public class Selection {
     }
 
     public Boolean checkTranslate(String query, User user) {
-        boolean answer = user.stateLearn.getValue().checkFromRuToEn(user.getId(), query);
+        boolean answer = user.getStateLearn().getValue().checkFromRuToEn(user.getId(), query);
         if (!this.usersStat.containsKey(user.getId()))
             this.usersStat.put(user.getId(), new Tuple<>(0, 1));
         Tuple<Integer, Integer> userStat = this.usersStat.get(user.getId());
@@ -52,29 +51,9 @@ public class Selection {
             userStat.setValue(userStat.getValue() + 1);
         return answer;
     }
-    /*
-    private Word getWordClass(String enWord){
-        Word word = null;
-        for (Word lookingWord : this.words)
-        {
-            if (lookingWord.en.equals(enWord)) {
-                word = lookingWord;
-            }
-        }
-        return word;
-    }*/
 
     public double getSelectionStatistic(User user) {
         return this.usersStat.get(user.getId()).getKey() * 100.0
                 / this.usersStat.get(user.getId()).getValue();
-    }
-
-    public void addWord(int freq, String en, String ru, String example) {
-        Word word = new Word(freq, en, ru, example);
-        this.words.add(word);
-    }
-
-    public void addWord(Word word) {
-        this.words.add(word);
     }
 }

@@ -1,23 +1,27 @@
 package automat;
 
 
-import automat.HandlerNode;
 import automat.LearnNodes.*;
-import automat.PrintNode;
-import common.*;
+import common.Event;
+import common.MessageBot;
+import common.Tuple;
+import common.User;
 import org.json.simple.parser.ParseException;
 import vocabulary.Selection;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.List;
 
 import static parser.JsonParser.getVocabulariesFromJson;
 
 public class MainLogic {
-    private final Hashtable<Long, User> users;
     private final Hashtable<String, Selection> vocabularies;
     private final HandlerNode root;
     private final ArrayList<Tuple<Integer, List<String>>> keyboards;
+    private final Hashtable<Long, User> users;
 
     public MainLogic() throws IOException, ParseException {
         users = new Hashtable<>();
@@ -30,7 +34,7 @@ public class MainLogic {
         root = initializationAutomat();
     }
 
-    public Message operate(Long chatId, String query, String userName) {
+    public MessageBot operate(Long chatId, String query, String userName) {
         if (!users.containsKey(chatId))
             users.put(chatId, new User(userName, (long) (users.size() + 1)));
 
@@ -38,11 +42,12 @@ public class MainLogic {
 
         query = query.trim().toLowerCase();
 
-        if (user.stateDialog.getValue() == null && user.stateDialog.getKey() == Event.FIRST_START)
-            user.stateDialog.setValue(root);
+        if (user.getStateDialog().getValue() == null
+                && user.getStateDialog().getKey() == Event.FIRST_START)
+            user.setStateDialog(root);
 
-        Message answer = user.stateDialog.getValue().action(query, user);
-        user.stateDialog.setValue(answer.getHandler());
+        MessageBot answer = user.getStateDialog().getValue().action(query, user);
+        user.setStateDialog(answer.getHandler());
 
         return answer.getMessageWithoutHandler();
     }
@@ -159,7 +164,7 @@ public class MainLogic {
         return zero;
     }
 
-    private <T> Hashtable<Event, T> getLinks(List<Event> events, List<T> nodes){
+    private <T> Hashtable<Event, T> getLinks(List<Event> events, List<T> nodes) {
         if (events.size() != nodes.size())
             return null;
 

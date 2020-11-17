@@ -2,7 +2,7 @@ package automat.LearnNodes;
 
 import automat.HandlerNode;
 import common.Event;
-import common.Message;
+import common.MessageBot;
 import common.User;
 import vocabulary.Selection;
 
@@ -16,7 +16,7 @@ public class ExitOrNextNode extends HandlerNode {
     }
 
     @Override
-    public Message action(String query, User user) {
+    public MessageBot action(String query, User user) {
         Event event = checkCommand(query);
         String word = user.getName();
         if (event != Event.NONE)
@@ -25,9 +25,9 @@ public class ExitOrNextNode extends HandlerNode {
         if (!query.equals("да"))
             return move(Event.EXIT).action(word);
 
-        Selection vocabulary = vocabularies.get(user.stateLearn.getKey());
-        user.stateLearn.setValue(vocabulary.getEnWord(user));
-        word = user.stateLearn.getValue().getEn();
+        Selection vocabulary = vocabularies.get(user.getStateLearn().getKey());
+        user.setStateLearn(vocabulary.getEnWord(user));
+        word = user.getStateLearn().getValue().getEn();
 
         return move(Event.FIRST_EN_WORD).action(word);
     }

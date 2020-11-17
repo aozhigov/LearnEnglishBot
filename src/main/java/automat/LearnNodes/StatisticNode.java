@@ -2,7 +2,7 @@ package automat.LearnNodes;
 
 import automat.HandlerNode;
 import common.Event;
-import common.Message;
+import common.MessageBot;
 import common.User;
 import vocabulary.Selection;
 
@@ -16,14 +16,14 @@ public class StatisticNode extends HandlerNode {
     }
 
     @Override
-    public Message action(String query, User user) {
+    public MessageBot action(String query, User user) {
         Event temp = checkCommand(query);
         String word = user.getName();
 
         if (temp != Event.NONE)
             return move(temp).action(word);
 
-        Selection vocabulary = vocabularies.get(user.stateLearn.getKey());
+        Selection vocabulary = vocabularies.get(user.getStateLearn().getKey());
 
         if (query.startsWith("по теме")) {
             String[] arr = query.split(" ");
@@ -33,9 +33,9 @@ public class StatisticNode extends HandlerNode {
                         .getSelectionStatistic(user));
                 word = arr[2] + " - " + word + "%";
             } else {
-                word = Double.toString(vocabularies.get(user.stateLearn.getKey())
+                word = Double.toString(vocabularies.get(user.getStateLearn().getKey())
                         .getSelectionStatistic(user));
-                word = user.stateLearn.getKey() + " - " + word + "%";
+                word = user.getStateLearn().getKey() + " - " + word + "%";
             }
 
             return move(Event.STAT_STR).action(word);
@@ -51,8 +51,8 @@ public class StatisticNode extends HandlerNode {
                 word = arr[2] + " - " + word + "%";
             } else {
                 word = Double.toString(vocabulary
-                        .getWordStatistic(user, user.stateLearn.getValue().en) * 100);
-                word = user.stateLearn.getValue().en + " - " + word + "%";
+                        .getWordStatistic(user, user.getStateLearn().getValue().getEn()) * 100);
+                word = user.getStateLearn().getValue().getEn() + " - " + word + "%";
             }
 
             return move(Event.STAT_STR).action(word);

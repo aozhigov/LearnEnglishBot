@@ -1,16 +1,19 @@
 package bot;
 
-import common.Message;
 import automat.MainLogic;
+import common.MessageBot;
 import org.json.simple.parser.ParseException;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
 
 import java.io.IOException;
+
+import static bot.WorkWithSendMessage.*;
 
 
 public class TelegramBot extends TelegramLongPollingBot {
@@ -26,11 +29,23 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        Long chatId = update.getMessage().getChatId();
-        String inputText = update.getMessage().getText();
-        String userName = update.getMessage().getFrom().getUserName();
-        Message answer = mainLogic.operate(chatId, inputText, userName);
-        SendMessage msg = WorkWithMessage.createMsgWithKeyboard(answer);
+        Message msgTelegram;
+        String inputText;
+
+        if (update.hasCallbackQuery()) {
+            msgTelegram = update.getCallbackQuery().getMessage();
+            inputText = update.getCallbackQuery().getData();
+        }
+        else {
+            msgTelegram = update.getMessage();
+            inputText = update.getMessage().getText();
+        }
+
+        Long chatId = msgTelegram.getChatId();
+        String userName = msgTelegram.getFrom().getUserName();
+
+        MessageBot answer = mainLogic.operate(chatId, inputText, userName);
+        SendMessage msg = createMsgWithKeyboard(answer);
         sendMsg(chatId, msg);
     }
 

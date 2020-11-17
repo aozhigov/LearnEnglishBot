@@ -1,6 +1,6 @@
 package automat;
 
-import common.Message;
+import common.MessageBot;
 import common.Tuple;
 
 import java.util.List;
@@ -15,9 +15,9 @@ public class PrintNode {
         this.keyboard = keyboard;
     }
 
-    public Message action(String word) {
+    public MessageBot action(String word) {
         String text = value.replaceAll("\\{\\{WORD\\}\\}", word);
-        return new Message(text, keyboard, move());
+        return new MessageBot(text, keyboard, move());
     }
 
     public HandlerNode move() {

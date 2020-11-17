@@ -1,7 +1,7 @@
 package automat;
 
 import common.Event;
-import common.Message;
+import common.MessageBot;
 import common.User;
 
 import java.util.Hashtable;
@@ -14,12 +14,11 @@ public abstract class HandlerNode {
         commands = new Hashtable<>();
         commands.put("/stat", Event.STATISTIC);
         commands.put("/topic", Event.CHANGE_TOPIC);
-        //commands.put("/stop", Event.STOP);
         commands.put("/help", Event.HELP);
         commands.put("/exit", Event.EXIT);
     }
 
-    public abstract Message action(
+    public abstract MessageBot action(
             String query, User user);
 
     public PrintNode move(Event event) {

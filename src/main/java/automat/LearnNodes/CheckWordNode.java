@@ -2,9 +2,10 @@ package automat.LearnNodes;
 
 import automat.HandlerNode;
 import common.Event;
-import common.Message;
+import common.MessageBot;
 import common.User;
 import vocabulary.Selection;
+import vocabulary.Word;
 
 import java.util.Hashtable;
 
@@ -16,24 +17,25 @@ public class CheckWordNode extends HandlerNode {
     }
 
     @Override
-    public Message action(String query, User user) {
+    public MessageBot action(String query, User user) {
         Event event = checkCommand(query);
         String word = user.getName();
 
         if (event != Event.NONE)
             return move(event).action(word);
 
-        Selection vocabulary = vocabularies.get(user.stateLearn.getKey());
+        Selection vocabulary = vocabularies.get(user.getStateLearn().getKey());
 
         if (query.contains("/hint")) {
-            word = user.stateLearn.getValue().createHint();
+            word = user.getStateLearn().getValue().createHint();
             return move(Event.HINT).action(word);
         }
 
 
         if (vocabulary.checkTranslate(query, user)) {
-            user.stateLearn.setValue(vocabulary.getEnWord(user));
-            word = user.stateLearn.getValue().getEn();
+            Word temp = vocabulary.getEnWord(user);
+            user.setStateLearn(temp/*vocabulary.getEnWord(user)*/);
+            word = user.getStateLearn().getValue().getEn();
             return move(Event.FIRST_EN_WORD).action(word);
         }
 

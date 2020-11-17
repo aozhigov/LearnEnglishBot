@@ -2,19 +2,16 @@ package automat.LearnNodes;
 
 import automat.HandlerNode;
 import common.Event;
-import common.Message;
+import common.MessageBot;
 import common.User;
 
 public class ZeroNode extends HandlerNode {
-    public ZeroNode() {
-
-    }
 
     @Override
-    public Message action(String query, User user) {
-        if (links.containsKey(user.stateDialog.getKey())) {
-            Event temp = user.stateDialog.getKey();
-            user.stateDialog.setKey(Event.SECOND_START);
+    public MessageBot action(String query, User user) {
+        if (links.containsKey(user.getStateDialog().getKey())) {
+            Event temp = user.getStateDialog().getKey();
+            user.setStateDialog(Event.SECOND_START);
             return move(temp).action(user.getName());
         }
 

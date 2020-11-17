@@ -12,6 +12,10 @@ public class Word {
     public int frequency;
     public HashMap<Long, Tuple<Integer, Integer>> dictionary;
 
+    public Word() {
+        dictionary = new HashMap<>();
+    }
+
     public Word(int freq, String en, String ru, String example) {
         frequency = freq;
         this.en = en;

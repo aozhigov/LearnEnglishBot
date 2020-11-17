@@ -1,13 +1,13 @@
 package bot;
 
-import common.Message;
+import common.MessageBot;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 import java.util.ArrayList;
 
-import static bot.UnderMessageKeyboard.addKeyboard;
+import static bot.Keyboard.addUnderMsgKeyboard;
 
-public class WorkWithMessage {
+public class WorkWithSendMessage {
     public static SendMessage setChatId(SendMessage message, Long chatId) {
         message.setChatId(chatId);
 
@@ -20,13 +20,13 @@ public class WorkWithMessage {
         return msg;
     }
 
-    public static SendMessage createMsgWithKeyboard(Message answer) {
+    public static SendMessage createMsgWithKeyboard(MessageBot answer) {
         SendMessage msg = createMessage(answer.getText());
 
         if (answer.getKeyboard() != null)
-            return addKeyboard(answer.getKeyboard().getKey(), msg,
+            return addUnderMsgKeyboard(answer.getKeyboard().getKey(), msg,
                     answer.getKeyboard().getValue());
 
-        return addKeyboard(0, msg, new ArrayList<>());
+        return addUnderMsgKeyboard(0, msg, new ArrayList<>());
     }
 }
