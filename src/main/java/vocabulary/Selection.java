@@ -5,6 +5,7 @@ import common.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Selection {
     private final ArrayList<Word> words;
@@ -29,15 +30,27 @@ public class Selection {
     }
 
     public Word getEnWord(User user) {
-        Word returningWord = this.words.get(0);
-        int minimalIncStat = returningWord.getIncorrectAnswerStatistic(user.getId());
+        ArrayList<Word> rightWords = new ArrayList<>();
+        rightWords.add(this.words.get(0));
+        int minimalIncStat = this.words.get(0).getIncorrectAnswerStatistic(user.getId());
+
         for (Word lookingWord : this.words) {
-            if (lookingWord.getIncorrectAnswerStatistic(user.getId()) < minimalIncStat) {
+            if (lookingWord.getIncorrectAnswerStatistic(user.getId()) == minimalIncStat) {
+                rightWords.add(lookingWord);
+            }
+            else if (lookingWord.getIncorrectAnswerStatistic(user.getId()) < minimalIncStat){
+                rightWords.clear();
+                rightWords.add(lookingWord);
                 minimalIncStat = lookingWord.getIncorrectAnswerStatistic(user.getId());
-                returningWord = lookingWord;
             }
         }
-        return returningWord;
+        return getRandomWord(rightWords);
+    }
+
+    private Word getRandomWord(ArrayList<Word> rightWords){
+        Random random = new Random();
+        int position = random.nextInt(rightWords.size() - 1);
+        return rightWords.get(position);
     }
 
     public Boolean checkTranslate(String query, User user) {
