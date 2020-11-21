@@ -15,7 +15,12 @@ public class YesNoNode extends HandlerNode {
         if (event != Event.NONE)
             return move(event).action(word);
 
-        if (query.equals("да")) {
+        if (query.contains("подсказка")) {
+            word = user.getStateLearn().getValue().createHint();
+            return move(Event.HINT).action(word);
+        }
+
+        if (query.equals("да") || query.equals("еще попытка")) {
             word = user.getStateLearn().getValue().getEn();
             event = Event.SECOND_EN_WORD;
         } else {

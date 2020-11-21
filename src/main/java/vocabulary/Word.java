@@ -28,14 +28,14 @@ public class Word {
         if (!this.dictionary.containsKey(userId))
             this.dictionary.put(userId, new Tuple<>(0, 1));
         if (Arrays.asList(ru.split("\\|")).contains(query)) {
-            calculateCoefficient(userId, true);
+            resetStatistic(userId, true);
             return true;
         }
-        calculateCoefficient(userId, false);
+        resetStatistic(userId, false);
         return false;
     }
 
-    private void calculateCoefficient(Long userId, Boolean bool) {
+    private void resetStatistic(Long userId, Boolean bool) {
         int correct = this.dictionary.get(userId).getKey();
         int incorrect = this.dictionary.get(userId).getValue();
         if (bool) correct += 1;
@@ -46,7 +46,7 @@ public class Word {
 
     public double getCoefficient(Long userId) {
         Tuple<Integer, Integer> stat = this.dictionary.get(userId);
-        return stat.getKey() * 1.0 / stat.getValue() * 100.0;
+        return stat.getKey() * 100.0 / stat.getValue();
     }
 
     public int getIncorrectAnswerStatistic(Long userId) {

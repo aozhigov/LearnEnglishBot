@@ -65,8 +65,39 @@ public class Selection {
         return answer;
     }
 
-    public double getSelectionStatistic(User user) {
-        return this.usersStat.get(user.getId()).getKey() * 100.0
-                / this.usersStat.get(user.getId()).getValue();
+    public String getSelectionStatistic(User user) {
+        if (!this.usersStat.containsKey(user.getId()))
+            this.usersStat.put(user.getId(), new Tuple<>(0, 1));
+        int badLearnedWords = 0;
+        int goodLearnedWords = 0;
+        int excellentLearnedWord = 0;
+        double selectionStatistic = 0.0;
+        for (Word lookingWord: this.words
+        ) {
+            selectionStatistic += lookingWord.getCoefficient(user.getId());
+            double wordCoefficient = lookingWord.getCoefficient(user.getId());
+            if (wordCoefficient <= 40.0) badLearnedWords += 1;
+            else if (wordCoefficient <= 80.0) goodLearnedWords += 1;
+            else excellentLearnedWord += 1;
+        }
+        String response = "";
+        response += String.format("%.2f", selectionStatistic /
+                (badLearnedWords + goodLearnedWords + excellentLearnedWord));
+        response += ":\n";
+        response += "\tПлохо изучил: " + badLearnedWords
+                + " слов\n\tХорошо изучил: " + goodLearnedWords
+                + " слов\n\tОтлично изучил: " + excellentLearnedWord + " слов";
+        return response;
+    }
+
+    public StringBuilder getWordsStatistic(User user){
+        StringBuilder response = new StringBuilder("Статистика слов:\n");
+        for (Word lookingWord: this.words
+        ) {
+            String wordStat = "\t" + lookingWord.getEn() + "\t-\t"
+                    + String.format("%.2f", lookingWord.getCoefficient(user.getId())) + "\n";
+            response.append(wordStat);
+        }
+        return response;
     }
 }

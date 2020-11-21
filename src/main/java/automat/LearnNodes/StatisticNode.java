@@ -23,36 +23,29 @@ public class StatisticNode extends HandlerNode {
         if (temp != Event.NONE)
             return move(temp).action(word);
 
-        Selection vocabulary = vocabularies.get(user.getStateLearn().getKey());
-
         if (query.startsWith("по теме")) {
             String[] arr = query.split(" ");
 
             if (arr.length > 2 && vocabularies.containsKey(arr[2])) {
-                word = Double.toString(vocabularies.get(arr[2])
-                        .getSelectionStatistic(user));
+                word = vocabularies.get(arr[2])
+                        .getSelectionStatistic(user);
                 word = arr[2] + " - " + word + "%";
             } else {
-                word = Double.toString(vocabularies.get(user.getStateLearn().getKey())
-                        .getSelectionStatistic(user));
-                word = user.getStateLearn().getKey() + " - " + word + "%";
+                word = vocabularies.get(user.getStateLearn().getKey())
+                        .getSelectionStatistic(user);
+                word = user.getStateLearn().getKey() + " - " + word;
             }
 
             return move(Event.STAT_STR).action(word);
         }
 
-
-        if (query.startsWith("по слову")) {
+        if (query.startsWith("по словам в")) {
             String[] arr = query.split(" ");
 
-            if (arr.length > 2) {
-                word = Double.toString(vocabulary
-                        .getWordStatistic(user, arr[2]) * 100);
-                word = arr[2] + " - " + word + "%";
+            if (arr.length > 3 && vocabularies.containsKey(arr[3])) {
+                word = vocabularies.get(arr[3]).getWordsStatistic(user).toString();
             } else {
-                word = Double.toString(vocabulary
-                        .getWordStatistic(user, user.getStateLearn().getValue().getEn()) * 100);
-                word = user.getStateLearn().getValue().getEn() + " - " + word + "%";
+                word = vocabularies.get(user.getStateLearn().getKey()).getWordsStatistic(user).toString();
             }
 
             return move(Event.STAT_STR).action(word);

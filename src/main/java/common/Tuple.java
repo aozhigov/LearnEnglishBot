@@ -25,4 +25,9 @@ public class Tuple<T1, T2> {
     public void setValue(T2 value) {
         this.value = value;
     }
+
+    public void setTuple(T1 key, T2 value){
+        this.key = key;
+        this.value = value;
+    }
 }
