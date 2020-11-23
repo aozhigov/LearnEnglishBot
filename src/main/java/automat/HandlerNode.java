@@ -30,7 +30,7 @@ public abstract class HandlerNode {
     }
 
     public Event checkCommand(String query) {
-        return query.startsWith("/") && !query.equals("/hint")
+        return query.startsWith("/")
                 ? commands.get(query.split(" ", 1)[0])
                 : Event.NONE;
     }

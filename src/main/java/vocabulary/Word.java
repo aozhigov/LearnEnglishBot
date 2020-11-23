@@ -12,10 +12,6 @@ public class Word {
     public int frequency;
     public HashMap<Long, Tuple<Integer, Integer>> dictionary;
 
-    public Word() {
-        dictionary = new HashMap<>();
-    }
-
     public Word(int freq, String en, String ru, String example) {
         frequency = freq;
         this.en = en;
@@ -45,6 +41,8 @@ public class Word {
     }
 
     public double getCoefficient(Long userId) {
+        if (!this.dictionary.containsKey(userId))
+            this.dictionary.put(userId, new Tuple<>(0, 1));
         Tuple<Integer, Integer> stat = this.dictionary.get(userId);
         return stat.getKey() * 100.0 / stat.getValue();
     }
@@ -57,7 +55,7 @@ public class Word {
 
     public String createHint() {
         String translate = getRu().split(" ")[0];
-        return translate.substring(0, translate.length() / 3);
+        return translate.substring(0, translate.length() / 2);
     }
 
     public String getEn() {

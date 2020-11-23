@@ -2,11 +2,9 @@ package automat;
 
 
 import automat.LearnNodes.*;
+import bot.Keyboard;
 import bot.KeyboardType;
-import common.Event;
-import common.MessageBot;
-import common.Tuple;
-import common.User;
+import common.*;
 import org.json.simple.parser.ParseException;
 import vocabulary.Selection;
 
@@ -32,7 +30,10 @@ public class MainLogic {
         keyboards.add(new Tuple<>(2, Arrays.asList("linq", "string", "io-api", "collection-api")));
         keyboards.add(new Tuple<>(1, Arrays.asList("Да", "Нет")));
         keyboards.add(new Tuple<>(2, Arrays.asList("Подсказка", "Закончить")));
-        keyboards.add(new Tuple<>(3, Arrays.asList("Подсказка", "Еще попытка", "Закончить")));
+        keyboards.add(new Tuple<>(3, Arrays.asList("Подсказка", "Еще попытка", "Не знаю")));
+        keyboards.add(new Tuple<>(3, Arrays.asList("Текущая тема", "Слова",
+                "Тема: linq", "Тема: string",
+                "Тема: io-api", "Тема: collection-api")));
 
         root = initializationAutomat();
     }
@@ -68,18 +69,18 @@ public class MainLogic {
                 "Выбери одну из тем, предложенных ниже:",
                 KeyboardType.SIMPLE,
                 keyboards.get(0));
-        PrintNode firstEnWordStr = new PrintNode("Вот слово для перевода: {{WORD}}",
-                KeyboardType.UNDER_MESSAGE,
+        PrintNode firstEnWordStr = new PrintNode("Отлично! Вот слово для перевода: {{WORD}}",
+                KeyboardType.SIMPLE,
                 keyboards.get(2));
         PrintNode toTryTo = new PrintNode("Неправильно, {{WORD}}!",
-                KeyboardType.UNDER_MESSAGE,
+                KeyboardType.SIMPLE,
                 keyboards.get(3));
         PrintNode secondEnWordStr = new PrintNode("Хорошо подумай и отвечай, слово: {{WORD}}",
-                KeyboardType.UNDER_MESSAGE,
+                KeyboardType.SIMPLE,
                 keyboards.get(2));
         PrintNode ruWordStr = new PrintNode("Не расстраивайся, вот перевод: {{WORD}}.\n" +
                 "Хочешь продолжить?",
-                KeyboardType.UNDER_MESSAGE,
+                KeyboardType.SIMPLE,
                 keyboards.get(1));
         PrintNode wrongTopicStr = new PrintNode("{{WORD}}, не правильно выбрана тема.\n" +
                 "Есть только такие темы",
@@ -87,12 +88,13 @@ public class MainLogic {
                 keyboards.get(0));
         PrintNode hintStr = new PrintNode("Вот подсказка: {{WORD}}, а теперь отвечай");
         PrintNode exitStr = new PrintNode("Пока, {{WORD}}!");
-        PrintNode statisticStr = new PrintNode("{{WORD}}, здесь ты можешь получить свою статистику, команды:\n" +
-                "'по теме [тема]' - узнать процент знания текущщей [указанной] темы\n" +
-                "'по слову [слово]' - узнать отношение успешных попыток к неуспешным текущего [указанного] слова");
+        PrintNode statisticStr = new PrintNode("{{WORD}}, здесь ты можешь получить свою статистику.\n" +
+                "Выбери какую:",
+                KeyboardType.SIMPLE,
+                keyboards.get(4));
         PrintNode statStr = new PrintNode("Вот твоя статистика: {{WORD}}\n" +
                 "Продолжим?",
-                KeyboardType.UNDER_MESSAGE,
+                KeyboardType.SIMPLE,
                 keyboards.get(1));
         PrintNode helpStr = new PrintNode("Бот, который поможет увеличить твой словарный запас.\n" +
                 "Следующие команды могут быть вызваны из любого места диалога:\n" +
@@ -103,14 +105,14 @@ public class MainLogic {
                 "Перевод необходимо напечатать самому, \n" +
                 "в остальном бот предлагает клавиатуру вариантов ответа.\n" +
                 "Продолжим?",
-                KeyboardType.UNDER_MESSAGE,
+                KeyboardType.SIMPLE,
                 keyboards.get(1));
         PrintNode topicStr = new PrintNode("Выбери одну из тем, предложенных ниже:",
                 KeyboardType.SIMPLE,
                 keyboards.get(0));
         PrintNode wrongStr = new PrintNode("Не понимаю тебя, {{WORD}}\n" +
                 "Продолжим?",
-                KeyboardType.UNDER_MESSAGE,
+                KeyboardType.SIMPLE,
                 keyboards.get(1));
 
         ZeroNode zero = new ZeroNode();

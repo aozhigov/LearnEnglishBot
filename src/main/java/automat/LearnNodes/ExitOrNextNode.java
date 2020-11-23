@@ -19,11 +19,16 @@ public class ExitOrNextNode extends HandlerNode {
     public MessageBot action(String query, User user) {
         Event event = checkCommand(query);
         String word = user.getName();
+
         if (event != Event.NONE)
             return move(event).action(word);
 
         if (!query.equals("да"))
             return move(Event.EXIT).action(word);
+
+        if (user.getStateLearn().getKey().equals("")){
+            return move(Event.CHANGE_TOPIC).action(word);
+        }
 
         Selection vocabulary = vocabularies.get(user.getStateLearn().getKey());
         user.setStateLearn(vocabulary.getEnWord(user));

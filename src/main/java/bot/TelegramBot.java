@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 
-import static bot.Keyboard.addSimpleKeyboard;
 import static bot.Keyboard.addUnderMsgKeyboard;
 import static bot.WorkWithSendMessage.*;
 
@@ -26,13 +25,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     String token;
     String botName;
     MainLogic mainLogic;
-    private final Hashtable<Long, Tuple<Boolean, Long>> users;
+    private final Hashtable<Long, Tuple<Boolean, Message>> lastMessageForUser;
 
     public TelegramBot(String botName, String token) throws IOException, ParseException {
         this.botName = botName;
         this.token = token;
         this.mainLogic = new MainLogic();
-        users = new Hashtable<>();
+        lastMessageForUser = new Hashtable<>();
     }
 
     @Override
@@ -55,21 +54,30 @@ public class TelegramBot extends TelegramLongPollingBot {
         Long chatId = msgTelegram.getChatId();
         String userName = msgTelegram.getFrom().getUserName();
 
-        if (!users.containsKey(chatId))
-            users.put(chatId, new Tuple<>(isCallback, (long) msgTelegram.getMessageId()));
+        if (!lastMessageForUser.containsKey(chatId))
+            lastMessageForUser.put(chatId, new Tuple<>(isCallback, msgTelegram));
         else
-            users.get(chatId).setTuple(isCallback, (long) msgTelegram.getMessageId());
+            lastMessageForUser.get(chatId).setTuple(isCallback, msgTelegram);
 
         MessageBot answer = mainLogic.operate(chatId, inputText, userName);
-        if (users.get(chatId).getKey())
-            sendMsg(chatId, editMessage(users.get(chatId).getValue(), answer));
-        else
-            sendMsg(chatId, createMsgWithKeyboard(answer));
+        isCallback = lastMessageForUser.get(chatId).getKey();
+        sendMsg(chatId, createMsgWithKeyboard(answer));
+//        if (!isCallback || answer.getEditMessage() == EditMessage.NOTHING)
+//            sendMsg(chatId, createMsgWithKeyboard(answer));
+//        else if (answer.getEditMessage() == EditMessage.ALL)
+//            sendMsg(chatId, editMessage(lastMessageForUser.get(chatId).getValue().getMessageId(), answer));
+//        else{
+//            MessageBot oldMsg = new MessageBot(lastMessageForUser.get(chatId).getValue().getText(),
+//                    null, null);
+//            sendMsg(chatId, editMessage(lastMessageForUser.get(chatId).getValue().getMessageId(), oldMsg));
+//            sendMsg(chatId, createMsgWithKeyboard(answer));
+//        }
     }
 
     public synchronized void sendMsg(long chatId, SendMessage sendMessage) {
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(chatId);
+
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {

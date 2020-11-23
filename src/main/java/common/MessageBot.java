@@ -1,7 +1,6 @@
 package common;
 
 import automat.HandlerNode;
-import bot.Keyboard;
 import bot.KeyboardType;
 
 import java.util.ArrayList;
