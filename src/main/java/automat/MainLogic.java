@@ -81,7 +81,7 @@ public class MainLogic {
         PrintNode wrongTopicStr = new PrintNode("{{WORD}}, не правильно выбрана тема.\n" +
                 "Есть только такие темы",
                 keyboards.get(0));
-        PrintNode hintStr = new PrintNode("Вот подсказка: {{WORD}}, а теперь отвечай");
+        PrintNode hintStr = new PrintNode("Держи подсказку: {{WORD}}, а теперь отвечай");
         PrintNode exitStr = new PrintNode("Пока, {{WORD}}!");
         PrintNode statisticStr = new PrintNode("{{WORD}}, здесь ты можешь получить свою статистику.\n" +
                 "Выбери какую:",

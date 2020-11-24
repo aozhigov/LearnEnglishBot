@@ -98,14 +98,31 @@ public class Selection {
     public String getWordsStatistic(User user, int countWords) {
         StringBuilder response = new StringBuilder("Статистика слов:\n");
         quickSort(words, 0, words.size() - 1, user.getId());
-        for (Word lookingWord : this.words) {
-            if (countWords-- <= 0)
-                break;
-            String wordStat = "\t" + lookingWord.getEn() + "\t-\t"
-                    + String.format("%.2f", lookingWord.getCoefficient(user.getId()))
-                    + "%\n";
-            response.append(wordStat);
+        response.append("Топ худших:\n");
+        response.append(generateStringStat(0, countWords,
+                1, user.getId(), false));
+        response.append("\nТоп лучших:\n");
+        response.append(generateStringStat(words.size() - 1, words.size() - 1 - countWords,
+                -1, user.getId(), true));
+        return response.toString();
+    }
+
+    private String generateStringStat(int start, int finish, int step, long userId, boolean isMore){
+        StringBuilder response = new StringBuilder();
+        for (int i = start; i >= 0 && i < words.size()
+                && ((i < finish && !isMore) || (isMore && i > finish)); i += step){
+            double coefficient = words.get(i).getCoefficient(userId);
+
+            if (isMore && coefficient == 0)
+                continue;
+
+            response.append("\t").
+                    append(words.get(i).getEn())
+                    .append("\t-\t")
+                    .append(String.format("%.2f", coefficient))
+                    .append("%\n");
         }
+
         return response.toString();
     }
 
