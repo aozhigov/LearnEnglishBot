@@ -40,7 +40,6 @@ public class StatisticNode extends HandlerNode {
                 word = "тут пока пусто";
 
             event = Event.STAT_STR;
-            //return move(Event.STAT_STR).action(word);
         }
         else if (query.startsWith("слова")) {
             if (vocabularies.containsKey(user.getStateLearn().getKey()))
@@ -50,7 +49,6 @@ public class StatisticNode extends HandlerNode {
                 word = "тут пока пусто";
 
             event = Event.STAT_STR;
-            //return move(Event.STAT_STR).action(word);
         }
 
         return move(event).action(word);

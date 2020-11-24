@@ -34,14 +34,12 @@ public class CheckWordNode extends HandlerNode {
         if (query.contains("подсказка")) {
             word = user.getStateLearn().getValue().createHint();
             event = Event.HINT;
-            //return move(Event.HINT).action(word);
         }
         else if (vocabulary.checkTranslate(query, user)) {
             Word temp = vocabulary.getEnWord(user);
             user.setStateLearn(temp);
             word = user.getStateLearn().getValue().getEn();
             event = Event.FIRST_EN_WORD;
-            //return move(Event.FIRST_EN_WORD).action(word);
         }
 
         return move(event).action(word);

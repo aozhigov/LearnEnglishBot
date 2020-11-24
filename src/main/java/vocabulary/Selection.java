@@ -29,7 +29,8 @@ public class Selection {
         double minimalIncStat = searchMin(user.getId());
 
         for (Word lookingWord : this.words) {
-            if (Math.abs(lookingWord.getCoefficient(user.getId()) - minimalIncStat) < 10.0)
+            if (Math.abs(lookingWord.getCoefficient(user.getId())
+                    - minimalIncStat) < 10.0)
                 rightWords.add(lookingWord);
         }
         return getRandomWord(rightWords);
@@ -50,7 +51,8 @@ public class Selection {
     }
 
     public Boolean checkTranslate(String query, User user) {
-        boolean answer = user.getStateLearn().getValue().checkFromRuToEn(user.getId(), query);
+        boolean answer = user.getStateLearn().getValue()
+                .checkFromRuToEn(user.getId(), query);
 
         if (!this.usersStat.containsKey(user.getId()))
             this.usersStat.put(user.getId(), new Tuple<>(0, 1));
@@ -86,10 +88,11 @@ public class Selection {
         }
 
         return String.format("%.2f", selectionStatistic /
-                (badLearnedWords + goodLearnedWords + excellentLearnedWord)) + "%:\n" +
-                "\tПлохо изучил: " + badLearnedWords
+                (badLearnedWords + goodLearnedWords + excellentLearnedWord))
+                + "%:\n\tПлохо изучил: " + badLearnedWords
                 + " слов\n\tХорошо изучил: " + goodLearnedWords
-                + " слов\n\tОтлично изучил: " + excellentLearnedWord + " слов";
+                + " слов\n\tОтлично изучил: " + excellentLearnedWord
+                + " слов";
     }
 
     public String getWordsStatistic(User user, int countWords) {
@@ -98,9 +101,9 @@ public class Selection {
         for (Word lookingWord : this.words) {
             if (countWords-- <= 0)
                 break;
-            double t = lookingWord.getCoefficient(user.getId());
             String wordStat = "\t" + lookingWord.getEn() + "\t-\t"
-                    + String.format("%.2f", t) + "%\n";
+                    + String.format("%.2f", lookingWord.getCoefficient(user.getId()))
+                    + "%\n";
             response.append(wordStat);
         }
         return response.toString();

@@ -25,10 +25,8 @@ public class ExitOrNextNode extends HandlerNode {
 
         if (!query.equals("да"))
             event = Event.EXIT;
-            //return move(Event.EXIT).action(word);
         else if (user.getStateLearn().getKey().equals("")){
             event = Event.CHANGE_TOPIC;
-            // return move().action(word);
         }
         else{
             Selection vocabulary = vocabularies.get(user.getStateLearn().getKey());
