@@ -21,36 +21,42 @@ public class Word {
     }
 
     public Boolean checkFromRuToEn(Long userId, String query) {
-        if (!this.dictionary.containsKey(userId))
-            this.dictionary.put(userId, new Tuple<>(0, 1));
+        containsUser(userId);
+
         if (Arrays.asList(ru.split("\\|")).contains(query)) {
-            resetStatistic(userId, true);
+            updateStatistic(userId, true);
             return true;
         }
-        resetStatistic(userId, false);
+
+        updateStatistic(userId, false);
         return false;
     }
 
-    private void resetStatistic(Long userId, Boolean bool) {
+    private void containsUser(Long userId) {
+        if (!this.dictionary.containsKey(userId))
+            this.dictionary.put(userId, new Tuple<>(0, 0));
+    }
+
+    private void updateStatistic(Long userId, Boolean bool) {
         int correct = this.dictionary.get(userId).getKey();
-        int incorrect = this.dictionary.get(userId).getValue();
-        if (bool) correct += 1;
-        else incorrect += 1;
-        this.dictionary.remove(userId);
-        this.dictionary.put(userId, new Tuple<>(correct, incorrect));
+        int trying = this.dictionary.get(userId).getValue();
+
+        if (bool)
+            correct += 1;
+
+        trying += 1;
+
+        this.dictionary.replace(userId, new Tuple<>(correct, trying));
     }
 
     public double getCoefficient(Long userId) {
-        if (!this.dictionary.containsKey(userId))
-            this.dictionary.put(userId, new Tuple<>(0, 1));
-        Tuple<Integer, Integer> stat = this.dictionary.get(userId);
-        return stat.getKey() * 100.0 / stat.getValue();
-    }
+        containsUser(userId);
 
-    public int getIncorrectAnswerStatistic(Long userId) {
-        if (!this.dictionary.containsKey(userId))
-            this.dictionary.put(userId, new Tuple<>(0, 1));
-        return this.dictionary.get(userId).getValue();
+        Tuple<Integer, Integer> stat = this.dictionary.get(userId);
+
+        return stat.getValue() != 0
+                ? Math.min(stat.getKey() * 100.0 / stat.getValue(), 100.0)
+                : 0.0;
     }
 
     public String createHint() {
@@ -68,5 +74,17 @@ public class Word {
 
     private String prepareTranslate(String word) {
         return word.replaceAll("\\|", " или ");
+    }
+
+    public int compareTo(Object o, long userId) {
+        if (o instanceof Word){
+            if (((Word) o).getCoefficient(userId) == this.getCoefficient(userId))
+                return this.en.compareTo(((Word) o).getEn());
+            else
+                return (int) (-((Word) o).getCoefficient(userId)
+                        + this.getCoefficient(userId));
+        }
+        else
+            return -1;
     }
 }

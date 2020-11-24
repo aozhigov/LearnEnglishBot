@@ -10,20 +10,22 @@ public class WrongNode extends HandlerNode {
 
     @Override
     public MessageBot action(String query, User user) {
-        Event temp = checkCommand(query);
+        Event event = checkCommand(query);
         String word = user.getName();
 
-        if (temp != Event.NONE)
-            return move(temp).action(word);
+        if (event != Event.NONE)
+            return move(event).action(word);
 
         if (query.equals("да")) {
             if (user.getStateLearn().getValue() != null){
                 word = user.getStateLearn().getValue().getEn();
-                return move(Event.FIRST_EN_WORD).action(word);
+                event = Event.FIRST_EN_WORD;
             }
 
             if (user.getStateLearn().getKey().equals(""))
-                return move(Event.CHANGE_TOPIC).action(word);
+               event = Event.CHANGE_TOPIC;
+
+            return move(event).action(word);
         }
 
         return move(Event.EXIT).action(word);

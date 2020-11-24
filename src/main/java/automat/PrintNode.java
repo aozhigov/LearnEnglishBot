@@ -14,11 +14,10 @@ public class PrintNode {
     private HandlerNode handler;
 
     public PrintNode(String value,
-                     KeyboardType type,
                      Tuple<Integer, List<String>> keyboard) {
         this.value = value;
         this.keyboard = keyboard;
-        this.keyboardType = type;
+        this.keyboardType = KeyboardType.SIMPLE;
     }
 
     public PrintNode(String value) {

@@ -28,20 +28,22 @@ public class CheckWordNode extends HandlerNode {
             return move(Event.EXIT).action(word);
         }
 
+        event = Event.TRY;
         Selection vocabulary = vocabularies.get(user.getStateLearn().getKey());
 
         if (query.contains("подсказка")) {
             word = user.getStateLearn().getValue().createHint();
-            return move(Event.HINT).action(word);
+            event = Event.HINT;
+            //return move(Event.HINT).action(word);
         }
-
-        if (vocabulary.checkTranslate(query, user)) {
+        else if (vocabulary.checkTranslate(query, user)) {
             Word temp = vocabulary.getEnWord(user);
             user.setStateLearn(temp);
             word = user.getStateLearn().getValue().getEn();
-            return move(Event.FIRST_EN_WORD).action(word);
+            event = Event.FIRST_EN_WORD;
+            //return move(Event.FIRST_EN_WORD).action(word);
         }
 
-        return move(Event.TRY).action(word);
+        return move(event).action(word);
     }
 }

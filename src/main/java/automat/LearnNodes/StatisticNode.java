@@ -17,11 +17,13 @@ public class StatisticNode extends HandlerNode {
 
     @Override
     public MessageBot action(String query, User user) {
-        Event temp = checkCommand(query);
+        Event event = checkCommand(query);
         String word = user.getName();
 
-        if (temp != Event.NONE)
-            return move(temp).action(word);
+        if (event != Event.NONE)
+            return move(event).action(word);
+
+        event = Event.WRONG;
 
         if (query.contains("тема")) {
             String[] arr = query.split(" ");
@@ -34,28 +36,23 @@ public class StatisticNode extends HandlerNode {
                 word = vocabularies.get(user.getStateLearn().getKey())
                         .getSelectionStatistic(user);
                 word = user.getStateLearn().getKey() + " - " + word;
-            } else {
-                word = vocabularies.get("linq")
-                        .getSelectionStatistic(user);
-                word = "linq" + " - " + word;
-            }
+            } else
+                word = "тут пока пусто";
 
-            return move(Event.STAT_STR).action(word);
+            event = Event.STAT_STR;
+            //return move(Event.STAT_STR).action(word);
         }
-
-        if (query.startsWith("слова")) {
-            String[] arr = query.split(" ");
-
-            if (arr.length > 3 && vocabularies.containsKey(arr[3]))
-                word = vocabularies.get(arr[3]).getWordsStatistic(user).toString();
-            else if (vocabularies.containsKey(user.getStateLearn().getKey()))
-                word = vocabularies.get(user.getStateLearn().getKey()).getWordsStatistic(user).toString();
+        else if (query.startsWith("слова")) {
+            if (vocabularies.containsKey(user.getStateLearn().getKey()))
+                word = vocabularies.get(user.getStateLearn().getKey())
+                        .getWordsStatistic(user, 5);
             else
-                word = "Тут пока пусто";
+                word = "тут пока пусто";
 
-            return move(Event.STAT_STR).action(word);
+            event = Event.STAT_STR;
+            //return move(Event.STAT_STR).action(word);
         }
 
-        return move(Event.WRONG).action(word);
+        return move(event).action(word);
     }
 }

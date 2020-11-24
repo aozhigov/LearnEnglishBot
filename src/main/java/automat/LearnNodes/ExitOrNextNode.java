@@ -24,16 +24,19 @@ public class ExitOrNextNode extends HandlerNode {
             return move(event).action(word);
 
         if (!query.equals("да"))
-            return move(Event.EXIT).action(word);
-
-        if (user.getStateLearn().getKey().equals("")){
-            return move(Event.CHANGE_TOPIC).action(word);
+            event = Event.EXIT;
+            //return move(Event.EXIT).action(word);
+        else if (user.getStateLearn().getKey().equals("")){
+            event = Event.CHANGE_TOPIC;
+            // return move().action(word);
+        }
+        else{
+            Selection vocabulary = vocabularies.get(user.getStateLearn().getKey());
+            user.setStateLearn(vocabulary.getEnWord(user));
+            word = user.getStateLearn().getValue().getEn();
+            event = Event.FIRST_EN_WORD;
         }
 
-        Selection vocabulary = vocabularies.get(user.getStateLearn().getKey());
-        user.setStateLearn(vocabulary.getEnWord(user));
-        word = user.getStateLearn().getValue().getEn();
-
-        return move(Event.FIRST_EN_WORD).action(word);
+        return move(event).action(word);
     }
 }

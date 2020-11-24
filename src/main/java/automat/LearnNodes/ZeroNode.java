@@ -12,6 +12,7 @@ public class ZeroNode extends HandlerNode {
         if (links.containsKey(user.getStateDialog().getKey())) {
             Event temp = user.getStateDialog().getKey();
             user.setStateDialog(Event.SECOND_START);
+
             return move(temp).action(user.getName());
         }
 

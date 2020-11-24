@@ -2,9 +2,10 @@ package automat;
 
 
 import automat.LearnNodes.*;
-import bot.Keyboard;
-import bot.KeyboardType;
-import common.*;
+import common.Event;
+import common.MessageBot;
+import common.Tuple;
+import common.User;
 import org.json.simple.parser.ParseException;
 import vocabulary.Selection;
 
@@ -27,7 +28,8 @@ public class MainLogic {
         vocabularies = getVocabulariesFromJson();
 
         keyboards = new ArrayList<>();
-        keyboards.add(new Tuple<>(2, Arrays.asList("linq", "string", "io-api", "collection-api")));
+        keyboards.add(new Tuple<>(2, Arrays.asList("linq", "string",
+                "io-api", "collection-api")));
         keyboards.add(new Tuple<>(1, Arrays.asList("Да", "Нет")));
         keyboards.add(new Tuple<>(2, Arrays.asList("Подсказка", "Закончить")));
         keyboards.add(new Tuple<>(3, Arrays.asList("Подсказка", "Еще попытка", "Не знаю")));
@@ -62,39 +64,30 @@ public class MainLogic {
                 "Тебе надо будет писать перевод слов, которые я тебе отправлю!\n" +
                 "В любой момент ты можешь попросить помощи по командам (/help).\n" +
                 "Выбери одну из тем, предложенных ниже:",
-                KeyboardType.SIMPLE,
                 keyboards.get(0));
         PrintNode startSecondStr = new PrintNode("С возвращением, {{WORD}}!\n" +
                 "В любой момент ты можешь попросить помощи по командам (/help).\n" +
                 "Выбери одну из тем, предложенных ниже:",
-                KeyboardType.SIMPLE,
                 keyboards.get(0));
         PrintNode firstEnWordStr = new PrintNode("Отлично! Вот слово для перевода: {{WORD}}",
-                KeyboardType.SIMPLE,
                 keyboards.get(2));
         PrintNode toTryTo = new PrintNode("Неправильно, {{WORD}}!",
-                KeyboardType.SIMPLE,
                 keyboards.get(3));
         PrintNode secondEnWordStr = new PrintNode("Хорошо подумай и отвечай, слово: {{WORD}}",
-                KeyboardType.SIMPLE,
                 keyboards.get(2));
         PrintNode ruWordStr = new PrintNode("Не расстраивайся, вот перевод: {{WORD}}.\n" +
                 "Хочешь продолжить?",
-                KeyboardType.SIMPLE,
                 keyboards.get(1));
         PrintNode wrongTopicStr = new PrintNode("{{WORD}}, не правильно выбрана тема.\n" +
                 "Есть только такие темы",
-                KeyboardType.SIMPLE,
                 keyboards.get(0));
         PrintNode hintStr = new PrintNode("Вот подсказка: {{WORD}}, а теперь отвечай");
         PrintNode exitStr = new PrintNode("Пока, {{WORD}}!");
         PrintNode statisticStr = new PrintNode("{{WORD}}, здесь ты можешь получить свою статистику.\n" +
                 "Выбери какую:",
-                KeyboardType.SIMPLE,
                 keyboards.get(4));
-        PrintNode statStr = new PrintNode("Вот твоя статистика: {{WORD}}\n" +
+        PrintNode statStr = new PrintNode("Вот твоя статистика:\n{{WORD}}\n" +
                 "Продолжим?",
-                KeyboardType.SIMPLE,
                 keyboards.get(1));
         PrintNode helpStr = new PrintNode("Бот, который поможет увеличить твой словарный запас.\n" +
                 "Следующие команды могут быть вызваны из любого места диалога:\n" +
@@ -105,14 +98,11 @@ public class MainLogic {
                 "Перевод необходимо напечатать самому, \n" +
                 "в остальном бот предлагает клавиатуру вариантов ответа.\n" +
                 "Продолжим?",
-                KeyboardType.SIMPLE,
                 keyboards.get(1));
         PrintNode topicStr = new PrintNode("Выбери одну из тем, предложенных ниже:",
-                KeyboardType.SIMPLE,
                 keyboards.get(0));
         PrintNode wrongStr = new PrintNode("Не понимаю тебя, {{WORD}}\n" +
                 "Продолжим?",
-                KeyboardType.SIMPLE,
                 keyboards.get(1));
 
         ZeroNode zero = new ZeroNode();
@@ -154,10 +144,10 @@ public class MainLogic {
                 Arrays.asList(statisticStr, exitStr, helpStr,
                         topicStr, firstEnWordStr, toTryTo, hintStr)));
         yesNo.initLinks(getLinks(
-                Arrays.asList(Event.STATISTIC, Event.EXIT, Event.HELP,
-                        Event.CHANGE_TOPIC, Event.SECOND_EN_WORD, Event.RU_WORD),
+                Arrays.asList(Event.STATISTIC, Event.EXIT, Event.HELP, Event.CHANGE_TOPIC,
+                        Event.SECOND_EN_WORD, Event.RU_WORD, Event.HINT),
                 Arrays.asList(statisticStr, exitStr, helpStr,
-                        topicStr, secondEnWordStr, ruWordStr)));
+                        topicStr, secondEnWordStr, ruWordStr, hintStr)));
         exitOrNext.initLinks(getLinks(
                 Arrays.asList(Event.STATISTIC, Event.EXIT, Event.HELP,
                         Event.CHANGE_TOPIC, Event.FIRST_EN_WORD),
