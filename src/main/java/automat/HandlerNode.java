@@ -19,6 +19,7 @@ public abstract class HandlerNode {
         commands.put("/topic", Event.CHANGE_TOPIC);
         commands.put("/help", Event.HELP);
         commands.put("/exit", Event.EXIT);
+        commands.put("/add", Event.ADD_VOCABULARY);
     }
 
     public abstract MessageBot action(

@@ -146,33 +146,38 @@ public class MainLogic {
         zero.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
             put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
-            put(Event.FIRST_START, startFirstStr); put(Event.SECOND_START, startSecondStr);}});
+            put(Event.FIRST_START, startFirstStr); put(Event.SECOND_START, startSecondStr);
+            put(Event.ADD_VOCABULARY, addVocabularyStr);}});
         choseTopic.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
             put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
-            put(Event.FIRST_START, startFirstStr); put(Event.WRONG_TOPIC, wrongTopicStr);}});
+            put(Event.FIRST_START, startFirstStr); put(Event.WRONG_TOPIC, wrongTopicStr);
+            put(Event.ADD_VOCABULARY, addVocabularyStr);}});
         checkWord.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
             put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
             put(Event.FIRST_START, startFirstStr); put(Event.TRY, toTryTo);
-            put(Event.HINT, hintStr);}});
+            put(Event.HINT, hintStr); put(Event.ADD_VOCABULARY, addVocabularyStr);}});
         yesNo.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
             put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
             put(Event.SECOND_EN_WORD, secondEnWordStr); put(Event.RU_WORD, ruWordStr);
-            put(Event.HINT, hintStr);}});
+            put(Event.HINT, hintStr); put(Event.ADD_VOCABULARY, addVocabularyStr);}});
         exitOrNext.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
             put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
-            put(Event.FIRST_EN_WORD, firstEnWordStr); }});
+            put(Event.FIRST_EN_WORD, firstEnWordStr);
+            put(Event.ADD_VOCABULARY, addVocabularyStr);}});
         wrong.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
             put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
-            put(Event.FIRST_EN_WORD, firstEnWordStr); }});
+            put(Event.FIRST_EN_WORD, firstEnWordStr);
+            put(Event.ADD_VOCABULARY, addVocabularyStr);}});
         statistic.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
             put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
-            put(Event.WRONG, wrongStr); put(Event.STAT_STR, statStr);}});
+            put(Event.WRONG, wrongStr); put(Event.STAT_STR, statStr);
+            put(Event.ADD_VOCABULARY, addVocabularyStr);}});
         addVocabulary.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
             put(Event.HELP, helpStr); put(Event.ADD_WORD_VOCABULARY, addWordVocabularyStr); }});
