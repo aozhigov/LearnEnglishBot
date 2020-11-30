@@ -11,11 +11,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 
 public class CheckWordNode extends HandlerNode {
-    private final HashMap<String, Selection> vocabularies;
-
-    public CheckWordNode(HashMap<String, Selection> vocabularies) {
-        this.vocabularies = vocabularies;
-    }
 
     @Override
     public MessageBot action(String query, User user) {
@@ -30,7 +25,7 @@ public class CheckWordNode extends HandlerNode {
         }
 
         event = Event.TRY;
-        Selection vocabulary = vocabularies.get(user.getStateLearn().getKey());
+        Selection vocabulary = user.getMyVocabularies().get(user.getStateLearn().getKey());
 
         if (query.contains("подсказка")) {
             word = user.getStateLearn().getValue().createHint();

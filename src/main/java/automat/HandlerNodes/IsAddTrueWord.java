@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-public class isAddTrueWord extends HandlerNode {
-    public isAddTrueWord(){ }
+public class IsAddTrueWord extends HandlerNode {
+    public IsAddTrueWord(){ }
 
     @Override
     public MessageBot action(String query, User user) throws IOException {
@@ -21,13 +21,15 @@ public class isAddTrueWord extends HandlerNode {
         if (event != Event.NONE)
             return move(event).action(word);
 
-        if (query.equals("закончить"))
-            event = Event.ADD_VOCABULARY;
-
         if (query.equals("знаю")) {
             event = Event.ADD_WORD_VOCABULARY;
-            word = "";
+            word = user.getNextWord();
+            //TODO оработать ограниченное количество слов,
+            // добавить оставшиесяя, не добавлять оставшиеся,
         }
+
+        if (query.equals("не знаю"))
+            user.delWord();
 
         return move(event).action(word);
     }

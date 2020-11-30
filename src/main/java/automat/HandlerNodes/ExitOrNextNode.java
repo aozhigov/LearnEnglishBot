@@ -10,11 +10,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 
 public class ExitOrNextNode extends HandlerNode {
-    private final HashMap<String, Selection> vocabularies;
-
-    public ExitOrNextNode(HashMap<String, Selection> vocabularies) {
-        this.vocabularies = vocabularies;
-    }
 
     @Override
     public MessageBot action(String query, User user) {
@@ -30,7 +25,7 @@ public class ExitOrNextNode extends HandlerNode {
             event = Event.CHANGE_TOPIC;
         }
         else{
-            Selection vocabulary = vocabularies.get(user.getStateLearn().getKey());
+            Selection vocabulary = user.getMyVocabularies().get(user.getStateLearn().getKey());
             user.setStateLearn(vocabulary.getEnWord(user));
             word = user.getStateLearn().getValue().getEn();
             event = Event.FIRST_EN_WORD;

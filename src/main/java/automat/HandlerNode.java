@@ -3,6 +3,7 @@ package automat;
 import common.Event;
 import common.MessageBot;
 import common.User;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public abstract class HandlerNode {
     }
 
     public abstract MessageBot action(
-            String query, User user) throws IOException;
+            String query, User user) throws IOException, ParseException;
 
     public PrintNode move(Event event) {
         return links.get(event);

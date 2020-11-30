@@ -13,6 +13,8 @@ public class User {
     private Tuple<Event, HandlerNode> stateDialog;
     private Tuple<String, Word> stateLearn;
     private HashMap<String, Selection> myVocabularies;
+    public Integer currIdx;
+    public String currVocab;
 
     public User(HashMap<String, Selection> startVocabularies) {
         userName = "";
@@ -65,5 +67,20 @@ public class User {
 
     public void addVocabularies(String name, Selection selection){
         myVocabularies.put(name, selection);
+    }
+
+    //TODO сократить remove до О(1)
+    //TODO обавить состояния добавления слов и возвращать их в методах
+
+    public String getNextWord(){
+        return myVocabularies.get(currVocab).getWithoutStat(currIdx);
+    }
+
+    public void setLastAddMyVocabularies(String name){
+
+    }
+
+    public void delWord(){
+        //TODO удалить последнее слово которое проверяли
     }
 }

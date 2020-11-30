@@ -27,7 +27,7 @@ public class MainLogic {
 
     public MessageBot operate(Long chatId,
                               String query,
-                              String userName) throws IOException {
+                              String userName) throws IOException, ParseException {
         if (!users.containsKey(chatId))
             users.put(chatId, new User(userName, (long) (users.size() + 1)));
 
@@ -45,7 +45,7 @@ public class MainLogic {
         return answer.getMessageWithoutHandler();
     }
 
-    private HandlerNode initializationAutomat() {
+    private HandlerNode initializationAutomat() throws IOException, ParseException {
         KeyboardBot vocabulariesNamesKeyboard = new KeyboardBot(2,
                 Arrays.asList("linq", "string",
                         "io-api", "collection-api"));
@@ -59,6 +59,8 @@ public class MainLogic {
                 Arrays.asList("Текущая тема", "Слова",
                         "Тема: linq", "Тема: string",
                         "Тема: io-api", "Тема: collection-api"));
+        KeyboardBot addWordKeyboard = new KeyboardBot(2,
+                Arrays.asList("Знаю", "Не уверен", "Закончить"));
 
         PrintNode startFirstStr = new PrintNode("Привет, {{WORD}}!\n" +
                 "Я бот, который поможет тебе выучить английские слова!\n" +
@@ -105,14 +107,23 @@ public class MainLogic {
         PrintNode wrongStr = new PrintNode("Не понимаю тебя, {{WORD}}\n" +
                 "Продолжим?",
                 yesNoKeyboard);
+        PrintNode addVocabularyStr = new PrintNode("Введи текст для " +
+                "выделения нечасто употребляемых слов", null);
+        PrintNode addWordVocabularyStr = new PrintNode("Вот следующее слово:{{WORD}}.\n" +
+                "Знаешь его?", addWordKeyboard);
+        PrintNode endAddVocabularyStr = new PrintNode("Теперь введи имя своего словаря",
+                null);
 
         ZeroNode zero = new ZeroNode();
-        ChoseTopicNode choseTopic = new ChoseTopicNode(startVocabularies);
-        CheckWordNode checkWord = new CheckWordNode(startVocabularies);
+        ChoseTopicNode choseTopic = new ChoseTopicNode();
+        CheckWordNode checkWord = new CheckWordNode();
         YesNoNode yesNo = new YesNoNode();
-        ExitOrNextNode exitOrNext = new ExitOrNextNode(startVocabularies);
+        ExitOrNextNode exitOrNext = new ExitOrNextNode();
         WrongNode wrong = new WrongNode();
-        StatisticNode statistic = new StatisticNode(startVocabularies);
+        StatisticNode statistic = new StatisticNode();
+        AddVocabularyNode addVocabulary = new AddVocabularyNode();
+        IsAddTrueWord isAddTrueWord = new IsAddTrueWord();
+        SetNameVocabularies setNameVocabularies = new SetNameVocabularies();
 
         startFirstStr.initLinks(choseTopic);
         startSecondStr.initLinks(choseTopic);
@@ -128,6 +139,9 @@ public class MainLogic {
         helpStr.initLinks(wrong);
         topicStr.initLinks(choseTopic);
         wrongStr.initLinks(wrong);
+        addVocabularyStr.initLinks(addVocabulary);
+        addWordVocabularyStr.initLinks(isAddTrueWord);
+        endAddVocabularyStr.initLinks(setNameVocabularies);
 
         zero.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
@@ -159,6 +173,17 @@ public class MainLogic {
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
             put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
             put(Event.WRONG, wrongStr); put(Event.STAT_STR, statStr);}});
+        addVocabulary.initLinks(new HashMap<Event, PrintNode>() {{
+            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr); put(Event.ADD_WORD_VOCABULARY, addWordVocabularyStr); }});
+        isAddTrueWord.initLinks(new HashMap<Event, PrintNode>() {{
+            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr);
+            put(Event.END_VOCABULARY, endAddVocabularyStr); }});
+        setNameVocabularies.initLinks(new HashMap<Event, PrintNode>() {{
+            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
+            put(Event.FIRST_EN_WORD, firstEnWordStr); }});
 
         return zero;
     }

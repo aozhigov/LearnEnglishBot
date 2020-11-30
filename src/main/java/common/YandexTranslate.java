@@ -67,23 +67,31 @@ public class YandexTranslate {
         Reader reader = new InputStreamReader(is);
         JSONObject jsonObject = (JSONObject) jsonParser.parse(reader);
         JSONArray jsonArray = (JSONArray) jsonObject.get("translations");
-        ArrayList<HashMap<String, String>> jsar =  (ArrayList<HashMap<String, String>>) jsonArray;
-        return this.prepareResponse(words, jsar, wordsLanguage);
+        ArrayList<String> translatedWords = this.prepareTranslatedWords(jsonArray);
+        return this.prepareResponse(words, translatedWords, wordsLanguage);
+    }
+    private ArrayList<String> prepareTranslatedWords(JSONArray jsonArray){
+        ArrayList<String> result = new ArrayList<>();
+        for (Object item: jsonArray){
+            JSONObject temp = (JSONObject) item;
+            result.add(temp.get("text").toString());
+        }
+        return result;
     }
 
     private Selection prepareResponse(List<String> wordsOnTranslate,
-                                                    List<HashMap<String, String>> words,
-                                                    String wordsLanguage){
+                                      ArrayList<String> words,
+                                      String wordsLanguage){
         ArrayList<Word> arr = new ArrayList<>();
         for (int counter = 0; counter < wordsOnTranslate.size(); counter++){
             if (wordsLanguage.equals("en")){
                 arr.add(new Word(0,
                         wordsOnTranslate.get(counter),
-                        words.get(counter).get("text"), ""));
+                        words.get(counter), ""));
             }
             else{
                 arr.add(new Word(0,
-                        words.get(counter).get("text"),
+                        words.get(counter),
                         wordsOnTranslate.get(counter), " "));
             }
         }

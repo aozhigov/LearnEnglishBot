@@ -56,7 +56,7 @@ public class CsvFile {
             result.add(new Tuple<>(findStr, frequencyTable.getOrDefault(findStr, 1)));
         }
 
-        result.sort(Comparator.comparingInt(Tuple::getValue));
+        result.sort((o1, o2) -> o2.getValue() - o1.getValue());
 
         ArrayList<String> result1 = new ArrayList<>();
         for (Tuple<String, Integer> word: result)

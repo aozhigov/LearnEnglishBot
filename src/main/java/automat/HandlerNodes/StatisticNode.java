@@ -10,11 +10,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 
 public class StatisticNode extends HandlerNode {
-    private final HashMap<String, Selection> vocabularies;
-
-    public StatisticNode(HashMap<String, Selection> vocabularies) {
-        this.vocabularies = vocabularies;
-    }
 
     @Override
     public MessageBot action(String query, User user) {
@@ -29,12 +24,12 @@ public class StatisticNode extends HandlerNode {
         if (query.contains("тема")) {
             String[] arr = query.split(" ");
 
-            if (arr.length >= 2 && vocabularies.containsKey(arr[1])) {
-                word = vocabularies.get(arr[1])
+            if (arr.length >= 2 && user.getMyVocabularies().containsKey(arr[1])) {
+                word = user.getMyVocabularies().get(arr[1])
                         .getSelectionStatistic(user);
                 word = arr[1] + " - " + word;
-            } else if (vocabularies.containsKey(user.getStateLearn().getKey())){
-                word = vocabularies.get(user.getStateLearn().getKey())
+            } else if (user.getMyVocabularies().containsKey(user.getStateLearn().getKey())){
+                word = user.getMyVocabularies().get(user.getStateLearn().getKey())
                         .getSelectionStatistic(user);
                 word = user.getStateLearn().getKey() + " - " + word;
             } else
@@ -43,8 +38,8 @@ public class StatisticNode extends HandlerNode {
             event = Event.STAT_STR;
         }
         else if (query.startsWith("слова")) {
-            if (vocabularies.containsKey(user.getStateLearn().getKey()))
-                word = vocabularies.get(user.getStateLearn().getKey())
+            if (user.getMyVocabularies().containsKey(user.getStateLearn().getKey()))
+                word = user.getMyVocabularies().get(user.getStateLearn().getKey())
                         .getWordsStatistic(user, 5);
             else
                 word = "тут пока пусто";

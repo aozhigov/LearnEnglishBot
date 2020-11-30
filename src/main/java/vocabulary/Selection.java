@@ -158,7 +158,11 @@ public class Selection {
             quickSort(array, i, high, userId);
     }
 
-    public void delWord(Word word){
+    public void delWord(String word){
         words.remove(word);
+    }
+
+    public String getWithoutStat(int idx){
+        return words.get(idx).en;
     }
 }
