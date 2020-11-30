@@ -3,7 +3,7 @@ package bot;
 import common.MessageBot;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 
-import static bot.Keyboard.addKeyboard;
+import static bot.ReplyKeyboard.addKeyboard;
 
 public class WorkWithSendMessage {
     public static SendMessage createMessage(String text) {
@@ -14,6 +14,6 @@ public class WorkWithSendMessage {
 
     public static SendMessage createMsgWithKeyboard(MessageBot answer) {
         SendMessage msg = createMessage(answer.getText());
-        return addKeyboard(msg, answer.getKeyboardType(), answer.getKeyboard());
+        return addKeyboard(msg, answer.getKeyboard());
     }
 }

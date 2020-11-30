@@ -2,11 +2,9 @@ package bot;
 
 import automat.MainLogic;
 import common.MessageBot;
-import common.Tuple;
 import org.json.simple.parser.ParseException;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -14,10 +12,8 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
 
 import java.io.IOException;
-import java.util.List;
 
-import static bot.Keyboard.addUnderMsgKeyboard;
-import static bot.WorkWithSendMessage.*;
+import static bot.WorkWithSendMessage.createMsgWithKeyboard;
 
 
 public class TelegramBot extends TelegramLongPollingBot {
@@ -39,8 +35,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (update.hasCallbackQuery()) {
             msgTelegram = update.getCallbackQuery().getMessage();
             inputText = update.getCallbackQuery().getData();
-        }
-        else {
+        } else {
             msgTelegram = update.getMessage();
             inputText = update.getMessage().getText();
         }
@@ -48,7 +43,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         Long chatId = msgTelegram.getChatId();
         String userName = msgTelegram.getFrom().getUserName();
 
-        MessageBot answer = mainLogic.operate(chatId, inputText, userName);
+        MessageBot answer = null;
+        try {
+            answer = mainLogic.operate(chatId, inputText, userName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         sendMsg(chatId, createMsgWithKeyboard(answer));
     }
 
@@ -75,16 +75,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 interruptedException.printStackTrace();
             }
         }
-    }
-
-    private EditMessageText editMessage(long message_id, MessageBot msg){
-        EditMessageText editMsg = new EditMessageText()
-                .setMessageId(Math.toIntExact(message_id))
-                .setText(msg.getText());
-        Tuple<Integer, List<String>> keyboard = msg.getKeyboard();
-        if (msg.getKeyboardType() == KeyboardType.UNDER_MESSAGE)
-            editMsg.setReplyMarkup(addUnderMsgKeyboard(keyboard.getKey(), keyboard.getValue()));
-        return editMsg;
     }
 
     @Override

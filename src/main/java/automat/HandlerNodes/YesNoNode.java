@@ -1,4 +1,4 @@
-package automat.LearnNodes;
+package automat.HandlerNodes;
 
 import automat.HandlerNode;
 import common.Event;

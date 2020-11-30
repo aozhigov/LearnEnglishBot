@@ -1,4 +1,4 @@
-package automat.LearnNodes;
+package automat.HandlerNodes;
 
 import automat.HandlerNode;
 import common.Event;
@@ -7,12 +7,13 @@ import common.User;
 import vocabulary.Selection;
 import vocabulary.Word;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 
 public class CheckWordNode extends HandlerNode {
-    private final Hashtable<String, Selection> vocabularies;
+    private final HashMap<String, Selection> vocabularies;
 
-    public CheckWordNode(Hashtable<String, Selection> vocabularies) {
+    public CheckWordNode(HashMap<String, Selection> vocabularies) {
         this.vocabularies = vocabularies;
     }
 

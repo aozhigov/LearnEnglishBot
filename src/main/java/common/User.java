@@ -1,17 +1,23 @@
 package common;
 
 import automat.HandlerNode;
+import vocabulary.Selection;
 import vocabulary.Word;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class User {
     private final String userName;
     private final Long id;
     private Tuple<Event, HandlerNode> stateDialog;
     private Tuple<String, Word> stateLearn;
+    private HashMap<String, Selection> myVocabularies;
 
-    public User() {
+    public User(HashMap<String, Selection> startVocabularies) {
         userName = "";
         id = (long) -1;
+        this.myVocabularies = startVocabularies;
     }
 
     public User(String name, Long id) {
@@ -51,5 +57,13 @@ public class User {
 
     public void setStateLearn(Word word) {
         stateLearn.setValue(word);
+    }
+
+    public HashMap<String, Selection> getMyVocabularies(){
+        return myVocabularies;
+    }
+
+    public void addVocabularies(String name, Selection selection){
+        myVocabularies.put(name, selection);
     }
 }

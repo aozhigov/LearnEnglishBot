@@ -1,4 +1,4 @@
-package automat.LearnNodes;
+package automat.HandlerNodes;
 
 import automat.HandlerNode;
 import common.Event;
@@ -6,12 +6,13 @@ import common.MessageBot;
 import common.User;
 import vocabulary.Selection;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 
-public class ChoseTopicNode extends HandlerNode {
-    private final Hashtable<String, Selection> vocabularies;
+public class ExitOrNextNode extends HandlerNode {
+    private final HashMap<String, Selection> vocabularies;
 
-    public ChoseTopicNode(Hashtable<String, Selection> vocabularies) {
+    public ExitOrNextNode(HashMap<String, Selection> vocabularies) {
         this.vocabularies = vocabularies;
     }
 
@@ -23,14 +24,17 @@ public class ChoseTopicNode extends HandlerNode {
         if (event != Event.NONE)
             return move(event).action(word);
 
-        if (vocabularies.containsKey(query)) {
-            user.setStateLearn(query);
+        if (!query.equals("да"))
+            event = Event.EXIT;
+        else if (user.getStateLearn().getKey().equals("")){
+            event = Event.CHANGE_TOPIC;
+        }
+        else{
             Selection vocabulary = vocabularies.get(user.getStateLearn().getKey());
             user.setStateLearn(vocabulary.getEnWord(user));
             word = user.getStateLearn().getValue().getEn();
             event = Event.FIRST_EN_WORD;
-        } else
-            event = Event.WRONG_TOPIC;
+        }
 
         return move(event).action(word);
     }

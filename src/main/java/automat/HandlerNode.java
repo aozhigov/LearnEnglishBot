@@ -4,11 +4,13 @@ import common.Event;
 import common.MessageBot;
 import common.User;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Hashtable;
 
 public abstract class HandlerNode {
     private final Hashtable<String, Event> commands;
-    public Hashtable<Event, PrintNode> links;
+    public HashMap<Event, PrintNode> links;
 
     public HandlerNode() {
         commands = new Hashtable<>();
@@ -19,13 +21,13 @@ public abstract class HandlerNode {
     }
 
     public abstract MessageBot action(
-            String query, User user);
+            String query, User user) throws IOException;
 
     public PrintNode move(Event event) {
         return links.get(event);
     }
 
-    public void initLinks(Hashtable<Event, PrintNode> links) {
+    public void initLinks(HashMap<Event, PrintNode> links) {
         this.links = links;
     }
 

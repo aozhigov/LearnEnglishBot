@@ -157,4 +157,8 @@ public class Selection {
         if (high > i)
             quickSort(array, i, high, userId);
     }
+
+    public void delWord(Word word){
+        words.remove(word);
+    }
 }

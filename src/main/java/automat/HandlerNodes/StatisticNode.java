@@ -1,4 +1,4 @@
-package automat.LearnNodes;
+package automat.HandlerNodes;
 
 import automat.HandlerNode;
 import common.Event;
@@ -6,12 +6,13 @@ import common.MessageBot;
 import common.User;
 import vocabulary.Selection;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 
 public class StatisticNode extends HandlerNode {
-    private final Hashtable<String, Selection> vocabularies;
+    private final HashMap<String, Selection> vocabularies;
 
-    public StatisticNode(Hashtable<String, Selection> vocabularies) {
+    public StatisticNode(HashMap<String, Selection> vocabularies) {
         this.vocabularies = vocabularies;
     }
 

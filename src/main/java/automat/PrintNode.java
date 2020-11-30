@@ -1,6 +1,6 @@
 package automat;
 
-import bot.KeyboardType;
+import common.KeyboardBot;
 import common.MessageBot;
 import common.Tuple;
 
@@ -8,27 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrintNode {
-    private final Tuple<Integer, List<String>> keyboard;
-    private final KeyboardType keyboardType;
+    private final KeyboardBot keyboard;
     public String value;
     private HandlerNode handler;
 
     public PrintNode(String value,
-                     Tuple<Integer, List<String>> keyboard) {
+                     KeyboardBot keyboard) {
         this.value = value;
         this.keyboard = keyboard;
-        this.keyboardType = KeyboardType.SIMPLE;
     }
 
     public PrintNode(String value) {
         this.value = value;
-        this.keyboard = new Tuple<>(0, new ArrayList<>());
-        this.keyboardType = KeyboardType.NONE;
+        this.keyboard = new KeyboardBot(0, new ArrayList<>());
     }
 
     public MessageBot action(String word) {
         String text = value.replaceAll("\\{\\{WORD\\}\\}", word);
-        return new MessageBot(text, keyboardType, keyboard, move());
+        return new MessageBot(text, keyboard, move());
     }
 
     public HandlerNode move() {
