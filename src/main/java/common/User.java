@@ -5,7 +5,6 @@ import vocabulary.Selection;
 import vocabulary.Word;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class User {
     private final String userName;
@@ -13,13 +12,13 @@ public class User {
     private Tuple<Event, HandlerNode> stateDialog;
     private Tuple<String, Word> stateLearn;
     private HashMap<String, Selection> myVocabularies;
-    public Integer currIdx;
-    public String currVocab;
+    private Tuple<String, Integer> stateAddVocabulary;
 
     public User(HashMap<String, Selection> startVocabularies) {
         userName = "";
         id = (long) -1;
         this.myVocabularies = startVocabularies;
+        stateAddVocabulary = new Tuple<>("", -1);
     }
 
     public User(String name, Long id) {
@@ -61,26 +60,33 @@ public class User {
         stateLearn.setValue(word);
     }
 
-    public HashMap<String, Selection> getMyVocabularies(){
+    public HashMap<String, Selection> getMyVocabularies() {
         return myVocabularies;
     }
 
-    public void addVocabularies(String name, Selection selection){
+    public void addVocabularies(String name, Selection selection, Integer count) {
+        stateAddVocabulary.setTuple(name, --count);
         myVocabularies.put(name, selection);
     }
 
     //TODO сократить remove до О(1)
-    //TODO обавить состояния добавления слов и возвращать их в методах
+    //todo ограничение на количество слов
 
-    public String getNextWord(){
-        return myVocabularies.get(currVocab).getWithoutStat(currIdx);
+    public String getNextWord() {
+        stateAddVocabulary.setValue(stateAddVocabulary.getValue() - 1);
+        return myVocabularies.get(stateAddVocabulary.getKey())
+                .getWithoutStat(stateAddVocabulary.getValue() + 1);
     }
 
-    public void setLastAddMyVocabularies(String name){
-
+    public void setLastAddMyVocabularies(String name) {
+        Selection temp = myVocabularies.get(stateAddVocabulary.getKey());
+        myVocabularies.remove(stateAddVocabulary.getKey());
+        myVocabularies.put(name, temp);
+        stateAddVocabulary.setTuple("", -1);
     }
 
-    public void delWord(){
-        //TODO удалить последнее слово которое проверяли
+    public void delWord() {
+        myVocabularies.get(stateAddVocabulary.getKey())
+                .delWord(stateAddVocabulary.getValue());
     }
 }

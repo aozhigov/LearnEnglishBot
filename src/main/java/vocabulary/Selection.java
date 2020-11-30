@@ -158,8 +158,8 @@ public class Selection {
             quickSort(array, i, high, userId);
     }
 
-    public void delWord(String word){
-        words.remove(word);
+    public void delWord(Integer idx){
+        words.remove(idx);
     }
 
     public String getWithoutStat(int idx){
