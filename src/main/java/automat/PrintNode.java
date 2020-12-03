@@ -2,14 +2,12 @@ package automat;
 
 import common.KeyboardBot;
 import common.MessageBot;
-import common.Tuple;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PrintNode {
-    private final KeyboardBot keyboard;
     public String value;
+    private KeyboardBot keyboard;
     private HandlerNode handler;
 
     public PrintNode(String value,
@@ -28,11 +26,20 @@ public class PrintNode {
         return new MessageBot(text, keyboard, move());
     }
 
+    public MessageBot action(String word, KeyboardBot keyboard) {
+        String text = value.replaceAll("\\{\\{WORD\\}\\}", word);
+        return new MessageBot(text, keyboard, move());
+    }
+
     public HandlerNode move() {
         return handler;
     }
 
     public void initLinks(HandlerNode links) {
         this.handler = links;
+    }
+
+    public void setKeyboard(KeyboardBot keyboard) {
+        this.keyboard = keyboard;
     }
 }

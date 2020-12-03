@@ -33,9 +33,23 @@ public abstract class HandlerNode {
         this.links = links;
     }
 
-    public Event checkCommand(String query) {
+    public Event checkCommand(String query, User user) {
+        if (query.startsWith("/add")){
+            String[] temp = query.split(" ");
+            try {
+                if (temp.length > 1)
+                    user.setCountWordsVocabulary(Integer.parseInt(temp[1]));
+                else
+                    user.setCountWordsVocabulary(20);
+            }
+            catch (NumberFormatException e){
+                e.printStackTrace();
+                user.setCountWordsVocabulary(20);
+            }
+        }
+
         return query.startsWith("/")
-                ? commands.get(query.split(" ", 1)[0])
+                ? commands.get(query.split(" ")[0])
                 : Event.NONE;
     }
 }

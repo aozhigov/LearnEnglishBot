@@ -46,7 +46,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         MessageBot answer = null;
         try {
             answer = mainLogic.operate(chatId, inputText, userName);
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
         sendMsg(chatId, createMsgWithKeyboard(answer));

@@ -2,19 +2,26 @@ package automat.HandlerNodes;
 
 import automat.HandlerNode;
 import common.Event;
+import common.KeyboardBot;
 import common.MessageBot;
 import common.User;
-import vocabulary.Selection;
 
-import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.ArrayList;
 
 public class StatisticNode extends HandlerNode {
 
     @Override
     public MessageBot action(String query, User user) {
-        Event event = checkCommand(query);
+        Event event = checkCommand(query, user);
         String word = user.getName();
+
+        if (event == Event.CHANGE_TOPIC){
+            int count = user.getMyVocabularies().size() / 2;
+            if (user.getMyVocabularies().size() % 2 != 0)
+                count++;
+            return move(event).action(word,
+                    new KeyboardBot(count, new ArrayList<>(user.getMyVocabularies().keySet())));
+        }
 
         if (event != Event.NONE)
             return move(event).action(word);
@@ -28,7 +35,7 @@ public class StatisticNode extends HandlerNode {
                 word = user.getMyVocabularies().get(arr[1])
                         .getSelectionStatistic(user);
                 word = arr[1] + " - " + word;
-            } else if (user.getMyVocabularies().containsKey(user.getStateLearn().getKey())){
+            } else if (user.getMyVocabularies().containsKey(user.getStateLearn().getKey())) {
                 word = user.getMyVocabularies().get(user.getStateLearn().getKey())
                         .getSelectionStatistic(user);
                 word = user.getStateLearn().getKey() + " - " + word;
@@ -36,8 +43,7 @@ public class StatisticNode extends HandlerNode {
                 word = "тут пока пусто";
 
             event = Event.STAT_STR;
-        }
-        else if (query.startsWith("слова")) {
+        } else if (query.startsWith("слова")) {
             if (user.getMyVocabularies().containsKey(user.getStateLearn().getKey()))
                 word = user.getMyVocabularies().get(user.getStateLearn().getKey())
                         .getWordsStatistic(user, 5);

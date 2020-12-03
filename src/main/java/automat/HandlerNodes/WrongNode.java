@@ -2,15 +2,18 @@ package automat.HandlerNodes;
 
 import automat.HandlerNode;
 import common.Event;
+import common.KeyboardBot;
 import common.MessageBot;
 import common.User;
+
+import java.util.ArrayList;
 
 
 public class WrongNode extends HandlerNode {
 
     @Override
     public MessageBot action(String query, User user) {
-        Event event = checkCommand(query);
+        Event event = checkCommand(query, user);
         String word = user.getName();
 
         if (event != Event.NONE)
@@ -22,8 +25,15 @@ public class WrongNode extends HandlerNode {
                 event = Event.FIRST_EN_WORD;
             }
 
-            if (user.getStateLearn().getKey().equals(""))
-               event = Event.CHANGE_TOPIC;
+            if (user.getStateLearn().getKey().equals("")){
+                event = Event.CHANGE_TOPIC;
+                int count = user.getMyVocabularies().size() / 2;
+                if (user.getMyVocabularies().size() % 2 != 0)
+                    count++;
+                return move(event).action(word,
+                        new KeyboardBot(count, new ArrayList<>(user.getMyVocabularies().keySet())));
+            }
+
 
             return move(event).action(word);
         }

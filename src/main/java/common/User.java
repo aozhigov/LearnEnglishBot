@@ -13,6 +13,7 @@ public class User {
     private Tuple<String, Word> stateLearn;
     private HashMap<String, Selection> myVocabularies;
     private Tuple<String, Integer> stateAddVocabulary;
+    private Integer countWordsVocabulary;
 
     public User(HashMap<String, Selection> startVocabularies) {
         userName = "";
@@ -21,11 +22,13 @@ public class User {
         stateAddVocabulary = new Tuple<>("", -1);
     }
 
-    public User(String name, Long id) {
+    public User(String name, Long id, HashMap<String, Selection> startVocabularies) {
         userName = name;
         stateDialog = new Tuple<>(Event.FIRST_START, null);
         stateLearn = new Tuple<>("", null);
+        stateAddVocabulary = new Tuple<>("", -1);
         this.id = id;
+        this.myVocabularies = startVocabularies;
     }
 
     public String getName() {
@@ -64,18 +67,24 @@ public class User {
         return myVocabularies;
     }
 
-    public void addVocabularies(String name, Selection selection, Integer count) {
-        stateAddVocabulary.setTuple(name, --count);
+    public void addVocabularies(String name, Selection selection) {
+        stateAddVocabulary.setTuple(name, 0);
         myVocabularies.put(name, selection);
     }
 
-    //TODO сократить remove до О(1)
-    //todo ограничение на количество слов
+    public String getNextWord(boolean isKnow) {
+        if (!isKnow)
+            countWordsVocabulary--;
+        stateAddVocabulary.setValue(stateAddVocabulary.getValue() + 1);
+        if (stateAddVocabulary.getValue() >= myVocabularies.get(stateAddVocabulary.getKey()).getSize()
+                || countWordsVocabulary == 0){
+            myVocabularies.get(stateAddVocabulary.getKey())
+                    .delAllStartIdx(stateAddVocabulary.getValue() - 1);
+            return null;
+        }
 
-    public String getNextWord() {
-        stateAddVocabulary.setValue(stateAddVocabulary.getValue() - 1);
         return myVocabularies.get(stateAddVocabulary.getKey())
-                .getWithoutStat(stateAddVocabulary.getValue() + 1);
+                .getWithoutStat(stateAddVocabulary.getValue() - 1);
     }
 
     public void setLastAddMyVocabularies(String name) {
@@ -88,5 +97,11 @@ public class User {
     public void delWord() {
         myVocabularies.get(stateAddVocabulary.getKey())
                 .delWord(stateAddVocabulary.getValue());
+    }
+
+    public void setCountWordsVocabulary(int count){
+        countWordsVocabulary = count > 0
+                ? count
+                : 20;
     }
 }

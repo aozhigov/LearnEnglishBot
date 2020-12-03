@@ -1,12 +1,13 @@
 package common;
 
+import vocabulary.Word;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CsvFile {
-    private String path;
     private final BufferedReader bufferFile;
     private final String separator;
     Pattern pattern;
@@ -14,10 +15,9 @@ public class CsvFile {
     private Hashtable<String, Integer> frequencyTable;
 
     public CsvFile(String path, String separator) throws IOException {
-        this.path = System.getProperty("user.dir") + path;
         this.separator = separator;
-        bufferFile = new BufferedReader(new FileReader(new File(this.path)));
-        prepeareTable();
+        bufferFile = new BufferedReader(new FileReader(new File(path)));
+        prepareTable();
     }
 
     private List<String> nextLine() throws IOException {
@@ -31,13 +31,13 @@ public class CsvFile {
                 : null;
     }
 
-    public void prepeareTable() throws IOException {
+    public void prepareTable() throws IOException {
         List<String> line = nextLine();
 
         Hashtable<String, Integer> result = new Hashtable<>();
         while (line != null) {
-                result.put(line.get(1),
-                        Integer.parseInt(line.get(2)));
+            result.put(line.get(1),
+                    Integer.parseInt(line.get(2).substring(0, line.get(2).length() - 1)));
 
             line = nextLine();
         }
@@ -56,12 +56,17 @@ public class CsvFile {
             result.add(new Tuple<>(findStr, frequencyTable.getOrDefault(findStr, 1)));
         }
 
-        result.sort((o1, o2) -> o2.getValue() - o1.getValue());
+        result.sort(Comparator.comparingInt(Tuple::getValue));
 
-        ArrayList<String> result1 = new ArrayList<>();
+        HashSet<String> result1 = new HashSet<>();
+        ArrayList<String> res2 = new ArrayList<>();
         for (Tuple<String, Integer> word: result)
-            result1.add(word.getKey());
+            if (!result1.contains(word.getKey())){
+                result1.add(word.getKey());
+                res2.add(word.getKey());
+            }
 
-        return result1;
+
+        return res2;
     }
 }
