@@ -69,11 +69,11 @@ public class MainLogic {
                 "Тебе надо будет писать перевод слов, которые я тебе отправлю!\n" +
                 "В любой момент ты можешь попросить помощи по командам (/help).\n" +
                 "Выбери одну из тем, предложенных ниже:",
-                null);
+                new KeyboardBot());
         PrintNode startSecondStr = new PrintNode("С возвращением, {{WORD}}!\n" +
                 "В любой момент ты можешь попросить помощи по командам (/help).\n" +
                 "Выбери одну из тем, предложенных ниже:",
-                null);
+                new KeyboardBot());
         PrintNode firstEnWordStr = new PrintNode("Отлично! Вот слово для перевода: {{WORD}}",
                 hintEndKeyboard);
         PrintNode toTryTo = new PrintNode("Неправильно, {{WORD}}!",
@@ -85,7 +85,7 @@ public class MainLogic {
                 yesNoKeyboard);
         PrintNode wrongTopicStr = new PrintNode("{{WORD}}, не правильно выбрана тема.\n" +
                 "Есть только такие темы",
-                null);
+                new KeyboardBot());
         PrintNode hintStr = new PrintNode("Держи подсказку: {{WORD}}, а теперь отвечай");
         PrintNode exitStr = new PrintNode("Пока, {{WORD}}!");
         PrintNode statisticStr = new PrintNode("{{WORD}}, здесь ты можешь получить свою статистику.\n" +
@@ -100,14 +100,14 @@ public class MainLogic {
                 "/topic - сменить тему слов\n" +
                 "/help - вызвать справку\n" +
                 "/stat - показать статистику\n" +
-                "/add [кол-во слов] - создать свой словарь из текста " +
+                "/add \\[кол-во сло\\] - создать свой словарь из текста " +
                 "с указанием количества слов (необязательно)\n" +
                 "Перевод необходимо напечатать самому, \n" +
                 "в остальном бот предлагает клавиатуру вариантов ответа.\n" +
                 "Продолжим?",
                 yesNoKeyboard);
         PrintNode topicStr = new PrintNode("Выбери одну из тем, предложенных ниже:",
-                null);
+                new KeyboardBot());
         PrintNode wrongStr = new PrintNode("Не понимаю тебя, {{WORD}}\n" +
                 "Продолжим?",
                 yesNoKeyboard);

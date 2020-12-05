@@ -55,7 +55,7 @@ public class YandexTranslate {
 
     public Selection getTranslateWord(List<String> words) throws IOException, ParseException {
         String preparedWords = this.prepareWords(words);
-        String wordsLanguage = this.autoDetectLanguage(words.get(0));
+        String wordsLanguage = "en";//this.autoDetectLanguage(words.get(0));
         HttpPost httpPost = new HttpPost("https://translate.api.cloud.yandex.net/translate/v2/translate");
         httpPost.setHeader("Content-Type", "appliacation/json");
         httpPost.setHeader("Authorization", "Bearer " + this.token);
@@ -70,6 +70,7 @@ public class YandexTranslate {
         ArrayList<String> translatedWords = this.prepareTranslatedWords(jsonArray);
         return this.prepareResponse(words, translatedWords, wordsLanguage);
     }
+
     private ArrayList<String> prepareTranslatedWords(JSONArray jsonArray){
         ArrayList<String> result = new ArrayList<>();
         for (Object item: jsonArray){

@@ -21,7 +21,7 @@ public class MessageBot {
     public MessageBot(String text,
                       HandlerNode handler) {
         this.handler = handler;
-        this.keyboard = new KeyboardBot(0, new ArrayList<>());
+        this.keyboard = new KeyboardBot(new ArrayList<>());
         this.text = text;
     }
 

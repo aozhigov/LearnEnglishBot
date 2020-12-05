@@ -20,24 +20,26 @@ public class SetNameVocabularies extends HandlerNode {
         Event event = checkCommand(query, user);
         String word = user.getName();
 
-        if (event == Event.CHANGE_TOPIC){
-            int count = user.getMyVocabularies().size() / 2;
+        if (event == Event.CHANGE_TOPIC) {
+            user.delLastAddMyVocabularies();
             return move(event).action(word,
-                    new KeyboardBot(count, new ArrayList<>(user.getMyVocabularies().keySet())));
+                    new KeyboardBot(new ArrayList<>(user.getMyVocabularies().keySet())));
         }
 
-        if (event != Event.NONE)
+        if (event != Event.NONE) {
+            user.delLastAddMyVocabularies();
             return move(event).action(word);
+        }
 
-        user.setLastAddMyVocabularies(query);
+        if (user.getMyVocabularies().containsKey(query))
+            user.setLastAddMyVocabularies("My_" + user.getMyVocabularies() + "_" + query);
+        else
+            user.setLastAddMyVocabularies(query);
 
         if (user.getStateLearn().getKey().equals("")) {
             event = Event.CHANGE_TOPIC;
-            int count = user.getMyVocabularies().size() / 2;
-            if (user.getMyVocabularies().size() % 2 != 0)
-                count++;
             return move(event).action(word,
-                    new KeyboardBot(count, new ArrayList<>(user.getMyVocabularies().keySet())));
+                    new KeyboardBot(new ArrayList<>(user.getMyVocabularies().keySet())));
         }
         else{
             Selection vocabulary = user.getMyVocabularies().get(user.getStateLearn().getKey());

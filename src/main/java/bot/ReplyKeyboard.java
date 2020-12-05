@@ -16,6 +16,8 @@ public class ReplyKeyboard {
 
     private static ReplyKeyboardMarkup addSimpleKeyboard(List<String> args) {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        if (args == null || args.size() == 0)
+            return replyKeyboardMarkup;
         List<KeyboardRow> keyboard = new ArrayList<>();
         replyKeyboardMarkup.setOneTimeKeyboard(true);
         replyKeyboardMarkup.setResizeKeyboard(true);

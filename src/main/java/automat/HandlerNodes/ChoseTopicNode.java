@@ -19,11 +19,8 @@ public class ChoseTopicNode extends HandlerNode {
         String word = user.getName();
 
         if (event == Event.CHANGE_TOPIC){
-            int count = user.getMyVocabularies().size() / 2;
-            if (user.getMyVocabularies().size() % 2 != 0)
-                count++;
             return move(event).action(word,
-                    new KeyboardBot(count, new ArrayList<>(user.getMyVocabularies().keySet())));
+                    new KeyboardBot(new ArrayList<>(user.getMyVocabularies().keySet())));
         }
 
         if (event != Event.NONE)

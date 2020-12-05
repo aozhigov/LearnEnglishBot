@@ -27,11 +27,8 @@ public class WrongNode extends HandlerNode {
 
             if (user.getStateLearn().getKey().equals("")){
                 event = Event.CHANGE_TOPIC;
-                int count = user.getMyVocabularies().size() / 2;
-                if (user.getMyVocabularies().size() % 2 != 0)
-                    count++;
                 return move(event).action(word,
-                        new KeyboardBot(count, new ArrayList<>(user.getMyVocabularies().keySet())));
+                        new KeyboardBot(new ArrayList<>(user.getMyVocabularies().keySet())));
             }
 
 

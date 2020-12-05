@@ -14,9 +14,12 @@ public class IsAddTrueWord extends HandlerNode {
         Event event = checkCommand(query, user);
         String word = user.getName();
 
-        if (event != Event.NONE)
+        if (event != Event.NONE) {
+            user.delLastAddMyVocabularies();
             return move(event).action(word);
+        }
 
+        event = Event.WRONG;
 
         if (query.equals("знаю")) {
             user.delWord();
@@ -33,6 +36,9 @@ public class IsAddTrueWord extends HandlerNode {
             word = user.getName();
             event = Event.END_VOCABULARY;
         }
+
+        if (event == Event.WRONG)
+            user.delLastAddMyVocabularies();
 
         return move(event).action(word);
     }

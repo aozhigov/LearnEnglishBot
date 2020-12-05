@@ -94,6 +94,11 @@ public class User {
         stateAddVocabulary.setTuple("", -1);
     }
 
+    public void delLastAddMyVocabularies(){
+        myVocabularies.remove(stateAddVocabulary.getKey());
+        stateAddVocabulary = new Tuple<>("", 0);
+    }
+
     public void delWord() {
         myVocabularies.get(stateAddVocabulary.getKey())
                 .delWord(stateAddVocabulary.getValue());

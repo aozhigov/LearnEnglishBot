@@ -15,9 +15,8 @@ public class ZeroNode extends HandlerNode {
         if (links.containsKey(user.getStateDialog().getKey())) {
             Event temp = user.getStateDialog().getKey();
             user.setStateDialog(Event.SECOND_START);
-            int count = user.getMyVocabularies().size() / 2;
             return move(temp).action(user.getName(),
-                    new KeyboardBot(count, new ArrayList<>(user.getMyVocabularies().keySet())));
+                    new KeyboardBot(new ArrayList<>(user.getMyVocabularies().keySet())));
         }
 
         return move(Event.HELP).action(user.getName());

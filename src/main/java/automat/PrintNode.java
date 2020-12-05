@@ -18,7 +18,7 @@ public class PrintNode {
 
     public PrintNode(String value) {
         this.value = value;
-        this.keyboard = new KeyboardBot(0, new ArrayList<>());
+        this.keyboard = new KeyboardBot(new ArrayList<>());
     }
 
     public MessageBot action(String word) {
