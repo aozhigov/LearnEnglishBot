@@ -51,17 +51,17 @@ public class MainLogic {
 //        KeyboardBot vocabulariesNamesKeyboard = new KeyboardBot(2,
 //                Arrays.asList("linq", "string",
 //                        "io-api", "collection-api"));
-        KeyboardBot yesNoKeyboard = new KeyboardBot(1,
+        KeyboardBot yesNoKeyboard = new KeyboardBot(
                 Arrays.asList("Да", "Нет"));
-        KeyboardBot hintEndKeyboard = new KeyboardBot(2,
+        KeyboardBot hintEndKeyboard = new KeyboardBot(
                 Arrays.asList("Подсказка", "Закончить"));
-        KeyboardBot hintNotKnowKeyboard = new KeyboardBot(3,
+        KeyboardBot hintNotKnowKeyboard = new KeyboardBot(
                 Arrays.asList("Подсказка", "Еще попытка", "Не знаю"));
-        KeyboardBot statKeyboard = new KeyboardBot(3,
+        KeyboardBot statKeyboard = new KeyboardBot(
                 Arrays.asList("Текущая тема", "Слова",
                         "Тема: linq", "Тема: string",
                         "Тема: io-api", "Тема: collection-api"));
-        KeyboardBot addWordKeyboard = new KeyboardBot(2,
+        KeyboardBot addWordKeyboard = new KeyboardBot(
                 Arrays.asList("Знаю", "Не уверен", "Закончить"));
 
         PrintNode startFirstStr = new PrintNode("Привет, {{WORD}}!\n" +
@@ -113,11 +113,11 @@ public class MainLogic {
                 yesNoKeyboard);
         PrintNode addVocabularyStr = new PrintNode("Введи текст для " +
                 "выделения нечасто употребляемых слов",
-                new KeyboardBot(0, new ArrayList<>()));
+                new KeyboardBot());
         PrintNode addWordVocabularyStr = new PrintNode("Вот следующее слово:{{WORD}}.\n" +
                 "Знаешь его?", addWordKeyboard);
         PrintNode endAddVocabularyStr = new PrintNode("Теперь введи имя своего словаря",
-                new KeyboardBot(0, new ArrayList<>()));
+                new KeyboardBot());
 
         ZeroNode zero = new ZeroNode();
         ChoseTopicNode choseTopic = new ChoseTopicNode();

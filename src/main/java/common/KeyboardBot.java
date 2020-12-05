@@ -7,9 +7,15 @@ public class KeyboardBot {
     private final List<String> buttons;
     private int maxLenButton;
 
-    public KeyboardBot(Integer countColumn, List<String> buttons){
-        this.countColumn = countColumn;
+    public KeyboardBot(List<String> buttons){
+        this.countColumn = (buttons.size() / 2) + (buttons.size() % 2);
         this.buttons = buttons;
+        maxLenButton = Integer.MIN_VALUE;
+    }
+
+    public KeyboardBot(){
+        this.countColumn = null;
+        this.buttons = null;
         maxLenButton = Integer.MIN_VALUE;
     }
 
