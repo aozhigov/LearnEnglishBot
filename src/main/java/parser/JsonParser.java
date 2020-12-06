@@ -11,14 +11,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 public class JsonParser {
-    public static Hashtable<String, Selection> getVocabulariesFromJson() throws IOException, ParseException {
-        Hashtable<String, Selection> vocabularies = new Hashtable<>();
+    public static HashMap<String, Selection> getVocabulariesFromJson(String path)
+            throws IOException, ParseException {
+        HashMap<String, Selection> vocabularies = new HashMap<>();
         JSONParser parser = new JSONParser();
 
-        String path = System.getProperty("user.dir") + "\\resources\\dictionaries.json";
         JSONObject obj = (JSONObject) parser.parse(new FileReader(path));
 
         for (String name : Arrays.asList("linq", "string", "io-api", "collection-api")) {
@@ -27,7 +27,8 @@ public class JsonParser {
 
             for (Object item : jsonArray) {
                 JSONObject temp = (JSONObject) item;
-                t.add(new Word(Integer.parseInt(temp.get("frequency").toString()), temp.get("en").toString(),
+                t.add(new Word(Integer.parseInt(temp.get("frequency").toString()),
+                        temp.get("en").toString(),
                         temp.get("ru").toString(), temp.get("example").toString()));
             }
 

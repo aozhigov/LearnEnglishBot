@@ -1,50 +1,38 @@
 package common;
 
 import automat.HandlerNode;
-import bot.KeyboardType;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static bot.ReplyKeyboard.addKeyboard;
+
 public class MessageBot {
     private final HandlerNode handler;
-    private final Tuple<Integer, List<String>> keyboard;
+    private final List<String> keyboard;
     private final String text;
-    private final KeyboardType typeKeyboard;
 
     public MessageBot(String text,
-                      KeyboardType type,
-                      Tuple<Integer, List<String>> keyboard,
+                      List<String> keyboard,
                       HandlerNode handler) {
         this.handler = handler;
         this.keyboard = keyboard;
         this.text = text;
-        this.typeKeyboard = type;
     }
 
     public MessageBot(String text,
                       HandlerNode handler) {
         this.handler = handler;
-        this.keyboard = new Tuple<>(0, new ArrayList<>());
+        this.keyboard = new ArrayList<>(0);
         this.text = text;
-        this.typeKeyboard = KeyboardType.NONE;
     }
 
     private MessageBot(String text,
-                       KeyboardType type,
-                       Tuple<Integer, List<String>> keyboard) {
+                       List<String> keyboard) {
         this.handler = null;
         this.keyboard = keyboard;
         this.text = text;
-        this.typeKeyboard = type;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public Tuple<Integer, List<String>> getKeyboard() {
-        return keyboard;
     }
 
     public HandlerNode getHandler() {
@@ -52,10 +40,12 @@ public class MessageBot {
     }
 
     public MessageBot getMessageWithoutHandler() {
-        return new MessageBot(text, typeKeyboard, keyboard);
+        return new MessageBot(text, keyboard);
     }
 
-    public KeyboardType getKeyboardType() {
-        return typeKeyboard;
+    public SendMessage getSendMessage() {
+        SendMessage msg = new SendMessage();
+        msg.setText(text);
+        return addKeyboard(msg, keyboard);
     }
 }

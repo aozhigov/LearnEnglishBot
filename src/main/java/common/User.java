@@ -1,24 +1,35 @@
 package common;
 
 import automat.HandlerNode;
+import vocabulary.Selection;
 import vocabulary.Word;
+
+import java.util.HashMap;
 
 public class User {
     private final String userName;
     private final Long id;
     private Tuple<Event, HandlerNode> stateDialog;
     private Tuple<String, Word> stateLearn;
+    private final HashMap<String, Selection> myVocabularies;
+    private Tuple<String, Integer> stateAddVocabulary;
+    private Integer countWordsVocabulary;
 
-    public User() {
+    public User(HashMap<String, Selection> startVocabularies) {
         userName = "";
         id = (long) -1;
+        this.myVocabularies = startVocabularies;
+        stateAddVocabulary = new Tuple<>("", -1);
     }
 
-    public User(String name, Long id) {
+    public User(String name, Long id,
+                HashMap<String, Selection> startVocabularies) {
         userName = name;
         stateDialog = new Tuple<>(Event.FIRST_START, null);
         stateLearn = new Tuple<>("", null);
+        stateAddVocabulary = new Tuple<>("", -1);
         this.id = id;
+        this.myVocabularies = startVocabularies;
     }
 
     public String getName() {
@@ -51,5 +62,53 @@ public class User {
 
     public void setStateLearn(Word word) {
         stateLearn.setValue(word);
+    }
+
+    public HashMap<String, Selection> getUserVocabularies() {
+        return myVocabularies;
+    }
+
+    public void addVocabulary(String name, Selection selection) {
+        stateAddVocabulary.setTuple(name, 0);
+        myVocabularies.put(name, selection);
+    }
+
+    public String getNextWordForAdd(boolean isKnow) {
+        if (!isKnow)
+            countWordsVocabulary--;
+
+        stateAddVocabulary.setValue(stateAddVocabulary.getValue() + 1);
+        if (stateAddVocabulary.getValue() >= myVocabularies.get(stateAddVocabulary.getKey()).getSize()
+                || countWordsVocabulary == 0){
+            myVocabularies.get(stateAddVocabulary.getKey())
+                    .delAllStartIdx(stateAddVocabulary.getValue() - 1);
+            return null;
+        }
+
+        return myVocabularies.get(stateAddVocabulary.getKey())
+                .getWithoutStat(stateAddVocabulary.getValue() - 1);
+    }
+
+    public void setUserVocabulary(String name) {
+        Selection temp = myVocabularies.get(stateAddVocabulary.getKey());
+        myVocabularies.remove(stateAddVocabulary.getKey());
+        myVocabularies.put(name, temp);
+        stateAddVocabulary.setTuple("", -1);
+    }
+
+    public void delUserVocabulary(){
+        myVocabularies.remove(stateAddVocabulary.getKey());
+        stateAddVocabulary = new Tuple<>("", 0);
+    }
+
+    public void delWordFromUserVocabulary() {
+        myVocabularies.get(stateAddVocabulary.getKey())
+                .delWord(stateAddVocabulary.getValue());
+    }
+
+    public void setCountWordsForAdd(int count){
+        countWordsVocabulary = count > 0
+                ? count
+                : 20;
     }
 }

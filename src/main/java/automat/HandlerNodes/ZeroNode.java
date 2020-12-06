@@ -1,9 +1,11 @@
-package automat.LearnNodes;
+package automat.HandlerNodes;
 
 import automat.HandlerNode;
 import common.Event;
 import common.MessageBot;
 import common.User;
+
+import java.util.ArrayList;
 
 public class ZeroNode extends HandlerNode {
 
@@ -13,7 +15,8 @@ public class ZeroNode extends HandlerNode {
             Event temp = user.getStateDialog().getKey();
             user.setStateDialog(Event.SECOND_START);
 
-            return move(temp).action(user.getName());
+            return move(temp).action(user.getName(),
+                    new ArrayList<>(user.getUserVocabularies().keySet()));
         }
 
         return move(Event.HELP).action(user.getName());

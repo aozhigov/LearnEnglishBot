@@ -1,4 +1,4 @@
-package automat.LearnNodes;
+package automat.HandlerNodes;
 
 import automat.HandlerNode;
 import common.Event;
@@ -9,17 +9,18 @@ public class YesNoNode extends HandlerNode {
 
     @Override
     public MessageBot action(String query, User user) {
-        Event event = checkCommand(query);
-        String word = user.getName();
+        MessageBot msg = checkCommand(query, user);
 
-        if (event != Event.NONE)
-            return move(event).action(word);
+        if (msg != null)
+            return msg;
+
+        String word;
+        Event event;
 
         if (query.contains("подсказка")) {
             word = user.getStateLearn().getValue().createHint();
             event = Event.HINT;
-        }
-        else if (query.equals("да") || query.equals("еще попытка")) {
+        } else if (query.equals("да") || query.equals("еще попытка")) {
             word = user.getStateLearn().getValue().getEn();
             event = Event.SECOND_EN_WORD;
         } else {

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Selection {
-    private final ArrayList<Word> words;
+    private ArrayList<Word> words;
     private final HashMap<Long, Tuple<Integer, Integer>> usersStat;
     private final Random rnd;
 
@@ -156,5 +156,25 @@ public class Selection {
 
         if (high > i)
             quickSort(array, i, high, userId);
+    }
+
+    public void delWord(Integer idx){
+        words.remove(idx);
+    }
+
+    public String getWithoutStat(int idx){
+        return words.get(idx).en;
+    }
+
+    public int getSize(){
+        return words.size();
+    }
+
+    public void delAllStartIdx(int idx){
+        ArrayList<Word> temp = new ArrayList<>();
+        if (idx < words.size() && idx >= 0)
+            for (int i = 0; i < idx; i++)
+                temp.add(words.get(i));
+            words = temp;
     }
 }
