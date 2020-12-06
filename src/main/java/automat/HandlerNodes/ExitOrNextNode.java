@@ -2,39 +2,27 @@ package automat.HandlerNodes;
 
 import automat.HandlerNode;
 import common.Event;
-import common.KeyboardBot;
 import common.MessageBot;
 import common.User;
-import vocabulary.Selection;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
 
 public class ExitOrNextNode extends HandlerNode {
 
     @Override
     public MessageBot action(String query, User user) {
-        Event event = checkCommand(query, user);
+        MessageBot msg = checkCommand(query, user);
+
+        if (msg != null)
+            return msg;
+
         String word = user.getName();
-
-        if (event == Event.CHANGE_TOPIC){
-            return move(event).action(word,
-                    new KeyboardBot(new ArrayList<>(user.getMyVocabularies().keySet())));
-        }
-
-        if (event != Event.NONE)
-            return move(event).action(word);
+        Event event;
 
         if (!query.equals("да"))
             event = Event.EXIT;
-        else if (user.getStateLearn().getKey().equals("")){
+        else if (user.getStateLearn().getKey().equals("")) {
             event = Event.CHANGE_TOPIC;
-        }
-        else{
-            Selection vocabulary = user.getMyVocabularies().get(user.getStateLearn().getKey());
-            user.setStateLearn(vocabulary.getEnWord(user));
-            word = user.getStateLearn().getValue().getEn();
+        } else {
+            word = getFirstWord(query, user);
             event = Event.FIRST_EN_WORD;
         }
 

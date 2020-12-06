@@ -11,25 +11,23 @@ public class IsAddTrueWord extends HandlerNode {
 
     @Override
     public MessageBot action(String query, User user) {
-        Event event = checkCommand(query, user);
+        MessageBot msg = checkCommand(query, user);
+
+        if (msg != null)
+            return msg;
+
         String word = user.getName();
-
-        if (event != Event.NONE) {
-            user.delLastAddMyVocabularies();
-            return move(event).action(word);
-        }
-
-        event = Event.WRONG;
+        Event event = Event.WRONG;
 
         if (query.equals("знаю")) {
-            user.delWord();
+            user.delWordFromUserVocabulary();
             event = Event.ADD_WORD_VOCABULARY;
-            word = user.getNextWord(true);
+            word = user.getNextWordForAdd(true);
         }
 
         if (query.equals("не уверен")) {
             event = Event.ADD_WORD_VOCABULARY;
-            word = user.getNextWord(false);
+            word = user.getNextWordForAdd(false);
         }
 
         if (word == null) {
@@ -38,7 +36,7 @@ public class IsAddTrueWord extends HandlerNode {
         }
 
         if (event == Event.WRONG)
-            user.delLastAddMyVocabularies();
+            user.delUserVocabulary();
 
         return move(event).action(word);
     }

@@ -17,11 +17,10 @@ public class AddVocabularyNode extends HandlerNode {
 
     @Override
     public MessageBot action(String query, User user) throws IOException, ParseException {
-        Event event = checkCommand(query, user);
-        String word = user.getName();
+        MessageBot msg = checkCommand(query, user);
 
-        if (event != Event.NONE)
-            return move(event).action(word);
+        if (msg != null)
+            return msg;
 
         CsvFile freqFile = new CsvFile(
                 System.getProperty("user.dir")
@@ -29,9 +28,9 @@ public class AddVocabularyNode extends HandlerNode {
                 ",");
 
         ArrayList<String> findWords = freqFile.search(query);
-        user.addVocabularies("myVoc" + user.getMyVocabularies().size(),
+        user.addVocabulary("myVoc" + user.getUserVocabularies().size(),
                 translate.getTranslateWord(findWords));
 
-        return move(Event.ADD_WORD_VOCABULARY).action(user.getNextWord(true));
+        return move(Event.ADD_WORD_VOCABULARY).action(user.getNextWordForAdd(true));
     }
 }

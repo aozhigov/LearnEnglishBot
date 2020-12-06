@@ -4,8 +4,11 @@ import common.Event;
 import common.MessageBot;
 import common.User;
 import org.json.simple.parser.ParseException;
+import vocabulary.Selection;
+import vocabulary.Word;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 
@@ -33,23 +36,40 @@ public abstract class HandlerNode {
         this.links = links;
     }
 
-    public Event checkCommand(String query, User user) {
-        if (query.startsWith("/add")){
+    public MessageBot checkCommand(String query, User user) {
+        Event event = commands.get(query.split(" ")[0]);
+
+        if (event == Event.CHANGE_TOPIC)
+            return move(event).action(user.getName(),
+                    new ArrayList<>(user.getUserVocabularies().keySet()));
+
+        if (event == Event.ADD_VOCABULARY){
             String[] temp = query.split(" ");
             try {
                 if (temp.length > 1)
-                    user.setCountWordsVocabulary(Integer.parseInt(temp[1]));
+                    user.setCountWordsForAdd(Integer.parseInt(temp[1]));
                 else
-                    user.setCountWordsVocabulary(20);
+                    user.setCountWordsForAdd(20);
             }
             catch (NumberFormatException e){
                 e.printStackTrace();
-                user.setCountWordsVocabulary(20);
+                user.setCountWordsForAdd(20);
             }
         }
 
-        return query.startsWith("/")
-                ? commands.get(query.split(" ")[0])
-                : Event.NONE;
+        return event != null
+                ? move(event).action(user.getName())
+                : null;
+    }
+
+    protected String getFirstWord(String query, User user) {
+        if (user.getStateLearn().getKey().equals(""))
+            user.setStateLearn(query);
+
+        Selection vocabulary = user.getUserVocabularies().get(user.getStateLearn().getKey());
+        Word temp = vocabulary.getEnWord(user);
+        user.setStateLearn(temp);
+
+        return user.getStateLearn().getValue().getEn();
     }
 }

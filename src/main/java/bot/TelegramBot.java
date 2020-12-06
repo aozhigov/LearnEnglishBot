@@ -13,8 +13,6 @@ import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
 
 import java.io.IOException;
 
-import static bot.WorkWithSendMessage.createMsgWithKeyboard;
-
 
 public class TelegramBot extends TelegramLongPollingBot {
     String token;
@@ -43,13 +41,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         Long chatId = msgTelegram.getChatId();
         String userName = msgTelegram.getFrom().getUserName();
 
-        MessageBot answer = null;
+        MessageBot answer;
         try {
             answer = mainLogic.operate(chatId, inputText, userName);
         } catch (IOException | ParseException e) {
             e.printStackTrace();
+            answer = new MessageBot(e.getMessage(), null);
         }
-        sendMsg(chatId, createMsgWithKeyboard(answer));
+
+        sendMsg(chatId, answer.getSendMessage());
     }
 
     public synchronized void sendMsg(long chatId, SendMessage sendMessage) {

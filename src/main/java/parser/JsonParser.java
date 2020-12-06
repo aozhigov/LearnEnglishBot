@@ -12,10 +12,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Hashtable;
 
 public class JsonParser {
-    public static HashMap<String, Selection> getVocabulariesFromJson(String path) throws IOException, ParseException {
+    public static HashMap<String, Selection> getVocabulariesFromJson(String path)
+            throws IOException, ParseException {
         HashMap<String, Selection> vocabularies = new HashMap<>();
         JSONParser parser = new JSONParser();
 

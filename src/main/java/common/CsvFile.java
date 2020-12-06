@@ -1,8 +1,9 @@
 package common;
 
-import vocabulary.Word;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
 public class CsvFile {
     private final BufferedReader bufferFile;
     private final String separator;
-    Pattern pattern;
+    Pattern pattern = Pattern.compile("[a-zA-Z]+");
     Matcher matcher;
     private Hashtable<String, Integer> frequencyTable;
 
@@ -37,7 +38,8 @@ public class CsvFile {
         Hashtable<String, Integer> result = new Hashtable<>();
         while (line != null) {
             result.put(line.get(1),
-                    Integer.parseInt(line.get(2).substring(0, line.get(2).length() - 1)));
+                    Integer.parseInt(line.get(2)
+                            .substring(0, line.get(2).length() - 1)));
 
             line = nextLine();
         }
@@ -45,28 +47,28 @@ public class CsvFile {
         frequencyTable = result;
     }
 
-    public ArrayList<String> search(String text){
-        text = text.toLowerCase();
-        pattern = Pattern.compile("[a-zA-Z]+");
-        matcher = pattern.matcher(text);
-        ArrayList<Tuple<String, Integer>> result = new ArrayList<>();
+    public ArrayList<String> search(String text) {
+        HashSet<String> hashsetWords = new HashSet<>();
+        ArrayList<String> resultWords = new ArrayList<>();
+        ArrayList<Tuple<String, Integer>> words = new ArrayList<>();
 
-        while (matcher.find()){
+        text = text.toLowerCase();
+        matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
             String findStr = matcher.group();
-            result.add(new Tuple<>(findStr, frequencyTable.getOrDefault(findStr, 1)));
+            words.add(new Tuple<>(findStr,
+                    frequencyTable.getOrDefault(findStr, 1)));
         }
 
-        result.sort(Comparator.comparingInt(Tuple::getValue));
+        words.sort(Comparator.comparingInt(Tuple::getValue));
 
-        HashSet<String> result1 = new HashSet<>();
-        ArrayList<String> res2 = new ArrayList<>();
-        for (Tuple<String, Integer> word: result)
-            if (!result1.contains(word.getKey())){
-                result1.add(word.getKey());
-                res2.add(word.getKey());
+        for (Tuple<String, Integer> word : words)
+            if (!hashsetWords.contains(word.getKey())) {
+                hashsetWords.add(word.getKey());
+                resultWords.add(word.getKey());
             }
 
-
-        return res2;
+        return resultWords;
     }
 }

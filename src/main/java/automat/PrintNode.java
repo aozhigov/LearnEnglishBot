@@ -1,24 +1,24 @@
 package automat;
 
-import common.KeyboardBot;
 import common.MessageBot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PrintNode {
     public String value;
-    private KeyboardBot keyboard;
+    private List<String> keyboard;
     private HandlerNode handler;
 
     public PrintNode(String value,
-                     KeyboardBot keyboard) {
+                     List<String> keyboard) {
         this.value = value;
         this.keyboard = keyboard;
     }
 
     public PrintNode(String value) {
         this.value = value;
-        this.keyboard = new KeyboardBot(new ArrayList<>());
+        this.keyboard = new ArrayList<>(0);
     }
 
     public MessageBot action(String word) {
@@ -26,7 +26,7 @@ public class PrintNode {
         return new MessageBot(text, keyboard, move());
     }
 
-    public MessageBot action(String word, KeyboardBot keyboard) {
+    public MessageBot action(String word, List<String> keyboard) {
         String text = value.replaceAll("\\{\\{WORD\\}\\}", word);
         return new MessageBot(text, keyboard, move());
     }
@@ -39,7 +39,7 @@ public class PrintNode {
         this.handler = links;
     }
 
-    public void setKeyboard(KeyboardBot keyboard) {
+    public void setKeyboard(List<String> keyboard) {
         this.keyboard = keyboard;
     }
 }
