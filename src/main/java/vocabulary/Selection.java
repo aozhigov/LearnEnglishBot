@@ -159,7 +159,13 @@ public class Selection {
     }
 
     public void delWord(Integer idx){
-        words.remove(idx);
+//        boolean t = words.remove(idx);
+        ArrayList<Word> temp = new ArrayList<>();
+        for (int i = 0; i < words.size(); i++)
+            if (i != idx)
+                temp.add(words.get(i));
+
+            words = temp;
     }
 
     public String getWithoutStat(int idx){
@@ -172,7 +178,7 @@ public class Selection {
 
     public void delAllStartIdx(int idx){
         ArrayList<Word> temp = new ArrayList<>();
-        if (idx < words.size() && idx >= 0)
+        if (idx <= words.size() && idx >= 0)
             for (int i = 0; i < idx; i++)
                 temp.add(words.get(i));
             words = temp;

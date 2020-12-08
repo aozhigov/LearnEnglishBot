@@ -69,7 +69,7 @@ public class User {
     }
 
     public void addVocabulary(String name, Selection selection) {
-        stateAddVocabulary.setTuple(name, 0);
+        stateAddVocabulary.setTuple(name, -1);
         myVocabularies.put(name, selection);
     }
 
@@ -81,12 +81,12 @@ public class User {
         if (stateAddVocabulary.getValue() >= myVocabularies.get(stateAddVocabulary.getKey()).getSize()
                 || countWordsVocabulary == 0){
             myVocabularies.get(stateAddVocabulary.getKey())
-                    .delAllStartIdx(stateAddVocabulary.getValue() - 1);
-            return null;
+                    .delAllStartIdx(stateAddVocabulary.getValue());
+            return "";
         }
 
         return myVocabularies.get(stateAddVocabulary.getKey())
-                .getWithoutStat(stateAddVocabulary.getValue() - 1);
+                .getWithoutStat(stateAddVocabulary.getValue());
     }
 
     public void setUserVocabulary(String name) {
@@ -110,5 +110,9 @@ public class User {
         countWordsVocabulary = count > 0
                 ? count
                 : 20;
+    }
+
+    public int getSizeAddVocabulary(){
+        return myVocabularies.get(stateAddVocabulary.getKey()).getSize();
     }
 }

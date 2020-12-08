@@ -67,7 +67,10 @@ public class YandexTranslate {
 
         JSONObject jsonObject = getAnswerJson(httpPost);
         JSONArray jsonArray = (JSONArray) jsonObject.get("translations");
-        ArrayList<String> translatedWords = this.prepareTranslatedWords(jsonArray);
+        ArrayList<String> translatedWords = new ArrayList<>();
+
+        for (String item : this.prepareTranslatedWords(jsonArray))
+            translatedWords.add(item.toLowerCase());
 
         return this.prepareResponse(words, translatedWords, wordsLanguage);
     }

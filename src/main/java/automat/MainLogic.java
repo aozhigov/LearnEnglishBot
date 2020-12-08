@@ -54,7 +54,8 @@ public class MainLogic {
         List<String> statKeyboard = Arrays.asList("Текущая тема", "Слова",
                         "Тема: linq", "Тема: string",
                         "Тема: io-api", "Тема: collection-api");
-        List<String> addWordKeyboard = Arrays.asList("Знаю", "Не уверен", "Закончить");
+        List<String> addWordKeyboard = Arrays.asList("Знаю", "Не уверен",
+                "Сформировать словарь","Закончить");
 
         PrintNode startFirstStr = new PrintNode("Привет, {{WORD}}!\n" +
                 "Я бот, который поможет тебе выучить английские слова!\n" +
@@ -66,19 +67,19 @@ public class MainLogic {
                 "В любой момент ты можешь попросить помощи по командам (/help).\n" +
                 "Выбери одну из тем, предложенных ниже:",
                 new ArrayList<>(0));
-        PrintNode firstEnWordStr = new PrintNode("Отлично! Вот слово для перевода: {{WORD}}",
+        PrintNode firstEnWordStr = new PrintNode("Отлично! Вот слово для перевода: ```{{WORD}}```",
                 hintEndKeyboard);
         PrintNode toTryTo = new PrintNode("Неправильно, {{WORD}}!",
                 hintNotKnowKeyboard);
-        PrintNode secondEnWordStr = new PrintNode("Хорошо подумай и отвечай, слово: {{WORD}}",
+        PrintNode secondEnWordStr = new PrintNode("Хорошо подумай и отвечай, слово: ```{{WORD}}```",
                 hintEndKeyboard);
-        PrintNode ruWordStr = new PrintNode("Не расстраивайся, вот перевод: {{WORD}}.\n" +
+        PrintNode ruWordStr = new PrintNode("Не расстраивайся, вот перевод: ```{{WORD}}```.\n" +
                 "Хочешь продолжить?",
                 yesNoKeyboard);
         PrintNode wrongTopicStr = new PrintNode("{{WORD}}, не правильно выбрана тема.\n" +
                 "Есть только такие темы",
                 new ArrayList<>(0));
-        PrintNode hintStr = new PrintNode("Держи подсказку: {{WORD}}, а теперь отвечай");
+        PrintNode hintStr = new PrintNode("Держи подсказку: ```{{WORD}}```, а теперь отвечай");
         PrintNode exitStr = new PrintNode("Пока, {{WORD}}!");
         PrintNode statisticStr = new PrintNode("{{WORD}}, здесь ты можешь получить свою статистику.\n" +
                 "Выбери какую:",
@@ -92,23 +93,23 @@ public class MainLogic {
                 "/topic - сменить тему слов\n" +
                 "/help - вызвать справку\n" +
                 "/stat - показать статистику\n" +
-                "/add \\[кол-во сло\\] - создать свой словарь из текста " +
+                "/add ``` количество ``` - создать свой словарь из текста " +
                 "с указанием количества слов (необязательно)\n" +
                 "Перевод необходимо напечатать самому, \n" +
                 "в остальном бот предлагает клавиатуру вариантов ответа.\n" +
                 "Продолжим?",
                 yesNoKeyboard);
-        PrintNode topicStr = new PrintNode("Выбери одну из тем, предложенных ниже:",
+        PrintNode topicStr = new PrintNode("{{WORD}}, выбери одну из тем, предложенных ниже:",
                 new ArrayList<>(0));
         PrintNode wrongStr = new PrintNode("Не понимаю тебя, {{WORD}}\n" +
                 "Продолжим?",
                 yesNoKeyboard);
-        PrintNode addVocabularyStr = new PrintNode("Введи текст для " +
+        PrintNode addVocabularyStr = new PrintNode("{{WORD}}, введи текст для " +
                 "выделения нечасто употребляемых слов",
                 new ArrayList<>(0));
-        PrintNode addWordVocabularyStr = new PrintNode("Вот следующее слово:{{WORD}}.\n" +
+        PrintNode addWordVocabularyStr = new PrintNode("Вот следующее слово:\n```{{WORD}}```.\n" +
                 "Знаешь его?", addWordKeyboard);
-        PrintNode endAddVocabularyStr = new PrintNode("Теперь введи имя своего словаря",
+        PrintNode endAddVocabularyStr = new PrintNode("{{WORD}}, теперь введи имя своего словаря",
                 new ArrayList<>(0));
 
         ZeroNode zero = new ZeroNode();
@@ -182,12 +183,13 @@ public class MainLogic {
             put(Event.ADD_VOCABULARY, addVocabularyStr);}});
         addVocabulary.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
-            put(Event.HELP, helpStr);
+            put(Event.HELP, helpStr); put(Event.WRONG, wrongStr);
 
             put(Event.ADD_WORD_VOCABULARY, addWordVocabularyStr); }});
         isAddTrueWord.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
             put(Event.HELP, helpStr); put(Event.WRONG, wrongStr);
+            put(Event.CHANGE_TOPIC, topicStr); put(Event.FIRST_EN_WORD, firstEnWordStr);
 
             put(Event.ADD_WORD_VOCABULARY, addWordVocabularyStr);
             put(Event.END_VOCABULARY, endAddVocabularyStr); }});
