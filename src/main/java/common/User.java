@@ -85,8 +85,7 @@ public class User {
             return "";
         }
 
-        return myVocabularies.get(stateAddVocabulary.getKey())
-                .getWithoutStat(stateAddVocabulary.getValue());
+        return getCurrentWord();
     }
 
     public void setUserVocabulary(String name) {
@@ -102,6 +101,7 @@ public class User {
     }
 
     public void delWordFromUserVocabulary() {
+        stateAddVocabulary.setValue(stateAddVocabulary.getValue() - 1);
         myVocabularies.get(stateAddVocabulary.getKey())
                 .delWord(stateAddVocabulary.getValue());
     }
@@ -110,6 +110,16 @@ public class User {
         countWordsVocabulary = count > 0
                 ? count
                 : 20;
+    }
+
+    public void setTranslateWord(String translate){
+        myVocabularies.get(stateAddVocabulary.getKey())
+                .setTranslateWord(stateAddVocabulary.getValue(), translate);
+    }
+
+    public String getCurrentWord(){
+        return myVocabularies.get(stateAddVocabulary.getKey())
+                .getWithoutStat(stateAddVocabulary.getValue());
     }
 
     public int getSizeAddVocabulary(){

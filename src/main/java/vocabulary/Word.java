@@ -72,6 +72,10 @@ public class Word {
         return prepareTranslate(ru);
     }
 
+    public void setRu(String translate){
+        this.ru = translate;
+    }
+
     private String prepareTranslate(String word) {
         return word.replaceAll("\\|", " или ");
     }

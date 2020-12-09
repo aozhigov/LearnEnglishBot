@@ -4,11 +4,10 @@ import automat.HandlerNode;
 import common.Event;
 import common.MessageBot;
 import common.User;
-import vocabulary.Selection;
 
 import java.util.ArrayList;
 
-public class SetNameVocabularies extends HandlerNode {
+public class SetNameVocabulariesNode extends HandlerNode {
 
     @Override
     public MessageBot action(String query, User user) {
@@ -24,6 +23,24 @@ public class SetNameVocabularies extends HandlerNode {
             user.setUserVocabulary("My_" + user.getUserVocabularies() + "_" + query);
         else
             user.setUserVocabulary(query);
+
+        if (query.equals("удалить")
+                || (word.equals("") && user.getSizeAddVocabulary() == 0)) {
+            user.delUserVocabulary();
+            event = Event.HELP;
+
+            if (user.getStateLearn().getValue() != null) {
+                word = user.getStateLearn().getValue().getEn();
+                event = Event.FIRST_EN_WORD;
+            }
+
+            if (user.getStateLearn().getKey().equals("")) {
+                event = Event.CHANGE_TOPIC;
+                return move(event).action(user.getName(),
+                        new ArrayList<>(user.getUserVocabularies().keySet()));
+            }
+            return move(event).action(word);
+        }
 
         if (user.getStateLearn().getKey().equals("")) {
             event = Event.CHANGE_TOPIC;

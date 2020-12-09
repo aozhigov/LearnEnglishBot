@@ -159,17 +159,20 @@ public class Selection {
     }
 
     public void delWord(Integer idx){
-//        boolean t = words.remove(idx);
         ArrayList<Word> temp = new ArrayList<>();
         for (int i = 0; i < words.size(); i++)
-            if (i != idx)
+            if (i != idx + 1)
                 temp.add(words.get(i));
 
             words = temp;
     }
 
+    public void setTranslateWord(Integer idx, String translate){
+        words.get(idx).setRu(translate);
+    }
+
     public String getWithoutStat(int idx){
-        return words.get(idx).en;
+        return "\n" + words.get(idx).en + "\nПеревод: " + words.get(idx).ru;
     }
 
     public int getSize(){

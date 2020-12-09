@@ -55,7 +55,8 @@ public class MainLogic {
                         "Тема: linq", "Тема: string",
                         "Тема: io-api", "Тема: collection-api");
         List<String> addWordKeyboard = Arrays.asList("Знаю", "Не уверен",
-                "Сформировать словарь","Закончить");
+                "Редактировать перевод","Закончить");
+        List<String> setNameVocabularyKeyboard = Collections.singletonList("Удалить");
 
         PrintNode startFirstStr = new PrintNode("Привет, {{WORD}}!\n" +
                 "Я бот, который поможет тебе выучить английские слова!\n" +
@@ -110,6 +111,8 @@ public class MainLogic {
         PrintNode addWordVocabularyStr = new PrintNode("Вот следующее слово:\n```{{WORD}}```.\n" +
                 "Знаешь его?", addWordKeyboard);
         PrintNode endAddVocabularyStr = new PrintNode("{{WORD}}, теперь введи имя своего словаря",
+                setNameVocabularyKeyboard);
+        PrintNode editTranslateStr = new PrintNode("Введи свой перевод для ```{{WORD}}```",
                 new ArrayList<>(0));
 
         ZeroNode zero = new ZeroNode();
@@ -120,8 +123,9 @@ public class MainLogic {
         WrongNode wrong = new WrongNode();
         StatisticNode statistic = new StatisticNode();
         AddVocabularyNode addVocabulary = new AddVocabularyNode();
-        IsAddTrueWord isAddTrueWord = new IsAddTrueWord();
-        SetNameVocabularies setNameVocabularies = new SetNameVocabularies();
+        WordEditionVocabularyNode wordEditionVocabularyNode = new WordEditionVocabularyNode();
+        SetNameVocabulariesNode setNameVocabulariesNode = new SetNameVocabulariesNode();
+        TranslateEditorNode translateEditorNode = new TranslateEditorNode();
 
         addLinksInStr(choseTopic,
                 Arrays.asList(startFirstStr, startSecondStr, wrongTopicStr, topicStr));
@@ -135,8 +139,9 @@ public class MainLogic {
         exitStr.initLinks(zero);
         statisticStr.initLinks(statistic);
         addVocabularyStr.initLinks(addVocabulary);
-        addWordVocabularyStr.initLinks(isAddTrueWord);
-        endAddVocabularyStr.initLinks(setNameVocabularies);
+        addWordVocabularyStr.initLinks(wordEditionVocabularyNode);
+        endAddVocabularyStr.initLinks(setNameVocabulariesNode);
+        editTranslateStr.initLinks(translateEditorNode);
 
         zero.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
@@ -186,18 +191,24 @@ public class MainLogic {
             put(Event.HELP, helpStr); put(Event.WRONG, wrongStr);
 
             put(Event.ADD_WORD_VOCABULARY, addWordVocabularyStr); }});
-        isAddTrueWord.initLinks(new HashMap<Event, PrintNode>() {{
+        wordEditionVocabularyNode.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
             put(Event.HELP, helpStr); put(Event.WRONG, wrongStr);
             put(Event.CHANGE_TOPIC, topicStr); put(Event.FIRST_EN_WORD, firstEnWordStr);
 
+            put(Event.EDIT_TRANSLATE, editTranslateStr);
             put(Event.ADD_WORD_VOCABULARY, addWordVocabularyStr);
             put(Event.END_VOCABULARY, endAddVocabularyStr); }});
-        setNameVocabularies.initLinks(new HashMap<Event, PrintNode>() {{
+        setNameVocabulariesNode.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
             put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
 
             put(Event.FIRST_EN_WORD, firstEnWordStr); }});
+
+        translateEditorNode.initLinks(new HashMap<Event, PrintNode>() {{
+            put(Event.END_VOCABULARY, endAddVocabularyStr);
+            put(Event.ADD_WORD_VOCABULARY, addWordVocabularyStr);
+        }});
 
         return zero;
     }

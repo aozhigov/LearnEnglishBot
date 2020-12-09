@@ -57,11 +57,13 @@ public class CsvFile {
 
         while (matcher.find()) {
             String findStr = matcher.group();
+            if (findStr.length() == 1)
+                continue;
             words.add(new Tuple<>(findStr,
                     frequencyTable.getOrDefault(findStr, 1)));
         }
 
-        words.sort(Comparator.comparingInt(Tuple::getValue));
+        words.sort((o1, o2) -> o1.getValue() - o2.getValue());
 
         for (Tuple<String, Integer> word : words)
             if (!hashsetWords.contains(word.getKey())) {
