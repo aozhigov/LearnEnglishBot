@@ -38,6 +38,7 @@ public class WordEditionVocabularyNode extends HandlerNode {
 
         if (word.equals("") || query.equals("закончить")) {
             word = user.getName();
+            user.delRemainingWord();
             event = Event.END_VOCABULARY;
         }
 

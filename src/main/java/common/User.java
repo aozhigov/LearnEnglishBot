@@ -125,4 +125,9 @@ public class User {
     public int getSizeAddVocabulary(){
         return myVocabularies.get(stateAddVocabulary.getKey()).getSize();
     }
+
+    public void delRemainingWord(){
+        myVocabularies.get(stateAddVocabulary.getKey())
+                .delAllStartIdx(stateAddVocabulary.getValue());
+    }
 }
