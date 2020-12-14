@@ -14,6 +14,7 @@ public class User {
     private final HashMap<String, Selection> myVocabularies;
     private Tuple<String, Integer> stateAddVocabulary;
     private Integer countWordsVocabulary;
+    public HashMap<String, Tuple<Integer, Integer>> statistic = new HashMap<>();
 
     public User(HashMap<String, Selection> startVocabularies) {
         userName = "";
