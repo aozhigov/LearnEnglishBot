@@ -7,6 +7,7 @@ import common.User;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -46,7 +47,7 @@ public class UserRepository {
         HttpPost httpPost = new HttpPost(uri);
         httpPost.setHeader("Content-Type", "application/json");
 
-        httpPost.setHeader("Authorization", "Bearer " + this.token);
+        //httpPost.setHeader("Authorization", "Bearer " + this.token);
 
         return httpPost;
     }
@@ -65,5 +66,15 @@ public class UserRepository {
 
     private void closeHttp() throws IOException {
         httpclient.close();
+    }
+
+    private HttpPatch httpPatch(String uri){
+        HttpPatch httpPatch = new HttpPatch(uri);
+        httpPatch.setHeader("Content-Type", "application/json");
+        return httpPatch;
+    }
+
+    private void updateField(String nameField, String valueJson){
+
     }
 }
