@@ -1,6 +1,12 @@
-package common;
+package User;
 
 import automat.HandlerNode;
+import common.Event;
+import common.Tuple;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import parser.JsonParser;
 import vocabulary.Selection;
 import vocabulary.Word;
 
@@ -8,26 +14,37 @@ import java.util.HashMap;
 
 public class User {
     private final String userName;
-    private final Long id;
+    private final String id;
     private Tuple<Event, HandlerNode> stateDialog;
-    private Tuple<String, Word> stateLearn;
+    private Tuple<String, Integer> stateLearn;
     private final HashMap<String, Selection> myVocabularies;
     private Tuple<String, Integer> stateAddVocabulary;
     private Integer countWordsVocabulary;
-    public HashMap<String, Tuple<Integer, Integer>> statistic = new HashMap<>();
+    //public HashMap<String, Tuple<Integer, Integer>> statistic = new HashMap<>();
 
     public User(HashMap<String, Selection> startVocabularies) {
         userName = "";
-        id = (long) -1;
+        id = "-1";
         this.myVocabularies = startVocabularies;
         stateAddVocabulary = new Tuple<>("", -1);
     }
 
-    public User(String name, Long id,
+    public User(String name, String id,
                 HashMap<String, Selection> startVocabularies) {
         userName = name;
         stateDialog = new Tuple<>(Event.FIRST_START, null);
-        stateLearn = new Tuple<>("", null);
+        stateLearn = new Tuple<>("", -1);
+        stateAddVocabulary = new Tuple<>("", -1);
+        this.id = id;
+        this.myVocabularies = startVocabularies;
+    }
+
+    public User(String name, String id,
+                HashMap<String, Selection> startVocabularies,
+                Tuple<String, Integer> stateLearn) {
+        userName = name;
+        stateDialog = new Tuple<>(Event.SECOND_START, null);
+        this.stateLearn = stateLearn;
         stateAddVocabulary = new Tuple<>("", -1);
         this.id = id;
         this.myVocabularies = startVocabularies;
@@ -37,7 +54,7 @@ public class User {
         return userName;
     }
 
-    public Long getId() {
+    public String getId() {
         return this.id;
     }
 
@@ -53,15 +70,20 @@ public class User {
         stateDialog.setValue(handler);
     }
 
-    public Tuple<String, Word> getStateLearn() {
+    public Tuple<String, Integer> getStateLearn() {
         return stateLearn;
+    }
+
+    public Word getCurrentLearnWord(){
+        Selection vocabulary = myVocabularies.get(stateLearn.getKey());
+        return vocabulary.getWord(stateLearn.getValue());
     }
 
     public void setStateLearn(String name) {
         stateLearn.setKey(name);
     }
 
-    public void setStateLearn(Word word) {
+    public void setStateLearn(Integer word) {
         stateLearn.setValue(word);
     }
 
@@ -130,5 +152,33 @@ public class User {
     public void delRemainingWord(){
         myVocabularies.get(stateAddVocabulary.getKey())
                 .delAllStartIdx(stateAddVocabulary.getValue());
+    }
+
+    public JSONObject getJson(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userName", userName);
+        jsonObject.put("id", id);
+        jsonObject.put("stateLearn", stateLearn.getJson());
+        jsonObject.put("myVocabularies", getJsonVocabularies());
+        return jsonObject;
+    }
+
+    private JSONObject getJsonVocabularies(){
+        JSONObject jsonObject = new JSONObject();
+        for (String key: myVocabularies.keySet()){
+            jsonObject.put(key, myVocabularies.get(key).getJson());
+        }
+        return jsonObject;
+//        StringBuilder builder = new StringBuilder();
+//        builder.append("\"myVocabularies\": {");
+//        for (String key: myVocabularies.keySet()){
+//            builder.append("\"")
+//                    .append(key)
+//                    .append("\": ")
+//                    .append(myVocabularies.get(key).getJson())
+//                    .append(",\n");
+//        }
+//        builder.replace(builder.length() - 3, builder.length() - 1, " }");
+//        return builder.toString();
     }
 }

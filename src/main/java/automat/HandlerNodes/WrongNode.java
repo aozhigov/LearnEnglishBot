@@ -3,7 +3,7 @@ package automat.HandlerNodes;
 import automat.HandlerNode;
 import common.Event;
 import common.MessageBot;
-import common.User;
+import User.User;
 
 import java.util.ArrayList;
 
@@ -22,8 +22,8 @@ public class WrongNode extends HandlerNode {
         if (query.equals("да")) {
             Event event = Event.HELP;
 
-            if (user.getStateLearn().getValue() != null) {
-                word = user.getStateLearn().getValue().getEn();
+            if (user.getStateLearn().getValue() != -1) {
+                word = user.getCurrentLearnWord().getEn();
                 event = Event.FIRST_EN_WORD;
             }
 

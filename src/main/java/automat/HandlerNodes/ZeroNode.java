@@ -3,7 +3,7 @@ package automat.HandlerNodes;
 import automat.HandlerNode;
 import common.Event;
 import common.MessageBot;
-import common.User;
+import User.User;
 
 import java.util.ArrayList;
 

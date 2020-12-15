@@ -1,61 +1,52 @@
 package vocabulary;
 
 import common.Tuple;
+import org.json.simple.JSONObject;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class Word {
     public String en;
     public String ru;
-    public String example;
-    public int frequency;
-    public HashMap<Long, Tuple<Integer, Integer>> dictionary;
+    public Tuple<Integer, Integer> statistic;
 
-    public Word(int freq, String en, String ru, String example) {
-        frequency = freq;
+    public Word(String en, String ru) {
         this.en = en;
         this.ru = ru;
-        this.example = example;
-        this.dictionary = new HashMap<>();
+        this.statistic = new Tuple<>(0, 0);
     }
 
-    public Boolean checkFromRuToEn(Long userId, String query) {
-        containsUser(userId);
+    public Word(String en, String ru, Tuple<Integer, Integer> statistic) {
+        this.en = en;
+        this.ru = ru;
+        this.statistic = statistic;
+    }
 
+    public Boolean checkFromRuToEn(String query) {
         if (Arrays.asList(ru.split("\\|")).contains(query)) {
-            updateStatistic(userId, true);
+            updateStatistic(true);
             return true;
         }
 
-        updateStatistic(userId, false);
+        updateStatistic(false);
         return false;
     }
 
-    private void containsUser(Long userId) {
-        if (!this.dictionary.containsKey(userId))
-            this.dictionary.put(userId, new Tuple<>(0, 0));
-    }
-
-    private void updateStatistic(Long userId, Boolean bool) {
-        int correct = this.dictionary.get(userId).getKey();
-        int trying = this.dictionary.get(userId).getValue();
+    private void updateStatistic(Boolean bool) {
+        int correct = statistic.getKey();
+        int trying = statistic.getValue();
 
         if (bool)
             correct += 1;
 
         trying += 1;
 
-        this.dictionary.replace(userId, new Tuple<>(correct, trying));
+        statistic.setTuple(correct, trying);
     }
 
-    public double getCoefficient(Long userId) {
-        containsUser(userId);
-
-        Tuple<Integer, Integer> stat = this.dictionary.get(userId);
-
-        return stat.getValue() != 0
-                ? Math.min(stat.getKey() * 100.0 / stat.getValue(), 100.0)
+    public double getCoefficient() {
+        return statistic.getValue() != 0
+                ? Math.min(statistic.getKey() * 100.0 / statistic.getValue(), 100.0)
                 : 0.0;
     }
 
@@ -80,15 +71,23 @@ public class Word {
         return word.replaceAll("\\|", " или ");
     }
 
-    public int compareTo(Object o, long userId) {
+    public int compareTo(Object o) {
         if (o instanceof Word){
-            if (((Word) o).getCoefficient(userId) == this.getCoefficient(userId))
+            if (((Word) o).getCoefficient() == this.getCoefficient())
                 return this.en.compareTo(((Word) o).getEn());
             else
-                return (int) (-((Word) o).getCoefficient(userId)
-                        + this.getCoefficient(userId));
+                return (int) (-((Word) o).getCoefficient()
+                        + this.getCoefficient());
         }
         else
             return -1;
+    }
+
+    public JSONObject getJson(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("en", en);
+        jsonObject.put("ru", ru);
+        jsonObject.put("statistic", statistic.getJson());
+        return jsonObject;
     }
 }

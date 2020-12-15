@@ -3,7 +3,7 @@ package automat.HandlerNodes;
 import automat.HandlerNode;
 import common.Event;
 import common.MessageBot;
-import common.User;
+import User.User;
 import vocabulary.Selection;
 
 public class CheckWordNode extends HandlerNode {
@@ -24,7 +24,7 @@ public class CheckWordNode extends HandlerNode {
         Selection vocabulary = user.getUserVocabularies().get(user.getStateLearn().getKey());
 
         if (query.contains("подсказка")) {
-            word = user.getStateLearn().getValue().createHint();
+            word = user.getCurrentLearnWord().createHint();
             event = Event.HINT;
         } else if (vocabulary.checkTranslate(query, user)) {
             word = getFirstWord(query, user);

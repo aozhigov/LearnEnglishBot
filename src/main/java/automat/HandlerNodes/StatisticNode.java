@@ -3,12 +3,12 @@ package automat.HandlerNodes;
 import automat.HandlerNode;
 import common.Event;
 import common.MessageBot;
-import common.User;
+import User.User;
 
 public class StatisticNode extends HandlerNode {
 
     @Override
-    public MessageBot action(String query, User user) {
+    public MessageBot action(String query, User user){
         MessageBot msg = checkCommand(query, user);
 
         if (msg != null)
@@ -23,11 +23,11 @@ public class StatisticNode extends HandlerNode {
 
             if (arr.length >= 2 && user.getUserVocabularies().containsKey(arr[1])) {
                 word = user.getUserVocabularies().get(arr[1])
-                        .getSelectionStatistic(user);
+                        .getSelectionStatistic();
                 word = arr[1] + " - " + word;
             } else if (user.getUserVocabularies().containsKey(user.getStateLearn().getKey())) {
                 word = user.getUserVocabularies().get(user.getStateLearn().getKey())
-                        .getSelectionStatistic(user);
+                        .getSelectionStatistic();
                 word = user.getStateLearn().getKey() + " - " + word;
             } else
                 word = "тут пока пусто";
@@ -36,7 +36,7 @@ public class StatisticNode extends HandlerNode {
         } else if (query.startsWith("слова")) {
             if (user.getUserVocabularies().containsKey(user.getStateLearn().getKey()))
                 word = user.getUserVocabularies().get(user.getStateLearn().getKey())
-                        .getWordsStatistic(user, 5);
+                        .getWordsStatistic(5);
             else
                 word = "тут пока пусто";
 

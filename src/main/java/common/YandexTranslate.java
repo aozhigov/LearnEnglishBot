@@ -1,5 +1,6 @@
 package common;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -91,15 +92,14 @@ public class YandexTranslate {
 
         for (int counter = 0; counter < wordsOnTranslate.size(); counter++)
             if (wordsLanguage.equals("en"))
-                arr.add(new Word(0,
+                arr.add(new Word(
                         wordsOnTranslate.get(counter),
-                        words.get(counter), ""));
+                        words.get(counter)));
 
             else
-                arr.add(new Word(0,
+                arr.add(new Word(
                         words.get(counter),
-                        wordsOnTranslate.get(counter), " "));
-
+                        wordsOnTranslate.get(counter)));
         return new Selection(arr);
     }
 

@@ -1,5 +1,7 @@
 package parser;
 
+import common.Tuple;
+import User.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -27,9 +29,9 @@ public class JsonParser {
 
             for (Object item : jsonArray) {
                 JSONObject temp = (JSONObject) item;
-                t.add(new Word(Integer.parseInt(temp.get("frequency").toString()),
+                t.add(new Word(
                         temp.get("en").toString(),
-                        temp.get("ru").toString(), temp.get("example").toString()));
+                        temp.get("ru").toString()));
             }
 
             vocabularies.put(name, new Selection(t));
@@ -37,5 +39,43 @@ public class JsonParser {
 
         return vocabularies;
     }
+
+    public static User parseUser(JSONObject jsonObject){
+        String id = (String) jsonObject.get("id");
+        String userName = (String) jsonObject.get("userName");
+        JSONObject stateLearn = (JSONObject) jsonObject.get("stateLearn");
+        String key = (String) stateLearn.keySet().toArray()[0];
+        int value = Integer.parseInt((String) stateLearn.values().toArray()[0]);
+        HashMap<String, Selection> myVocabularies = new HashMap<>();
+        JSONObject vocabularies = (JSONObject) jsonObject.get("myVocabularies");
+        for (Object item: vocabularies.keySet()){
+            JSONObject selection = (JSONObject) vocabularies.get(item);
+            myVocabularies.put((String) item, parseSelection(selection));
+        }
+
+        return new User(userName, id,
+                myVocabularies,
+                new Tuple<>(key, value));
+    }
+
+    public static Selection parseSelection(JSONObject jsonObject){
+        ArrayList<Word> words = new ArrayList<>();
+        JSONArray jsonWords = (JSONArray) jsonObject.get("words");
+        for (Object jsonWord: jsonWords){
+            Word word = parseWord((JSONObject) jsonWord);
+            words.add(word);
+        }
+        return new Selection(words);
+    }
+
+    public static Word parseWord(JSONObject jsonObject){
+        String ru = (String) jsonObject.get("ru");
+        String en = (String) jsonObject.get("en");
+        JSONObject statistic = (JSONObject) jsonObject.get("statistic");
+        int key = Integer.parseInt((String) statistic.keySet().toArray()[0]);
+        int value = Integer.parseInt((String) statistic.values().toArray()[0]);
+        return new Word(en, ru, new Tuple<>(key, value));
+    }
+
 }
 

@@ -1,7 +1,8 @@
 package vocabulary;
 
-import common.Tuple;
-import common.User;
+import User.User;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -15,72 +16,50 @@ public class Selection {
         rnd = new Random();
     }
 
-    public Word getEnWord(User user) {
-        ArrayList<Word> rightWords = new ArrayList<>();
-        double minimalIncStat = searchMin(user.getId());
+    public int getEnWord() {
+        ArrayList<Integer> rightWords = new ArrayList<>();
+        double minimalIncStat = searchMin();
 
-        for (Word lookingWord : this.words) {
-            if (Math.abs(lookingWord.getCoefficient(user.getId())
+        for (int i = 0; i < this.words.size(); i++) {
+            Word lookingWord = this.words.get(i);
+            if (Math.abs(lookingWord.getCoefficient()
                     - minimalIncStat) < 10.0)
-                rightWords.add(lookingWord);
+                rightWords.add(i);
         }
         return getRandomWord(rightWords);
     }
 
-    private double searchMin(long userId) {
+    private double searchMin() {
         double min = Double.MAX_VALUE;
 
         for (Word lookingWord : this.words)
-            if (lookingWord.getCoefficient(userId) < min)
-                min = lookingWord.getCoefficient(userId);
+            if (lookingWord.getCoefficient() < min)
+                min = lookingWord.getCoefficient();
         return min;
     }
 
-    private Word getRandomWord(ArrayList<Word> rightWords) {
-        int position = rnd.nextInt(rightWords.size());
-        return rightWords.get(position);
+    public Word getWord(int idx){
+        return words.get(idx);
+    }
+
+    private int getRandomWord(ArrayList<Integer> rightWords) {
+        return rnd.nextInt(rightWords.size());
     }
 
     public Boolean checkTranslate(String query, User user) {
-        boolean answer = user.getStateLearn().getValue()
-                .checkFromRuToEn(user.getId(), query);
-
-        if (!user.statistic.containsKey(user.getStateLearn().getValue().en)) this.checkUserStat(user);
-        if (answer) {
-            int correctAnswerCount = user.statistic.get(user.getStateLearn().getValue().en).getKey();
-            user.statistic.get(user.getStateLearn().getValue().en).setKey(correctAnswerCount + 1);
-        }
-        else {
-            int incorrectAnswerCount = user.statistic.get(user.getStateLearn().getValue().en).getKey();
-            user.statistic.get(user.getStateLearn().getValue().en).setValue(incorrectAnswerCount + 1);
-        }
-
-        return answer;
+        return user.getCurrentLearnWord()
+                .checkFromRuToEn(query);
     }
 
-    // Если кратко, то... если юзер содержит проверяемое слово(en) в статистике,
-    // то ничего не происходит, иначе мы сразу же закидываем все слова в статистику к пользователю
-    private void checkUserStat(User user){
-        for (Word word: this.words) {
-            if (!user.statistic.containsKey(word.en)){
-                user.statistic.put(word.en, new Tuple<>(0, 1));
-            }
-        }
-    }
-
-    public String getSelectionStatistic(User user) {
-        this.checkUserStat(user);
-
+    public String getSelectionStatistic() {
         int badLearnedWords = 0;
         int goodLearnedWords = 0;
         int excellentLearnedWord = 0;
         double selectionStatistic = 0.0;
 
         for (Word word : this.words) {
-            int correct = user.statistic.get(word.en).getKey();
-            int incorrect = user.statistic.get(word.en).getValue();
-            selectionStatistic += this.getCoefficient(correct, incorrect);
-            double wordCoefficient = this.getCoefficient(correct, incorrect);
+            selectionStatistic += word.getCoefficient();
+            double wordCoefficient = word.getCoefficient();
             if (wordCoefficient <= 40.0)
                 badLearnedWords += 1;
             else if (wordCoefficient <= 80.0)
@@ -96,27 +75,24 @@ public class Selection {
                 + " слов\n\tОтлично изучил: " + excellentLearnedWord
                 + " слов";
     }
-    public double getCoefficient(int correct, int incorrect){
-        return correct * 100.0 / (correct + incorrect);
-    }
 
-    public String getWordsStatistic(User user, int countWords) {
+    public String getWordsStatistic(int countWords) {
         StringBuilder response = new StringBuilder("Статистика слов:\n");
-        quickSort(words, 0, words.size() - 1, user.getId());
+        quickSort(words, 0, words.size() - 1);
         response.append("Топ худших:\n");
         response.append(generateStringStat(0, countWords,
-                1, user.getId(), false));
+                1, false));
         response.append("\nТоп лучших:\n");
         response.append(generateStringStat(words.size() - 1, words.size() - 1 - countWords,
-                -1, user.getId(), true));
+                -1, true));
         return response.toString();
     }
 
-    private String generateStringStat(int start, int finish, int step, long userId, boolean isMore){
+    private String generateStringStat(int start, int finish, int step, boolean isMore){
         StringBuilder response = new StringBuilder();
         for (int i = start; i >= 0 && i < words.size()
                 && ((i < finish && !isMore) || (isMore && i > finish)); i += step){
-            double coefficient = words.get(i).getCoefficient(userId);
+            double coefficient = words.get(i).getCoefficient();
 
             if (isMore && coefficient == 0)
                 continue;
@@ -131,7 +107,7 @@ public class Selection {
         return response.toString();
     }
 
-    public void quickSort(ArrayList<Word> array, int low, int high, long userId) {
+    public void quickSort(ArrayList<Word> array, int low, int high) {
         if (array.size() == 0)
             return;
 
@@ -143,10 +119,10 @@ public class Selection {
 
         int i = low, j = high;
         while (i <= j) {
-            while (array.get(i).compareTo(item, userId) < 0)
+            while (array.get(i).compareTo(item) < 0)
                 i++;
 
-            while (array.get(j).compareTo(item, userId) > 0)
+            while (array.get(j).compareTo(item) > 0)
                 j--;
 
             if (i <= j) {
@@ -157,10 +133,10 @@ public class Selection {
         }
 
         if (low < j)
-            quickSort(array, low, j, userId);
+            quickSort(array, low, j);
 
         if (high > i)
-            quickSort(array, i, high, userId);
+            quickSort(array, i, high);
     }
 
     public void delWord(Integer idx){
@@ -190,5 +166,28 @@ public class Selection {
             for (int i = 0; i < idx; i++)
                 temp.add(words.get(i));
             words = temp;
+    }
+
+    public Word findWords(Word word){
+        for (Word item: words)
+            if (word.compareTo(item) == 0)
+                return item;
+
+            return null;
+    }
+
+    public JSONObject getJson(){
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        //StringBuilder builder = new StringBuilder();
+        //builder.append("{ \"words\": [");
+        for (Word word: words){
+            jsonArray.add(word.getJson());
+            //builder.append(word.getJson() + ",\n");
+        }
+        jsonObject.put("words", jsonArray);
+//        builder.replace(builder.length()- 3, builder.length() - 1, "}]}");
+//        return builder.toString();
+        return jsonObject;
     }
 }

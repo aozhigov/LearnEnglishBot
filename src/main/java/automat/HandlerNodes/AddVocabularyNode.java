@@ -1,5 +1,6 @@
 package automat.HandlerNodes;
 
+import User.User;
 import automat.HandlerNode;
 import common.*;
 import org.json.simple.parser.ParseException;

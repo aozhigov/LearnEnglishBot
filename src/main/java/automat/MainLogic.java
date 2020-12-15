@@ -1,10 +1,11 @@
 package automat;
 
 
+import User.User;
+import User.UserRepository;
 import automat.HandlerNodes.*;
 import common.*;
 import org.json.simple.parser.ParseException;
-import vocabulary.Selection;
 
 import java.io.IOException;
 import java.util.*;
@@ -12,38 +13,47 @@ import java.util.*;
 import static parser.JsonParser.getVocabulariesFromJson;
 
 public class MainLogic {
-    private final HashMap<String, Selection> startVocabularies;
     private final HandlerNode root;
-    private final Hashtable<Long, User> users;
+    private final Hashtable<String, User> users;
+    private final UserRepository db;
 
     public MainLogic() throws IOException, ParseException {
         users = new Hashtable<>();
-        startVocabularies = getVocabulariesFromJson(
-                System.getProperty("user.dir")
-                        + "/src/main/resources/dictionaries.json");
-
         root = initializationAutomate();
+        db = new UserRepository(System.getProperty("user.dir")
+                + "/src/main/resources/users.json");
     }
 
-    public MessageBot operate(Long chatId,
+    public MessageBot operate(String chatId,
                               String query,
                               String userName) throws IOException, ParseException {
-        if (!users.containsKey(chatId))
-            users.put(chatId, new User(userName,
-                    (long) (users.size() + 1),
-                    startVocabularies));
+        if (!users.containsKey(chatId)) {
+            User user = db.getUserById(chatId);
+            if (user == null) {
+                users.put(chatId, new User(userName,
+                        chatId,
+                        getVocabulariesFromJson(
+                                System.getProperty("user.dir")
+                                        + "/src/main/resources/dictionaries.json")));
+                db.saveUser(chatId, users.get(chatId));
+            }
+            else
+                users.put(chatId, user);
+        }
 
         User user = users.get(chatId);
 
         query = query.trim().toLowerCase();
 
         if (user.getStateDialog().getValue() == null
-                && user.getStateDialog().getKey() == Event.FIRST_START)
+                && (user.getStateDialog().getKey() == Event.FIRST_START
+                    || user.getStateDialog().getKey() == Event.SECOND_START))
             user.setStateDialog(root);
 
         MessageBot answer = user.getStateDialog().getValue().action(query, user);
         user.setStateDialog(answer.getHandler());
 
+        db.saveUser(chatId, users.get(chatId));
         return answer.getMessageWithoutHandler();
     }
 
@@ -51,9 +61,9 @@ public class MainLogic {
         List<String> yesNoKeyboard = Arrays.asList("Да", "Нет");
         List<String> hintEndKeyboard = Arrays.asList("Подсказка", "Закончить");
         List<String> hintNotKnowKeyboard = Arrays.asList("Подсказка", "Еще попытка", "Не знаю");
-        List<String> statKeyboard = Arrays.asList("Текущая тема", "Слова",
-                        "Тема: linq", "Тема: string",
-                        "Тема: io-api", "Тема: collection-api");
+//        List<String> statKeyboard = Arrays.asList("Текущая тема", "Слова",
+//                        "Тема: linq", "Тема: string",
+//                        "Тема: io-api", "Тема: collection-api");
         List<String> addWordKeyboard = Arrays.asList("Знаю", "Не уверен",
                 "Редактировать перевод","Закончить");
         List<String> setNameVocabularyKeyboard = Collections.singletonList("Удалить");
@@ -84,7 +94,7 @@ public class MainLogic {
         PrintNode exitStr = new PrintNode("Пока, {{WORD}}!");
         PrintNode statisticStr = new PrintNode("{{WORD}}, здесь ты можешь получить свою статистику.\n" +
                 "Выбери какую:",
-                statKeyboard);
+                new ArrayList<>(0));
         PrintNode statStr = new PrintNode("Вот твоя статистика:\n{{WORD}}\n" +
                 "Продолжим?",
                 yesNoKeyboard);
@@ -119,7 +129,7 @@ public class MainLogic {
         ChoseTopicNode choseTopic = new ChoseTopicNode();
         CheckWordNode checkWord = new CheckWordNode();
         YesNoNode yesNo = new YesNoNode();
-        ExitOrNextNode exitOrNext = new ExitOrNextNode();
+        ExitOrNextNode exitOrNext = new ExitOrNextNode(db);
         WrongNode wrong = new WrongNode();
         StatisticNode statistic = new StatisticNode();
         AddVocabularyNode addVocabulary = new AddVocabularyNode();

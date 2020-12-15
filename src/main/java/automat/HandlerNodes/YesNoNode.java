@@ -3,7 +3,7 @@ package automat.HandlerNodes;
 import automat.HandlerNode;
 import common.Event;
 import common.MessageBot;
-import common.User;
+import User.User;
 
 public class YesNoNode extends HandlerNode {
 
@@ -18,13 +18,13 @@ public class YesNoNode extends HandlerNode {
         Event event;
 
         if (query.contains("подсказка")) {
-            word = user.getStateLearn().getValue().createHint();
+            word = user.getCurrentLearnWord().createHint();
             event = Event.HINT;
         } else if (query.equals("да") || query.equals("еще попытка")) {
-            word = user.getStateLearn().getValue().getEn();
+            word = user.getCurrentLearnWord().getEn();
             event = Event.SECOND_EN_WORD;
         } else {
-            word = user.getStateLearn().getValue().getRu();
+            word = user.getCurrentLearnWord().getRu();
             event = Event.RU_WORD;
         }
 

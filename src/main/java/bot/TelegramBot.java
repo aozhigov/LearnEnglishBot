@@ -38,7 +38,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             inputText = update.getMessage().getText();
         }
 
-        Long chatId = msgTelegram.getChatId();
+        String chatId = msgTelegram.getChatId().toString();
         String userName = msgTelegram.getFrom().getUserName();
 
         MessageBot answer;
@@ -52,7 +52,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMsg(chatId, answer.getSendMessage());
     }
 
-    public synchronized void sendMsg(long chatId, SendMessage sendMessage) {
+    public synchronized void sendMsg(String chatId, SendMessage sendMessage) {
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(chatId);
 
