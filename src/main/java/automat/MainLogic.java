@@ -1,8 +1,9 @@
 package automat;
 
 
-import User.User;
-import User.UserRepository;
+import common.YandexTranslate;
+import user.User;
+import user.UserRepository;
 import automat.HandlerNodes.*;
 import common.Event;
 import common.MessageBot;
@@ -17,12 +18,21 @@ public class MainLogic {
     private final HandlerNode root;
     private final Hashtable<String, User> users;
     private final UserRepository db;
+    private final String pathToStartVocabularies;
+    private final String pathToFreqTable;
+    private final String separatorCSV;
 
-    public MainLogic() throws IOException, ParseException {
+    public MainLogic(UserRepository db,
+                     String pathToStartVocabularies,
+                     String pathToFreqTable,
+                     String separatorCSV,
+                     YandexTranslate translate) {
         users = new Hashtable<>();
-        db = new UserRepository(System.getProperty("user.dir")
-                + "/src/main/resources/users.json");
-        root = initializationAutomate();
+        this.db = db;
+        this.pathToStartVocabularies = pathToStartVocabularies;
+        this.pathToFreqTable = pathToFreqTable;
+        this.separatorCSV = separatorCSV;
+        root = initializationAutomate(translate);
     }
 
     public MessageBot operate(String chatId,
@@ -33,9 +43,7 @@ public class MainLogic {
             if (user == null) {
                 users.put(chatId, new User(userName,
                         chatId,
-                        getVocabulariesFromJson(
-                                System.getProperty("user.dir")
-                                        + "/src/main/resources/dictionaries.json")));
+                        getVocabulariesFromJson(pathToStartVocabularies)));
                 db.saveUser(chatId, users.get(chatId));
             } else
                 users.put(chatId, user);
@@ -57,7 +65,7 @@ public class MainLogic {
         return answer.getMessageWithoutHandler();
     }
 
-    private HandlerNode initializationAutomate() throws IOException, ParseException {
+    private HandlerNode initializationAutomate(YandexTranslate translate) {
         List<String> yesNoKeyboard = Arrays.asList("Да", "Нет");
         List<String> hintEndKeyboard = Arrays.asList("Подсказка", "Закончить");
         List<String> hintNotKnowKeyboard = Arrays.asList("Подсказка", "Еще попытка", "Не знаю");
@@ -129,7 +137,8 @@ public class MainLogic {
         ExitOrNextNode exitOrNext = new ExitOrNextNode(db);
         WrongNode wrong = new WrongNode();
         StatisticNode statistic = new StatisticNode();
-        AddVocabularyNode addVocabulary = new AddVocabularyNode();
+        AddVocabularyNode addVocabulary = new AddVocabularyNode(
+                pathToFreqTable, separatorCSV, translate);
         WordEditionVocabularyNode wordEditionVocabularyNode = new WordEditionVocabularyNode();
         SetNameVocabulariesNode setNameVocabulariesNode = new SetNameVocabulariesNode();
         TranslateEditorNode translateEditorNode = new TranslateEditorNode();

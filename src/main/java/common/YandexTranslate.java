@@ -46,23 +46,25 @@ public class YandexTranslate {
             throws IOException, ParseException {
         HttpPost httpPost = getHttpPost(
                 "https://iam.api.cloud.yandex.net/iam/v1/tokens",
-                "{\"yandexPassportOauthToken\": \"" + oAuth + "\"}",
+                new JSONObject() {{
+                    put("yandexPassportOauthToken", oAuth);}}
+                        .toJSONString(),
                 false);
 
         return (String) getAnswerJson(httpPost).get("iamToken");
     }
 
 
-    public Selection getTranslateWord(List<String> words) throws IOException, ParseException {
-        String preparedWords = this.prepareWords(words);
-        String wordsLanguage = "en";//this.autoDetectLanguage(words.get(0));
+    public ArrayList<Word> getWord(List<String> words) throws IOException, ParseException {
+        String translateLanguage = wordsLanguage.get("en");//this.autoDetectLanguage(words.get(0));
 
         HttpPost httpPost = getHttpPost(
                 "https://translate.api.cloud.yandex.net/translate/v2/translate",
-                "{\"folder_id\": \"" + this.folderId + "\"," +
-                        "\"texts\": [" + preparedWords + "]," +
-                        "\"targetLanguageCode\": " + "\""
-                        + this.wordsLanguage.get(wordsLanguage) + "\"}",
+                new JSONObject() {{
+                    put("folder_id", folderId);
+                    put("texts", new JSONArray() {{addAll(words);}});
+                    put("targetLanguageCode", translateLanguage);}}
+                    .toJSONString(),
                 true);
 
         JSONObject jsonObject = getAnswerJson(httpPost);
@@ -72,7 +74,9 @@ public class YandexTranslate {
         for (String item : this.prepareTranslatedWords(jsonArray))
             translatedWords.add(item.toLowerCase());
 
-        return this.prepareResponse(words, translatedWords, wordsLanguage);
+        return this.prepareResponse(words,
+                translatedWords,
+                wordsLanguage.get(translateLanguage));
     }
 
     private ArrayList<String> prepareTranslatedWords(JSONArray array) {
@@ -84,7 +88,7 @@ public class YandexTranslate {
         return result;
     }
 
-    private Selection prepareResponse(List<String> wordsOnTranslate,
+    private ArrayList<Word> prepareResponse(List<String> wordsOnTranslate,
                                       ArrayList<String> words,
                                       String wordsLanguage) {
         ArrayList<Word> arr = new ArrayList<>();
@@ -99,26 +103,17 @@ public class YandexTranslate {
                 arr.add(new Word(
                         words.get(counter),
                         wordsOnTranslate.get(counter)));
-        return new Selection(arr);
-    }
-
-    private String prepareWords(List<String> words) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < words.size(); i++) {
-            result.append("\"").append(words.get(i)).append("\"");
-            if (i != words.size() - 1)
-                result.append(", ");
-        }
-
-        return result.toString();
+        return arr;
     }
 
     private String autoDetectLanguage(String word)
             throws IOException, ParseException {
         HttpPost httpPost = getHttpPost(
                 "https://translate.api.cloud.yandex.net/translate/v2/detect",
-                "{\"folder_id\": \"" + this.folderId + "\"," +
-                        " \"text\": \"" + word + "\"}",
+                new JSONObject() {{
+                    put("folder_id", folderId);
+                    put("text", word);}}
+                    .toJSONString(),
                 true);
 
         return (String) getAnswerJson(httpPost).get("languageCode");

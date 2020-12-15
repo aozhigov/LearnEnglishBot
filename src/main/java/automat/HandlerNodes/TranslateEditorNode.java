@@ -3,7 +3,7 @@ package automat.HandlerNodes;
 import automat.HandlerNode;
 import common.Event;
 import common.MessageBot;
-import User.User;
+import user.User;
 
 
 public class TranslateEditorNode extends HandlerNode {

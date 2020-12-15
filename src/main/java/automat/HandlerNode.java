@@ -2,7 +2,7 @@ package automat;
 
 import common.Event;
 import common.MessageBot;
-import User.User;
+import user.User;
 import org.json.simple.parser.ParseException;
 import vocabulary.Selection;
 

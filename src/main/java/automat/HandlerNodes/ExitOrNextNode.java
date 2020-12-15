@@ -3,8 +3,8 @@ package automat.HandlerNodes;
 import automat.HandlerNode;
 import common.Event;
 import common.MessageBot;
-import User.User;
-import User.UserRepository;
+import user.User;
+import user.UserRepository;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;

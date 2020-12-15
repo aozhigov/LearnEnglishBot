@@ -1,6 +1,6 @@
 package vocabulary;
 
-import User.User;
+import user.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

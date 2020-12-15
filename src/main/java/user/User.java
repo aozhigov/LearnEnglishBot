@@ -1,4 +1,4 @@
-package User;
+package user;
 
 import automat.HandlerNode;
 import common.Event;
