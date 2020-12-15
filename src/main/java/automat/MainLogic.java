@@ -4,7 +4,8 @@ package automat;
 import User.User;
 import User.UserRepository;
 import automat.HandlerNodes.*;
-import common.*;
+import common.Event;
+import common.MessageBot;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -19,9 +20,9 @@ public class MainLogic {
 
     public MainLogic() throws IOException, ParseException {
         users = new Hashtable<>();
-        root = initializationAutomate();
         db = new UserRepository(System.getProperty("user.dir")
                 + "/src/main/resources/users.json");
+        root = initializationAutomate();
     }
 
     public MessageBot operate(String chatId,
@@ -36,8 +37,7 @@ public class MainLogic {
                                 System.getProperty("user.dir")
                                         + "/src/main/resources/dictionaries.json")));
                 db.saveUser(chatId, users.get(chatId));
-            }
-            else
+            } else
                 users.put(chatId, user);
         }
 
@@ -47,7 +47,7 @@ public class MainLogic {
 
         if (user.getStateDialog().getValue() == null
                 && (user.getStateDialog().getKey() == Event.FIRST_START
-                    || user.getStateDialog().getKey() == Event.SECOND_START))
+                || user.getStateDialog().getKey() == Event.SECOND_START))
             user.setStateDialog(root);
 
         MessageBot answer = user.getStateDialog().getValue().action(query, user);
@@ -61,11 +61,8 @@ public class MainLogic {
         List<String> yesNoKeyboard = Arrays.asList("Да", "Нет");
         List<String> hintEndKeyboard = Arrays.asList("Подсказка", "Закончить");
         List<String> hintNotKnowKeyboard = Arrays.asList("Подсказка", "Еще попытка", "Не знаю");
-//        List<String> statKeyboard = Arrays.asList("Текущая тема", "Слова",
-//                        "Тема: linq", "Тема: string",
-//                        "Тема: io-api", "Тема: collection-api");
         List<String> addWordKeyboard = Arrays.asList("Знаю", "Не уверен",
-                "Редактировать перевод","Закончить");
+                "Редактировать перевод", "Закончить");
         List<String> setNameVocabularyKeyboard = Collections.singletonList("Удалить");
 
         PrintNode startFirstStr = new PrintNode("Привет, {{WORD}}!\n" +
@@ -80,7 +77,7 @@ public class MainLogic {
                 new ArrayList<>(0));
         PrintNode firstEnWordStr = new PrintNode("Отлично! Вот слово для перевода: ```{{WORD}}```",
                 hintEndKeyboard);
-        PrintNode toTryTo = new PrintNode("Неправильно, {{WORD}}!",
+        PrintNode toTryTo = new PrintNode("Неправильно, {{WORD}}! Попробуем еще?",
                 hintNotKnowKeyboard);
         PrintNode secondEnWordStr = new PrintNode("Хорошо подумай и отвечай, слово: ```{{WORD}}```",
                 hintEndKeyboard);
@@ -154,66 +151,105 @@ public class MainLogic {
         editTranslateStr.initLinks(translateEditorNode);
 
         zero.initLinks(new HashMap<Event, PrintNode>() {{
-            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
-            put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
+            put(Event.STATISTIC, statisticStr);
+            put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr);
+            put(Event.CHANGE_TOPIC, topicStr);
 
-            put(Event.FIRST_START, startFirstStr); put(Event.SECOND_START, startSecondStr);
-            put(Event.ADD_VOCABULARY, addVocabularyStr);}});
+            put(Event.FIRST_START, startFirstStr);
+            put(Event.SECOND_START, startSecondStr);
+            put(Event.ADD_VOCABULARY, addVocabularyStr);
+        }});
         choseTopic.initLinks(new HashMap<Event, PrintNode>() {{
-            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
-            put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
+            put(Event.STATISTIC, statisticStr);
+            put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr);
+            put(Event.CHANGE_TOPIC, topicStr);
 
-            put(Event.FIRST_START, startFirstStr); put(Event.WRONG_TOPIC, wrongTopicStr);
-            put(Event.ADD_VOCABULARY, addVocabularyStr); put(Event.FIRST_EN_WORD, firstEnWordStr);}});
+            put(Event.FIRST_START, startFirstStr);
+            put(Event.WRONG_TOPIC, wrongTopicStr);
+            put(Event.ADD_VOCABULARY, addVocabularyStr);
+            put(Event.FIRST_EN_WORD, firstEnWordStr);
+        }});
         checkWord.initLinks(new HashMap<Event, PrintNode>() {{
-            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
-            put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
+            put(Event.STATISTIC, statisticStr);
+            put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr);
+            put(Event.CHANGE_TOPIC, topicStr);
 
-            put(Event.FIRST_START, startFirstStr); put(Event.TRY, toTryTo);
-            put(Event.HINT, hintStr); put(Event.ADD_VOCABULARY, addVocabularyStr);
-            put(Event.FIRST_EN_WORD, firstEnWordStr);}});
+            put(Event.FIRST_START, startFirstStr);
+            put(Event.TRY, toTryTo);
+            put(Event.HINT, hintStr);
+            put(Event.ADD_VOCABULARY, addVocabularyStr);
+            put(Event.FIRST_EN_WORD, firstEnWordStr);
+        }});
         yesNo.initLinks(new HashMap<Event, PrintNode>() {{
-            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
-            put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
+            put(Event.STATISTIC, statisticStr);
+            put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr);
+            put(Event.CHANGE_TOPIC, topicStr);
 
-            put(Event.SECOND_EN_WORD, secondEnWordStr); put(Event.RU_WORD, ruWordStr);
-            put(Event.HINT, hintStr); put(Event.ADD_VOCABULARY, addVocabularyStr);}});
+            put(Event.SECOND_EN_WORD, secondEnWordStr);
+            put(Event.RU_WORD, ruWordStr);
+            put(Event.HINT, hintStr);
+            put(Event.ADD_VOCABULARY, addVocabularyStr);
+        }});
         exitOrNext.initLinks(new HashMap<Event, PrintNode>() {{
-            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
-            put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
+            put(Event.STATISTIC, statisticStr);
+            put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr);
+            put(Event.CHANGE_TOPIC, topicStr);
 
             put(Event.FIRST_EN_WORD, firstEnWordStr);
-            put(Event.ADD_VOCABULARY, addVocabularyStr);}});
+            put(Event.ADD_VOCABULARY, addVocabularyStr);
+        }});
         wrong.initLinks(new HashMap<Event, PrintNode>() {{
-            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
-            put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
+            put(Event.STATISTIC, statisticStr);
+            put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr);
+            put(Event.CHANGE_TOPIC, topicStr);
 
             put(Event.FIRST_EN_WORD, firstEnWordStr);
-            put(Event.ADD_VOCABULARY, addVocabularyStr);}});
+            put(Event.ADD_VOCABULARY, addVocabularyStr);
+        }});
         statistic.initLinks(new HashMap<Event, PrintNode>() {{
-            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
-            put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
+            put(Event.STATISTIC, statisticStr);
+            put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr);
+            put(Event.CHANGE_TOPIC, topicStr);
 
-            put(Event.WRONG, wrongStr); put(Event.STAT_STR, statStr);
-            put(Event.ADD_VOCABULARY, addVocabularyStr);}});
+            put(Event.WRONG, wrongStr);
+            put(Event.STAT_STR, statStr);
+            put(Event.ADD_VOCABULARY, addVocabularyStr);
+        }});
         addVocabulary.initLinks(new HashMap<Event, PrintNode>() {{
-            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
-            put(Event.HELP, helpStr); put(Event.WRONG, wrongStr);
+            put(Event.STATISTIC, statisticStr);
+            put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr);
+            put(Event.WRONG, wrongStr);
 
-            put(Event.ADD_WORD_VOCABULARY, addWordVocabularyStr); }});
+            put(Event.ADD_WORD_VOCABULARY, addWordVocabularyStr);
+        }});
         wordEditionVocabularyNode.initLinks(new HashMap<Event, PrintNode>() {{
-            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
-            put(Event.HELP, helpStr); put(Event.WRONG, wrongStr);
-            put(Event.CHANGE_TOPIC, topicStr); put(Event.FIRST_EN_WORD, firstEnWordStr);
+            put(Event.STATISTIC, statisticStr);
+            put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr);
+            put(Event.WRONG, wrongStr);
+            put(Event.CHANGE_TOPIC, topicStr);
+            put(Event.FIRST_EN_WORD, firstEnWordStr);
 
             put(Event.EDIT_TRANSLATE, editTranslateStr);
             put(Event.ADD_WORD_VOCABULARY, addWordVocabularyStr);
-            put(Event.END_VOCABULARY, endAddVocabularyStr); }});
+            put(Event.END_VOCABULARY, endAddVocabularyStr);
+        }});
         setNameVocabulariesNode.initLinks(new HashMap<Event, PrintNode>() {{
-            put(Event.STATISTIC, statisticStr); put(Event.EXIT, exitStr);
-            put(Event.HELP, helpStr); put(Event.CHANGE_TOPIC, topicStr);
+            put(Event.STATISTIC, statisticStr);
+            put(Event.EXIT, exitStr);
+            put(Event.HELP, helpStr);
+            put(Event.CHANGE_TOPIC, topicStr);
 
-            put(Event.FIRST_EN_WORD, firstEnWordStr); }});
+            put(Event.FIRST_EN_WORD, firstEnWordStr);
+        }});
 
         translateEditorNode.initLinks(new HashMap<Event, PrintNode>() {{
             put(Event.END_VOCABULARY, endAddVocabularyStr);
@@ -223,7 +259,7 @@ public class MainLogic {
         return zero;
     }
 
-    private void addLinksInStr(HandlerNode handler, List<PrintNode> printNodes){
+    private void addLinksInStr(HandlerNode handler, List<PrintNode> printNodes) {
         for (PrintNode item : printNodes)
             item.initLinks(handler);
     }

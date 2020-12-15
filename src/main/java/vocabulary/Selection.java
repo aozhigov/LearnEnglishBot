@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Selection {
-    private ArrayList<Word> words;
     private final Random rnd;
+    private ArrayList<Word> words;
 
     public Selection(ArrayList<Word> words) {
         this.words = words;
@@ -38,7 +38,7 @@ public class Selection {
         return min;
     }
 
-    public Word getWord(int idx){
+    public Word getWord(int idx) {
         return words.get(idx);
     }
 
@@ -88,10 +88,10 @@ public class Selection {
         return response.toString();
     }
 
-    private String generateStringStat(int start, int finish, int step, boolean isMore){
+    private String generateStringStat(int start, int finish, int step, boolean isMore) {
         StringBuilder response = new StringBuilder();
         for (int i = start; i >= 0 && i < words.size()
-                && ((i < finish && !isMore) || (isMore && i > finish)); i += step){
+                && ((i < finish && !isMore) || (isMore && i > finish)); i += step) {
             double coefficient = words.get(i).getCoefficient();
 
             if (isMore && coefficient == 0)
@@ -139,55 +139,43 @@ public class Selection {
             quickSort(array, i, high);
     }
 
-    public void delWord(Integer idx){
+    public void delWord(Integer idx) {
         ArrayList<Word> temp = new ArrayList<>();
         for (int i = 0; i < words.size(); i++)
             if (i != idx + 1)
                 temp.add(words.get(i));
 
-            words = temp;
+        words = temp;
     }
 
-    public void setTranslateWord(Integer idx, String translate){
+    public void setTranslateWord(Integer idx, String translate) {
         words.get(idx).setRu(translate);
     }
 
-    public String getWithoutStat(int idx){
+    public String getWithoutStat(int idx) {
         return "\n" + words.get(idx).en + "\nПеревод: " + words.get(idx).ru;
     }
 
-    public int getSize(){
+    public int getSize() {
         return words.size();
     }
 
-    public void delAllStartIdx(int idx){
+    public void delAllStartIdx(int idx) {
         ArrayList<Word> temp = new ArrayList<>();
         if (idx <= words.size() && idx >= 0)
             for (int i = 0; i < idx; i++)
                 temp.add(words.get(i));
-            words = temp;
+        words = temp;
     }
 
-    public Word findWords(Word word){
-        for (Word item: words)
-            if (word.compareTo(item) == 0)
-                return item;
-
-            return null;
-    }
-
-    public JSONObject getJson(){
+    public JSONObject getJson() {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        //StringBuilder builder = new StringBuilder();
-        //builder.append("{ \"words\": [");
-        for (Word word: words){
+
+        for (Word word : words)
             jsonArray.add(word.getJson());
-            //builder.append(word.getJson() + ",\n");
-        }
+
         jsonObject.put("words", jsonArray);
-//        builder.replace(builder.length()- 3, builder.length() - 1, "}]}");
-//        return builder.toString();
         return jsonObject;
     }
 }

@@ -4,9 +4,6 @@ import automat.HandlerNode;
 import common.Event;
 import common.Tuple;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import parser.JsonParser;
 import vocabulary.Selection;
 import vocabulary.Word;
 
@@ -15,12 +12,11 @@ import java.util.HashMap;
 public class User {
     private final String userName;
     private final String id;
+    private final HashMap<String, Selection> myVocabularies;
     private Tuple<Event, HandlerNode> stateDialog;
     private Tuple<String, Integer> stateLearn;
-    private final HashMap<String, Selection> myVocabularies;
     private Tuple<String, Integer> stateAddVocabulary;
     private Integer countWordsVocabulary;
-    //public HashMap<String, Tuple<Integer, Integer>> statistic = new HashMap<>();
 
     public User(HashMap<String, Selection> startVocabularies) {
         userName = "";
@@ -74,17 +70,17 @@ public class User {
         return stateLearn;
     }
 
-    public Word getCurrentLearnWord(){
-        Selection vocabulary = myVocabularies.get(stateLearn.getKey());
-        return vocabulary.getWord(stateLearn.getValue());
-    }
-
     public void setStateLearn(String name) {
         stateLearn.setKey(name);
     }
 
     public void setStateLearn(Integer word) {
         stateLearn.setValue(word);
+    }
+
+    public Word getCurrentLearnWord() {
+        Selection vocabulary = myVocabularies.get(stateLearn.getKey());
+        return vocabulary.getWord(stateLearn.getValue());
     }
 
     public HashMap<String, Selection> getUserVocabularies() {
@@ -102,7 +98,7 @@ public class User {
 
         stateAddVocabulary.setValue(stateAddVocabulary.getValue() + 1);
         if (stateAddVocabulary.getValue() >= myVocabularies.get(stateAddVocabulary.getKey()).getSize()
-                || countWordsVocabulary == 0){
+                || countWordsVocabulary == 0) {
             myVocabularies.get(stateAddVocabulary.getKey())
                     .delAllStartIdx(stateAddVocabulary.getValue());
             return "";
@@ -118,7 +114,7 @@ public class User {
         stateAddVocabulary.setTuple("", -1);
     }
 
-    public void delUserVocabulary(){
+    public void delUserVocabulary() {
         myVocabularies.remove(stateAddVocabulary.getKey());
         stateAddVocabulary = new Tuple<>("", 0);
     }
@@ -129,32 +125,32 @@ public class User {
                 .delWord(stateAddVocabulary.getValue());
     }
 
-    public void setCountWordsForAdd(int count){
+    public void setCountWordsForAdd(int count) {
         countWordsVocabulary = count > 0
                 ? count
                 : 20;
     }
 
-    public void setTranslateWord(String translate){
+    public void setTranslateWord(String translate) {
         myVocabularies.get(stateAddVocabulary.getKey())
                 .setTranslateWord(stateAddVocabulary.getValue(), translate);
     }
 
-    public String getCurrentWord(){
+    public String getCurrentWord() {
         return myVocabularies.get(stateAddVocabulary.getKey())
                 .getWithoutStat(stateAddVocabulary.getValue());
     }
 
-    public int getSizeAddVocabulary(){
+    public int getSizeAddVocabulary() {
         return myVocabularies.get(stateAddVocabulary.getKey()).getSize();
     }
 
-    public void delRemainingWord(){
+    public void delRemainingWord() {
         myVocabularies.get(stateAddVocabulary.getKey())
                 .delAllStartIdx(stateAddVocabulary.getValue());
     }
 
-    public JSONObject getJson(){
+    public JSONObject getJson() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("userName", userName);
         jsonObject.put("id", id);
@@ -163,22 +159,11 @@ public class User {
         return jsonObject;
     }
 
-    private JSONObject getJsonVocabularies(){
+    private JSONObject getJsonVocabularies() {
         JSONObject jsonObject = new JSONObject();
-        for (String key: myVocabularies.keySet()){
+        for (String key : myVocabularies.keySet()) {
             jsonObject.put(key, myVocabularies.get(key).getJson());
         }
         return jsonObject;
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("\"myVocabularies\": {");
-//        for (String key: myVocabularies.keySet()){
-//            builder.append("\"")
-//                    .append(key)
-//                    .append("\": ")
-//                    .append(myVocabularies.get(key).getJson())
-//                    .append(",\n");
-//        }
-//        builder.replace(builder.length() - 3, builder.length() - 1, " }");
-//        return builder.toString();
     }
 }

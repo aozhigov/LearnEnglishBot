@@ -5,7 +5,10 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import parser.JsonParser;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 
 
@@ -13,7 +16,7 @@ public class UserRepository {
     private final JSONParser jsonParser;
     private final String pathDB;
 
-    public UserRepository(String pathDB) throws IOException {
+    public UserRepository(String pathDB) {
         jsonParser = new JSONParser();
         this.pathDB = pathDB;
     }
@@ -41,7 +44,7 @@ public class UserRepository {
     public HashMap<String, User> getAllUsers() throws IOException, ParseException {
         JSONObject jsonObject = openFile();
         HashMap<String, User> users = new HashMap<>();
-        for (Object key: jsonObject.keySet())
+        for (Object key : jsonObject.keySet())
             users.put((String) key,
                     JsonParser.parseUser((JSONObject) jsonObject.get(key)));
 
@@ -50,7 +53,7 @@ public class UserRepository {
 
     public void saveAllUser(HashMap<String, User> users) throws IOException {
         JSONObject jsonObject = new JSONObject();
-        for (String key: users.keySet()){
+        for (String key : users.keySet()) {
             jsonObject.put(key, users.get(key).getJson());
         }
 
@@ -67,7 +70,7 @@ public class UserRepository {
 
     private void saveFile(JSONObject jsonObject) throws IOException {
         File file = checkFile();
-        try (FileWriter fw = new FileWriter(file)){
+        try (FileWriter fw = new FileWriter(file)) {
             fw.write(jsonObject.toJSONString());
         }
     }
@@ -79,5 +82,4 @@ public class UserRepository {
 
         return file;
     }
-
 }

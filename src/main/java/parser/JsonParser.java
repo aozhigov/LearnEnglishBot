@@ -76,6 +76,4 @@ public class JsonParser {
         int value = Integer.parseInt((String) statistic.values().toArray()[0]);
         return new Word(en, ru, new Tuple<>(key, value));
     }
-
 }
-
