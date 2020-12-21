@@ -1,7 +1,6 @@
 package vocabulary;
 
 import common.Tuple;
-import org.json.simple.JSONObject;
 
 import java.util.Arrays;
 
@@ -82,12 +81,4 @@ public class Word {
         else
             return -1;
     }
-
-//    public JSONObject getJson(){
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("en", en);
-//        jsonObject.put("ru", ru);
-//        jsonObject.put("statistic", statistic.getJson());
-//        return jsonObject;
-//    }
 }

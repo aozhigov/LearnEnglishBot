@@ -8,7 +8,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import vocabulary.Selection;
 import vocabulary.Word;
 
 import java.io.*;
@@ -36,10 +35,6 @@ public class YandexTranslate {
 
     private void openHttp() {
         httpclient = HttpClients.createDefault();
-    }
-
-    private void closeHttp() throws IOException {
-        httpclient.close();
     }
 
     private String getToken(String oAuth)
@@ -104,19 +99,6 @@ public class YandexTranslate {
                         words.get(counter),
                         wordsOnTranslate.get(counter)));
         return arr;
-    }
-
-    private String autoDetectLanguage(String word)
-            throws IOException, ParseException {
-        HttpPost httpPost = getHttpPost(
-                "https://translate.api.cloud.yandex.net/translate/v2/detect",
-                new JSONObject() {{
-                    put("folder_id", folderId);
-                    put("text", word);}}
-                    .toJSONString(),
-                true);
-
-        return (String) getAnswerJson(httpPost).get("languageCode");
     }
 
     private HttpPost getHttpPost(String uri,

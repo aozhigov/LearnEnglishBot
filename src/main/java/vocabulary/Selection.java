@@ -167,15 +167,4 @@ public class Selection {
                 temp.add(words.get(i));
         words = temp;
     }
-
-//    public JSONObject getJson() {
-//        JSONObject jsonObject = new JSONObject();
-//        JSONArray jsonArray = new JSONArray();
-//
-//        for (Word word : words)
-//            jsonArray.add(word.getJson());
-//
-//        jsonObject.put("words", jsonArray);
-//        return jsonObject;
-//    }
 }

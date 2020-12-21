@@ -1,11 +1,8 @@
 package user;
 
 import automat.HandlerNode;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import common.Event;
 import common.Tuple;
-import org.json.simple.JSONObject;
 import vocabulary.Selection;
 import vocabulary.Word;
 
@@ -161,25 +158,4 @@ public class User {
         myVocabularies.get(stateAddVocabulary.getKey())
                 .delAllStartIdx(stateAddVocabulary.getValue());
     }
-
-    public String getJson() {
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .create();
-        return gson.toJson(this);
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("userName", userName);
-//        jsonObject.put("id", id);
-//        jsonObject.put("stateLearn", stateLearn.getJson());
-//        jsonObject.put("myVocabularies", getJsonVocabularies());
-//        return jsonObject;
-    }
-
-//    private JSONObject getJsonVocabularies() {
-//        JSONObject jsonObject = new JSONObject();
-//        for (String key : myVocabularies.keySet()) {
-//            jsonObject.put(key, myVocabularies.get(key).getJson());
-//        }
-//        return jsonObject;
-//    }
 }
