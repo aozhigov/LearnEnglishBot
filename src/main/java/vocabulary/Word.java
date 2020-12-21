@@ -83,11 +83,11 @@ public class Word {
             return -1;
     }
 
-    public JSONObject getJson(){
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("en", en);
-        jsonObject.put("ru", ru);
-        jsonObject.put("statistic", statistic.getJson());
-        return jsonObject;
-    }
+//    public JSONObject getJson(){
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("en", en);
+//        jsonObject.put("ru", ru);
+//        jsonObject.put("statistic", statistic.getJson());
+//        return jsonObject;
+//    }
 }

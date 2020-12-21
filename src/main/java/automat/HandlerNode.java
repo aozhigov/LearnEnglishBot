@@ -41,12 +41,12 @@ public abstract class HandlerNode {
 
         if (event == Event.CHANGE_TOPIC)
             return move(event).action(user.getName(),
-                    new ArrayList<>(user.getUserVocabularies().keySet()));
+                    new ArrayList<>(user.getMyVocabularies().keySet()));
 
         if (event == Event.STATISTIC) {
             ArrayList<String> keyboard = new ArrayList<>(
                     Arrays.asList("Текущая тема", "Слова"));
-            for(String item: user.getUserVocabularies().keySet())
+            for(String item: user.getMyVocabularies().keySet())
                 keyboard.add("Тема: " + item);
 
             return move(event).action(user.getName(), keyboard);
@@ -75,7 +75,7 @@ public abstract class HandlerNode {
         if (user.getStateLearn().getKey().equals(""))
             user.setStateLearn(query);
 
-        Selection vocabulary = user.getUserVocabularies().get(user.getStateLearn().getKey());
+        Selection vocabulary = user.getMyVocabularies().get(user.getStateLearn().getKey());
         int temp = vocabulary.getEnWord();
         user.setStateLearn(temp);
 

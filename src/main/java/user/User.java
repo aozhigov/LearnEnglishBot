@@ -1,6 +1,8 @@
 package user;
 
 import automat.HandlerNode;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import common.Event;
 import common.Tuple;
 import org.json.simple.JSONObject;
@@ -10,13 +12,13 @@ import vocabulary.Word;
 import java.util.HashMap;
 
 public class User {
-    private final String userName;
-    private final String id;
-    private final HashMap<String, Selection> myVocabularies;
-    private Tuple<Event, HandlerNode> stateDialog;
+    private String userName;
+    private String id;
+    private HashMap<String, Selection> myVocabularies;
+    private transient Tuple<Event, HandlerNode> stateDialog;
     private Tuple<String, Integer> stateLearn;
-    private Tuple<String, Integer> stateAddVocabulary;
-    private Integer countWordsVocabulary;
+    private transient Tuple<String, Integer> stateAddVocabulary;
+    private transient Integer countWordsVocabulary;
 
     public User(HashMap<String, Selection> startVocabularies) {
         userName = "";
@@ -46,6 +48,12 @@ public class User {
         this.myVocabularies = startVocabularies;
     }
 
+    public User(){
+        stateAddVocabulary = new Tuple<>("", -1);
+        stateDialog = new Tuple<>(Event.SECOND_START, null);
+        countWordsVocabulary = 20;
+    }
+
     public String getName() {
         return userName;
     }
@@ -70,6 +78,10 @@ public class User {
         return stateLearn;
     }
 
+    public void setStateLearn(Tuple<String, Integer> value){
+        stateLearn.setTuple(value.getKey(), value.getValue());
+    }
+
     public void setStateLearn(String name) {
         stateLearn.setKey(name);
     }
@@ -83,7 +95,7 @@ public class User {
         return vocabulary.getWord(stateLearn.getValue());
     }
 
-    public HashMap<String, Selection> getUserVocabularies() {
+    public HashMap<String, Selection> getMyVocabularies() {
         return myVocabularies;
     }
 
@@ -150,20 +162,24 @@ public class User {
                 .delAllStartIdx(stateAddVocabulary.getValue());
     }
 
-    public JSONObject getJson() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("userName", userName);
-        jsonObject.put("id", id);
-        jsonObject.put("stateLearn", stateLearn.getJson());
-        jsonObject.put("myVocabularies", getJsonVocabularies());
-        return jsonObject;
+    public String getJson() {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        return gson.toJson(this);
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("userName", userName);
+//        jsonObject.put("id", id);
+//        jsonObject.put("stateLearn", stateLearn.getJson());
+//        jsonObject.put("myVocabularies", getJsonVocabularies());
+//        return jsonObject;
     }
 
-    private JSONObject getJsonVocabularies() {
-        JSONObject jsonObject = new JSONObject();
-        for (String key : myVocabularies.keySet()) {
-            jsonObject.put(key, myVocabularies.get(key).getJson());
-        }
-        return jsonObject;
-    }
+//    private JSONObject getJsonVocabularies() {
+//        JSONObject jsonObject = new JSONObject();
+//        for (String key : myVocabularies.keySet()) {
+//            jsonObject.put(key, myVocabularies.get(key).getJson());
+//        }
+//        return jsonObject;
+//    }
 }

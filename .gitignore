@@ -6,4 +6,4 @@ cls
 src/main/resources/Selections.json
 src/main/resources/Users.json
 repository
-src/main/resources/db
+src/main/resources/db/*.json

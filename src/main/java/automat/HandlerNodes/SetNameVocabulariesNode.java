@@ -19,8 +19,8 @@ public class SetNameVocabulariesNode extends HandlerNode {
         String word = user.getName();
         Event event;
 
-        if (user.getUserVocabularies().containsKey(query))
-            user.setUserVocabulary("My_" + user.getUserVocabularies() + "_" + query);
+        if (user.getMyVocabularies().containsKey(query))
+            user.setUserVocabulary("My_" + user.getMyVocabularies() + "_" + query);
         else
             user.setUserVocabulary(query);
 
@@ -37,7 +37,7 @@ public class SetNameVocabulariesNode extends HandlerNode {
             if (user.getStateLearn().getKey().equals("")) {
                 event = Event.CHANGE_TOPIC;
                 return move(event).action(user.getName(),
-                        new ArrayList<>(user.getUserVocabularies().keySet()));
+                        new ArrayList<>(user.getMyVocabularies().keySet()));
             }
             return move(event).action(word);
         }
@@ -45,7 +45,7 @@ public class SetNameVocabulariesNode extends HandlerNode {
         if (user.getStateLearn().getKey().equals("")) {
             event = Event.CHANGE_TOPIC;
             return move(event).action(word,
-                    new ArrayList<>(user.getUserVocabularies().keySet()));
+                    new ArrayList<>(user.getMyVocabularies().keySet()));
         } else {
             word = getFirstWord(query, user);
             event = Event.FIRST_EN_WORD;

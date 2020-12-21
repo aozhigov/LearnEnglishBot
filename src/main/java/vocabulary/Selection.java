@@ -1,14 +1,12 @@
 package vocabulary;
 
 import user.User;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Selection {
-    private final Random rnd;
+    private transient Random rnd;
     private ArrayList<Word> words;
 
     public Selection(ArrayList<Word> words) {
@@ -43,6 +41,8 @@ public class Selection {
     }
 
     private int getRandomWord(ArrayList<Integer> rightWords) {
+        if (rnd == null)
+            rnd = new Random();
         return rnd.nextInt(rightWords.size());
     }
 
@@ -168,14 +168,14 @@ public class Selection {
         words = temp;
     }
 
-    public JSONObject getJson() {
-        JSONObject jsonObject = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
-
-        for (Word word : words)
-            jsonArray.add(word.getJson());
-
-        jsonObject.put("words", jsonArray);
-        return jsonObject;
-    }
+//    public JSONObject getJson() {
+//        JSONObject jsonObject = new JSONObject();
+//        JSONArray jsonArray = new JSONArray();
+//
+//        for (Word word : words)
+//            jsonArray.add(word.getJson());
+//
+//        jsonObject.put("words", jsonArray);
+//        return jsonObject;
+//    }
 }

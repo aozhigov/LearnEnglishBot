@@ -5,10 +5,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import parser.JsonParser;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.Scanner;
 
 
 public class UserRepository {
@@ -23,36 +21,44 @@ public class UserRepository {
     }
 
     public User getUserById(String id) throws IOException, ParseException {
-        JSONObject jsonObject = readDBFileJson(id);
+        User jsonObject = readDBFileJson(id);
         if (jsonObject != null)
-            return JsonParser.parseUser((JSONObject) jsonObject.get(id));
+            return jsonObject;
+//            return JsonParser.parseUser(jsonObject);
         return null;
     }
 
     public void saveUser(String id, User user) throws IOException, ParseException {
-        JSONObject jsonObject = readDBFileJson(id);
-        if (jsonObject == null)
-            jsonObject = new JSONObject();
-        jsonObject.put(id, user.getJson());
-        saveJsonToDB(id, jsonObject);
+//        JSONObject jsonObject = readDBFileJson(id);
+//        if (jsonObject == null)
+//            jsonObject = new JSONObject();
+//        jsonObject.put(id, );
+        saveJsonToDB(id, user.getJson());
     }
 
     public void dellUser(String id) {
         delFile(id);
     }
 
-    private JSONObject readDBFileJson(String id) throws IOException, ParseException {
+    private User readDBFileJson(String id) throws IOException, ParseException {
         File file = getOrCreateIfNone(id);
         if (file.length() == 0)
             return null;
-        return (JSONObject) jsonParser.parse(new FileReader(file));
+        Reader t = new FileReader(file);
+        Scanner sc = new Scanner(file);
+        String r = "";
+        while(sc.hasNext()){
+            r += sc.next();
+        }
+        return JsonParser.parseGsonUser(r);
+//        return (JSONObject) jsonParser.parse(t);
     }
 
-    private void saveJsonToDB(String id, JSONObject jsonObject) throws IOException {
+    private void saveJsonToDB(String id, String jsonObject) throws IOException {
         delFile(id);
         File file = getOrCreateIfNone(id);
         try (FileWriter fw = new FileWriter(file)) {
-            fw.write(jsonObject.toJSONString());
+            fw.write(jsonObject);
         }
     }
 

@@ -33,7 +33,7 @@ public class AddVocabularyNode extends HandlerNode {
 
         ArrayList<String> findWords = freqFile.search(query);
         if (findWords.size() > 0){
-            user.addVocabulary("myVoc" + user.getUserVocabularies().size(),
+            user.addVocabulary("myVoc" + user.getMyVocabularies().size(),
                     new Selection(translate.getWord(findWords)));
             return move(Event.ADD_WORD_VOCABULARY).action(user.getNextWordForAdd(true));
         }

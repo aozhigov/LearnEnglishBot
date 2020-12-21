@@ -16,7 +16,7 @@ public class ZeroNode extends HandlerNode {
             user.setStateDialog(Event.SECOND_START);
 
             return move(temp).action(user.getName(),
-                    new ArrayList<>(user.getUserVocabularies().keySet()));
+                    new ArrayList<>(user.getMyVocabularies().keySet()));
         }
 
         return move(Event.HELP).action(user.getName());

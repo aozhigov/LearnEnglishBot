@@ -1,5 +1,6 @@
 package parser;
 
+import com.google.gson.Gson;
 import common.Tuple;
 import user.User;
 import org.json.simple.JSONArray;
@@ -40,12 +41,16 @@ public class JsonParser {
         return vocabularies;
     }
 
+    public static User parseGsonUser(String json){
+        return new Gson().fromJson(json, User.class);
+    }
+
     public static User parseUser(JSONObject jsonObject){
         String id = (String) jsonObject.get("id");
         String userName = (String) jsonObject.get("userName");
         JSONObject stateLearn = (JSONObject) jsonObject.get("stateLearn");
-        String key = (String) stateLearn.keySet().toArray()[0];
-        int value = Integer.parseInt((String) stateLearn.values().toArray()[0]);
+        String key = (String) stateLearn.get("key");//stateLearn.keySet().toArray()[0];
+        int value = Integer.parseInt(stateLearn.get("value").toString()/*stateLearn.values().toArray()[0]*/);
         HashMap<String, Selection> myVocabularies = new HashMap<>();
         JSONObject vocabularies = (JSONObject) jsonObject.get("myVocabularies");
         for (Object item: vocabularies.keySet()){
@@ -72,8 +77,8 @@ public class JsonParser {
         String ru = (String) jsonObject.get("ru");
         String en = (String) jsonObject.get("en");
         JSONObject statistic = (JSONObject) jsonObject.get("statistic");
-        int key = Integer.parseInt((String) statistic.keySet().toArray()[0]);
-        int value = Integer.parseInt((String) statistic.values().toArray()[0]);
+        int key = Integer.parseInt(statistic.get("value").toString());
+        int value = Integer.parseInt(statistic.get("value").toString());
         return new Word(en, ru, new Tuple<>(key, value));
     }
 }

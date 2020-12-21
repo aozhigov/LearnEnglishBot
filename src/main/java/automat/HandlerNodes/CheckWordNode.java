@@ -21,7 +21,7 @@ public class CheckWordNode extends HandlerNode {
             return move(Event.EXIT).action(word);
 
         Event event = Event.TRY;
-        Selection vocabulary = user.getUserVocabularies().get(user.getStateLearn().getKey());
+        Selection vocabulary = user.getMyVocabularies().get(user.getStateLearn().getKey());
 
         if (query.contains("подсказка")) {
             word = user.getCurrentLearnWord().createHint();

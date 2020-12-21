@@ -21,12 +21,12 @@ public class StatisticNode extends HandlerNode {
         if (query.contains("тема")) {
             String[] arr = query.split(" ");
 
-            if (arr.length >= 2 && user.getUserVocabularies().containsKey(arr[1])) {
-                word = user.getUserVocabularies().get(arr[1])
+            if (arr.length >= 2 && user.getMyVocabularies().containsKey(arr[1])) {
+                word = user.getMyVocabularies().get(arr[1])
                         .getSelectionStatistic();
                 word = arr[1] + " - " + word;
-            } else if (user.getUserVocabularies().containsKey(user.getStateLearn().getKey())) {
-                word = user.getUserVocabularies().get(user.getStateLearn().getKey())
+            } else if (user.getMyVocabularies().containsKey(user.getStateLearn().getKey())) {
+                word = user.getMyVocabularies().get(user.getStateLearn().getKey())
                         .getSelectionStatistic();
                 word = user.getStateLearn().getKey() + " - " + word;
             } else
@@ -34,8 +34,8 @@ public class StatisticNode extends HandlerNode {
 
             event = Event.STAT_STR;
         } else if (query.startsWith("слова")) {
-            if (user.getUserVocabularies().containsKey(user.getStateLearn().getKey()))
-                word = user.getUserVocabularies().get(user.getStateLearn().getKey())
+            if (user.getMyVocabularies().containsKey(user.getStateLearn().getKey()))
+                word = user.getMyVocabularies().get(user.getStateLearn().getKey())
                         .getWordsStatistic(5);
             else
                 word = "тут пока пусто";

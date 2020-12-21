@@ -19,15 +19,15 @@ public class ChoseTopicNode extends HandlerNode {
         String word = user.getName();
         Event event;
 
-        if (user.getUserVocabularies().containsKey(query)
-                && user.getUserVocabularies().get(query).getSize() != 0) {
+        if (user.getMyVocabularies().containsKey(query)
+                && user.getMyVocabularies().get(query).getSize() != 0) {
             user.setStateLearn(query);
             word = getFirstWord(query, user);
             event = Event.FIRST_EN_WORD;
         } else {
-            user.getUserVocabularies().remove(query);
+            user.getMyVocabularies().remove(query);
             return move(Event.WRONG_TOPIC).action(
-                    word, new ArrayList<>(user.getUserVocabularies().keySet()));
+                    word, new ArrayList<>(user.getMyVocabularies().keySet()));
         }
 
         return move(event).action(word);

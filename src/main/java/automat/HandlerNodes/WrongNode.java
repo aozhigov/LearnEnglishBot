@@ -30,7 +30,7 @@ public class WrongNode extends HandlerNode {
             if (user.getStateLearn().getKey().equals("")) {
                 event = Event.CHANGE_TOPIC;
                 return move(event).action(word,
-                        new ArrayList<>(user.getUserVocabularies().keySet()));
+                        new ArrayList<>(user.getMyVocabularies().keySet()));
             }
 
             return move(event).action(word);
