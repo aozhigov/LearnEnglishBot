@@ -6,12 +6,10 @@ import java.util.Scanner;
 
 
 public class UserRepository {
-    private final JsonParser jsonParser;
     private final String pathDB;
     private final String extension;
 
     public UserRepository(String pathDB, String extension) {
-        this.jsonParser = new JsonParser();
         this.pathDB = pathDB;
         this.extension = extension;
     }
@@ -20,19 +18,25 @@ public class UserRepository {
         File file = getOrCreateIfNone(id);
         if (file.length() == 0)
             return null;
+        String json = readJson(file);
+
+        return JsonParser.fromJsonToUser(json);
+    }
+
+    public static String readJson(File file) throws FileNotFoundException {
         Scanner sc = new Scanner(file);
-        StringBuilder r = new StringBuilder();
-        while(sc.hasNext()){
-            r.append(sc.next());
-        }
-        return JsonParser.parseGsonUser(r.toString());
+        StringBuilder json = new StringBuilder();
+        while(sc.hasNext())
+            json.append(sc.next());
+
+        return json.toString();
     }
 
     public void saveUser(String id, User user) throws IOException {
         delFile(id);
         File file = getOrCreateIfNone(id);
         try (FileWriter fw = new FileWriter(file)) {
-            fw.write(jsonParser.fromUserToJson(user));
+            fw.write(JsonParser.fromUserToJson(user));
         }
     }
 
@@ -44,6 +48,7 @@ public class UserRepository {
         File file = new File(pathDB + id + extension);
         if (!file.exists())
             file.createNewFile();
+
         return file;
     }
 

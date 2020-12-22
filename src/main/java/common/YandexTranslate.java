@@ -6,19 +6,23 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import vocabulary.Word;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
+
+import static parser.JsonParser.getTranslateStringsInYandex;
+import static parser.JsonParser.getYandexToken;
 
 public class YandexTranslate {
     private final String folderId;
     private final String token;
-    private final JSONParser jsonParser;
     private final HashMap<String, String> wordsLanguage;
     private CloseableHttpClient httpclient;
 
@@ -27,7 +31,6 @@ public class YandexTranslate {
         openHttp();
         wordsLanguage = new HashMap<>();
         this.folderId = folderId;
-        jsonParser = new JSONParser();
         token = getToken(oAuth);
         this.wordsLanguage.put("en", "ru");
         this.wordsLanguage.put("ru", "en");
@@ -42,11 +45,12 @@ public class YandexTranslate {
         HttpPost httpPost = getHttpPost(
                 "https://iam.api.cloud.yandex.net/iam/v1/tokens",
                 new JSONObject() {{
-                    put("yandexPassportOauthToken", oAuth);}}
+                    put("yandexPassportOauthToken", oAuth);
+                }}
                         .toJSONString(),
                 false);
 
-        return (String) getAnswerJson(httpPost).get("iamToken");
+        return getYandexToken(getAnswerJson(httpPost));
     }
 
 
@@ -57,35 +61,25 @@ public class YandexTranslate {
                 "https://translate.api.cloud.yandex.net/translate/v2/translate",
                 new JSONObject() {{
                     put("folder_id", folderId);
-                    put("texts", new JSONArray() {{addAll(words);}});
-                    put("targetLanguageCode", translateLanguage);}}
-                    .toJSONString(),
+                    put("texts", new JSONArray() {{
+                        addAll(words);
+                    }});
+                    put("targetLanguageCode", translateLanguage);
+                }}
+                        .toJSONString(),
                 true);
 
-        JSONObject jsonObject = getAnswerJson(httpPost);
-        JSONArray jsonArray = (JSONArray) jsonObject.get("translations");
-        ArrayList<String> translatedWords = new ArrayList<>();
-
-        for (String item : this.prepareTranslatedWords(jsonArray))
-            translatedWords.add(item.toLowerCase());
+        ArrayList<String> translatedWords = getTranslateStringsInYandex(
+                getAnswerJson(httpPost));
 
         return this.prepareResponse(words,
                 translatedWords,
                 wordsLanguage.get(translateLanguage));
     }
 
-    private ArrayList<String> prepareTranslatedWords(JSONArray array) {
-        ArrayList<String> result = new ArrayList<>();
-
-        for (Object item : array)
-            result.add(((JSONObject) item).get("text").toString());
-
-        return result;
-    }
-
     private ArrayList<Word> prepareResponse(List<String> wordsOnTranslate,
-                                      ArrayList<String> words,
-                                      String wordsLanguage) {
+                                            ArrayList<String> words,
+                                            String wordsLanguage) {
         ArrayList<Word> arr = new ArrayList<>();
 
         for (int counter = 0; counter < wordsOnTranslate.size(); counter++)
@@ -117,11 +111,16 @@ public class YandexTranslate {
         return httpPost;
     }
 
-    private JSONObject getAnswerJson(HttpPost httpPost)
-            throws IOException, ParseException {
+    private String getAnswerJson(HttpPost httpPost)
+            throws IOException {
 
         InputStream is = httpclient.execute(httpPost).getEntity().getContent();
-        Reader reader = new InputStreamReader(is);
-        return (JSONObject) jsonParser.parse(reader);
+
+        Scanner sc = new Scanner(is);
+        StringBuilder json = new StringBuilder();
+        while (sc.hasNext())
+            json.append(sc.next());
+
+        return json.toString();
     }
 }
